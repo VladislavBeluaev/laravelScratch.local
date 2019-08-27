@@ -22,6 +22,9 @@ class ProjectController extends Controller
     {
         return $this->project->where('id', $id);
     }
+    function create(){
+
+    }
 
     protected $project;
 }

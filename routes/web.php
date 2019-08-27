@@ -11,7 +11,16 @@
 |
 */
 Route::get('/','PagesController@home')->name('home');
-Route::get('/projects','PagesController@projects')->name('projects');
+Route::group(['prefix'=>'/projects'],function(){
+    Route::get('','PagesController@projects')->name('projects');
+    Route::get('/create','ProjectController@create')->name('create_projects');
+});
+Route::group(['prefix'=>'/tasks'],function(){
+    Route::get('/tasks','PagesController@tasks')->name('tasks');
+    Route::get('/create','TasksController@create')->name('create_tasks');
+});
+
+Route::get('/tasks','PagesController@tasks')->name('tasks');
 Route::get('/about','PagesController@about')->name('about');
 Route::get('/contacts','PagesController@contacts')->name('contacts');
 /*Route::get('/', function () {

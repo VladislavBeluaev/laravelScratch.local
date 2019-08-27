@@ -1,8 +1,12 @@
 .to-do-list{
-    list-style: none;
+   /* list-style: none;*/
     font-size: 24px;
     font-family: "Bell MT";
     color:#000;
+    display: inline-block;
+}
+.to-do-list li{
+    text-align: left;
 }
 .projects-list{
     border: 1px solid #dee2e6;

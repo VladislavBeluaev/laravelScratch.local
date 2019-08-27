@@ -4,6 +4,7 @@
 
 @section('main_menu_links')
     <a href="{{route('home')}}">Home</a>
+    <a href="{{route('tasks')}}">Tasks</a>
     <a href="{{route('contacts')}}">Contacts</a>
     <a href="{{route('about')}}">About</a>
 @endsection
@@ -26,4 +27,5 @@
             @endforeach
         </tr>
         </tbody>
+    </table>
 @endsection

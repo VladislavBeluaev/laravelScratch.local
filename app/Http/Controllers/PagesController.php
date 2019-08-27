@@ -17,8 +17,15 @@ class PagesController extends Controller
             'foo' => 'foobar'
         ]);
     }
-    function projects(ProjectController $controller){
-        return view('projects')->withProjects($controller->all());
+
+    function projects(ProjectController $controller)
+    {
+        return view('projects.project')->withProjects($controller->all());
+    }
+
+    function tasks(TasksController $controller)
+    {
+        return view('tasks.task')->withTasks($controller->all());
     }
 
     function contacts()

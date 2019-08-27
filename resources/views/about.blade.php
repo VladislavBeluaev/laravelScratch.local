@@ -5,6 +5,7 @@
 @section('main_menu_links')
     <a href="{{route('home')}}">Home</a>
     <a href="{{route('projects')}}">Projects</a>
+    <a href="{{route('tasks')}}">Tasks</a>
     <a href="{{route('contacts')}}">Contacts</a>
 @endsection
 
