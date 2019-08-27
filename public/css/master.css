@@ -1,0 +1,16 @@
+.to-do-list{
+    list-style: none;
+    font-size: 24px;
+    font-family: "Bell MT";
+    color:#000;
+}
+.projects-list{
+    border: 1px solid #dee2e6;
+}
+.projects-list thead th{
+    font-size: 24px;
+    text-align: center;
+}
+.projects-list th:first-child{
+    border-right: 2px solid #dee2e6;
+}
