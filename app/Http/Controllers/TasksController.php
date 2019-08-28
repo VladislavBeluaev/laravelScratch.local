@@ -28,5 +28,11 @@ class TasksController extends Controller
         return view('tasks.create');
     }
 
+    function store()
+    {
+        $this->task->insert(request()->except('_token'));
+        return redirect(route('tasks'));
+    }
+
     protected $task;
 }

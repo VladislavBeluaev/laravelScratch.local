@@ -9,7 +9,14 @@
     <a href="{{route('about')}}">About</a>
 @endsection
 
-@section('h1','My projects')
+@section('h1')
+    <div class="main-header-wrapper">
+        <p class="main-header-content">My projects</p>
+        <p>
+            <a href="{{route('create_projects')}}"><i class="fa fa-plus" aria-hidden="true"></i>Add new project</a>
+        </p>
+    </div>
+@endsection
 
 @section('content')
     <table class="table projects-list">

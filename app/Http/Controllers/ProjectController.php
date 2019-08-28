@@ -22,8 +22,16 @@ class ProjectController extends Controller
     {
         return $this->project->where('id', $id);
     }
-    function create(){
 
+    function create()
+    {
+        return view('projects.create');
+    }
+
+    function store()
+    {
+        $this->project->insert(request()->except('_token'));
+        return redirect(route('projects'));
     }
 
     protected $project;

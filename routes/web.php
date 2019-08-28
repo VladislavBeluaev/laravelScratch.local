@@ -14,13 +14,20 @@ Route::get('/','PagesController@home')->name('home');
 Route::group(['prefix'=>'/projects'],function(){
     Route::get('','PagesController@projects')->name('projects');
     Route::get('/create','ProjectController@create')->name('create_projects');
+    Route::post('/create','ProjectController@store');
+    Route::get('/{project}','ProjectController@show')->name('show_project');
+    Route::patch('/{project}/edit','ProjectController@update')->name('update_project');
+    Route::delete('/{project}','ProjectController@destroy');
 });
 Route::group(['prefix'=>'/tasks'],function(){
-    Route::get('/tasks','PagesController@tasks')->name('tasks');
+    Route::get('','PagesController@tasks')->name('tasks');
     Route::get('/create','TasksController@create')->name('create_tasks');
+    Route::post('/create','TasksController@store');
+    Route::get('/{task}','TasksController@show')->name('show_task');
+    Route::patch('/{task}/edit','TasksController@update')->name('update_task');
+    Route::delete('/{task}','TasksController@destroy');
 });
 
-Route::get('/tasks','PagesController@tasks')->name('tasks');
 Route::get('/about','PagesController@about')->name('about');
 Route::get('/contacts','PagesController@contacts')->name('contacts');
 /*Route::get('/', function () {
