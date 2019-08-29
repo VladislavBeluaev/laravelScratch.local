@@ -1,0 +1,153 @@
+.no-margin {
+  margin: 0;
+}
+.no-padding {
+  padding: 0;
+}
+.no-border {
+  border: 0;
+}
+.no-focus-style:focus {
+  outline: none;
+}
+.number-input {
+  -moz-appearance: textfield;
+}
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+* {
+  box-sizing: border-box;
+}
+*:before,
+*:after {
+  box-sizing: border-box;
+}
+html,
+body {
+  height: 100%;
+}
+div,
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6,
+ul,
+p {
+  margin: 0;
+  padding: 0;
+}
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+a {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+input {
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+input:focus {
+  outline: none;
+}
+.main-header-wrapper p:first-child {
+  margin-bottom: 0;
+}
+.main-header-wrapper p:last-child {
+  margin-bottom: 18px;
+}
+.main-header-wrapper p:last-child a {
+  font-size: 24px;
+  color: #3f9fd0;
+}
+.main-header-wrapper p:last-child a:hover {
+  text-decoration: none;
+  color: #4d75a0;
+}
+.main-header-wrapper p:last-child a i {
+  padding-right: 6px;
+}
+.to-do-list {
+  width: 100%;
+  font-size: 24px;
+  font-family: "Bell MT";
+  color: #000;
+  display: inline-block;
+}
+.to-do-list li {
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  padding-left: 6px;
+  padding-right: 6px;
+  position: relative;
+  margin: auto;
+  width: 70%;
+}
+.to-do-list li:hover {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.to-do-list li:hover a[title] {
+  display: inline;
+}
+.to-do-list li a[title] {
+  display: none;
+}
+.to-do-list li a[title="task completed"] {
+  position: absolute;
+  left: 250px;
+  top: -10px;
+}
+.to-do-list li a[title="task completed"] > i {
+  font-size: 0.5em;
+  color: forestgreen;
+}
+.to-do-list li a[title="edit task"] {
+  position: absolute;
+  left: 280px;
+  top: -10px;
+}
+.to-do-list li a[title="edit task"] > i {
+  font-size: 0.5em;
+  color: #6a8a9a;
+}
+.to-do-list li a[title="task delete"] {
+  position: absolute;
+  left: 310px;
+  top: -10px;
+}
+.to-do-list li a[title="task delete"] > i {
+  font-size: 0.5em;
+  color: red;
+}
+.projects-list {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+.projects-list thead th {
+  vertical-align: baseline;
+  font-size: 24px;
+  text-align: center;
+}
+.projects-list th {
+  border-right: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
+}

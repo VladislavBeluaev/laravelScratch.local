@@ -1,0 +1,122 @@
+@import "variables";
+@import "mixins";
+@import "functions";
+
+* {
+    box-sizing: border-box;
+
+    &:before, &:after {
+        box-sizing: border-box;
+    }
+
+}
+
+html, body {
+    height: 100%
+}
+
+div, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, ul, p {
+    .no-margin;
+    .no-padding;
+}
+
+ul {
+    list-style-type: none;
+    .no-margin;
+    .no-padding;
+}
+a{
+    text-decoration: none;
+    .no-margin;
+    .no-padding;
+    .no-border;
+}
+input{
+    .no-border;
+    .no-padding;
+    .no-margin;
+    &:focus{
+        outline: none;
+    }
+}
+
+.main-header-wrapper {
+    p {
+        &:first-child {
+            margin-bottom: 0;
+        }
+
+        &:last-child {
+            margin-bottom: @defaultGutter*.75;
+
+            a {
+                font-size: @defaultFontSize*1.5;
+                color: @add_new_item_color;
+
+                &:hover {
+                    text-decoration: none;
+                    color: @add_new_item_hover_color;
+                }
+
+                i {
+                    padding-right: @defaultGutter/4;
+                }
+            }
+        }
+    }
+}
+
+.to-do-list {
+    width: 100%;
+    font-size: @defaultFontSize*1.5;
+    font-family: @to_do_listFontFamily;
+    color: @defaultFontColor;
+    display: inline-block;
+
+    li {
+        .alignTo(left);
+        .border_settings(1px solid transparent);
+        padding-left: @defaultGutter/4;
+        padding-right: @defaultGutter/4;
+        position: relative;
+        margin: auto;
+        width: 70%;
+
+        &:hover {
+            .border_settings(1px solid #dee2e6);
+            cursor: pointer;
+            .show_task_control_buttons();
+        }
+
+        span {
+        }
+        a{
+            &[title]{
+                display: none;
+            }
+            &[title="task completed"]{
+                .task_control_buttons(250px,-10px,@task_completed_color);
+            }
+            &[title="edit task"]{
+                .task_control_buttons(280px,-10px,@edit_task_color);
+            }
+            &[title="task delete"]{
+                .task_control_buttons(310px,-10px,@task_delete_color);
+            }
+        }
+    }
+}
+.projects-list{
+    .border_settings(1px solid #dee2e6);
+    thead{
+        th{
+            vertical-align: baseline;
+            font-size: @defaultFontSize*1.5;
+            .alignTo(center);
+        }
+    }
+    th{
+        .border_r_settings(1px solid #dee2e6);
+        .border_l_settings(1px solid #dee2e6);
+    }
+}

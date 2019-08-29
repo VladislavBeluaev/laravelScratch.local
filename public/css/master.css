@@ -25,7 +25,9 @@
     font-weight: bold;*/
 }
 .to-do-list{
-   /* list-style: none;*/
+   list-style: none;
+    padding-left: 0;
+    width: 100%;
     font-size: 24px;
     font-family: "Bell MT";
     color:#000;
@@ -33,7 +35,49 @@
 }
 .to-do-list li{
     text-align: left;
+    border:1px solid transparent;
+    position: relative;
+    margin: auto;
+    width:70%;
 }
+.to-do-list li:hover{
+   border:1px solid #dee2e6;
+    cursor:pointer;
+}
+.to-do-list li span:first-child{
+    padding-right: 5px;
+}
+.to-do-list li a[title="task completed"]{
+    position: absolute;
+    left:250px;
+    top:9px;
+    text-decoration: none;
+}
+.to-do-list li a[title="task completed"] i{
+    font-size: .5em;
+    color:forestgreen;
+}
+.to-do-list li a[title="edit task"]{
+    position: absolute;
+    left:280px;
+    top:7px;
+    text-decoration: none;
+}
+.to-do-list li a i{
+    font-size: .5em;
+    color:#6a8a9a;
+}
+.to-do-list li a[title="task delete"]{
+    position: absolute;
+    left:310px;
+    top:7px;
+    text-decoration: none;
+}
+.to-do-list li a[title="task delete"] i{
+    font-size: .5em;
+    color:red;
+}
+
 .projects-list{
     border: 1px solid #dee2e6;
 }

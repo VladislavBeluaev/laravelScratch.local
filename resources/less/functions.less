@@ -1,0 +1,54 @@
+@import "variables";
+.border_settings(@arguments;@radius:.25rem){
+    border:@arguments;
+    border-radius: @radius;
+}
+.border_t_settings(@arguments){
+    border-top:@arguments;
+}
+.border_r_settings(@arguments;){
+    border-right:@arguments;
+}
+.border_b_settings(@arguments;){
+    border-bottom:@arguments;
+}
+.border_l_settings(@arguments){
+    border-left:@arguments;
+}
+.alignTo(@align){
+    text-align: @align;
+}
+.placeholder(@rules) {
+
+    &::-webkit-input-placeholder {
+        @rules();
+    }
+    &:-moz-placeholder {
+        @rules();
+    }
+    &::-moz-placeholder {
+        @rules();
+    }
+    &:-ms-input-placeholder {
+        @rules();
+    }
+}
+.size(@width,@height){
+    width: @width;
+    height: @height;
+}
+.task_control_buttons(@left;@top;@iconColor){
+    position: absolute;
+    left:@left;
+    top:@top;
+    &>i{
+        font-size: .5em;
+        color:@iconColor;
+    }
+
+}
+.show_task_control_buttons(){
+    a[title]{
+        display: inline;
+    }
+}

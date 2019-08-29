@@ -23,8 +23,9 @@ Route::group(['prefix'=>'/tasks'],function(){
     Route::get('','PagesController@tasks')->name('tasks');
     Route::get('/create','TasksController@create')->name('create_tasks');
     Route::post('/create','TasksController@store');
-    Route::get('/{task}','TasksController@show')->name('show_task');
-    Route::patch('/{task}/edit','TasksController@update')->name('update_task');
+    Route::patch('/{task}/complete','TasksController@complete')->name('complete_task');
+    Route::get('/{task}/edit','TasksController@edit')->name('edit_task');
+    Route::patch('/{task}/update','TasksController@update')->name('update_task');
     Route::delete('/{task}','TasksController@destroy');
 });
 

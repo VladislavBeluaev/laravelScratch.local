@@ -1,4 +1,4 @@
-@extends('layout.master');
+@extends('layout.master')
 
 @section('title',"Tasks")
 
@@ -18,10 +18,16 @@
     </div>
 @endsection
 @section('content')
-    <ol class="to-do-list">
+    <ul class="to-do-list">
         @foreach($tasks as $task)
-            <li>{{$task->description}}</li>
+            {{--<li>{{$task->description}}</li>--}}
+            <li><span>{{$task->id}}.</span><label ><input type="text" value="{{$task->description}}"></label>
+                <a href="{{route('edit_task',[$task->getRouteKeyName()=>$task->id])}}" title="edit task"><i class="fa fa-edit"></i></a>
+                <a href="{{--{{route('complete_task')}}--}}" title="task completed"><i class="fa fa-check"></i></a>
+                <a href="{{--{{route('delete_task')}}--}}" title="task delete"><i class="fa fa-times"></i></a>
+                {{--<a href="" title="edit task"><i class="fa fa-edit"></i></a>--}}
+            </li>
         @endforeach
-    </ol>
+    </ul>
 @endsection
 

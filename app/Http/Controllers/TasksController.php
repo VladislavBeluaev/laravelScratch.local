@@ -33,6 +33,23 @@ class TasksController extends Controller
         $this->task->insert(request()->except('_token'));
         return redirect(route('tasks'));
     }
+    function edit(Task $task){
+    }
+
+    function update(Task $task)
+    {
+
+    }
+
+    function destroy()
+    {
+
+    }
+
+    function complete()
+    {
+
+    }
 
     protected $task;
 }
