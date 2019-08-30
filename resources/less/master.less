@@ -15,7 +15,7 @@ html, body {
     height: 100%
 }
 
-div, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, ul, p {
+div, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, ul, p,label {
     .no-margin;
     .no-padding;
 }
@@ -87,20 +87,44 @@ input{
             cursor: pointer;
             .show_task_control_buttons();
         }
+        &.active-edit{
+            .border_settings(2px solid #636b6f);
 
+           a{
+                &[title="save task"]{
+                    .task_control_buttons(280px,0,@task_completed_color);
+                    display: inline!important;
+                }
+                &[title="cancel edit task"]{
+                    .task_control_buttons(300px,0,@task_delete_color);
+                    display: inline!important;
+                }
+            }
+            &:hover{
+                cursor: default;
+                a{
+                    &[title]{
+                        display: none;
+                    }
+                }
+            }
+        }
         span {
+            &:first-child{
+                padding-right: @defaultGutter/6;
+            }
         }
         a{
             &[title]{
                 display: none;
             }
-            &[title="task completed"]{
+            &[title="complete task"]{
                 .task_control_buttons(250px,-10px,@task_completed_color);
             }
             &[title="edit task"]{
                 .task_control_buttons(280px,-10px,@edit_task_color);
             }
-            &[title="task delete"]{
+            &[title="delete task"]{
                 .task_control_buttons(310px,-10px,@task_delete_color);
             }
         }

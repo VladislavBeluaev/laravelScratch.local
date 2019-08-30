@@ -1,92 +1,196 @@
-.main-header-wrapper{
-    /*display: grid;
-    grid-template-rows: 1fr;
-    grid-template-columns: 1fr .2fr;
-    align-items: center;*/
+.no-margin {
+  margin: 0;
 }
-.main-header-wrapper p:first-child{
-    margin-bottom: 0;
-   /* justify-self: right;*/
+.no-padding {
+  padding: 0;
 }
-/*.main-header-wrapper p:last-child{
-    justify-self: left;
-}*/
-.main-header-wrapper a{
-    font-size: .3em;
-    color:#3f9fd0;
+.no-border {
+  border: 0;
 }
-.main-header-wrapper a:hover{
-    text-decoration: none;
-    color: #4d75a0;
+.no-focus-style:focus {
+  outline: none;
 }
-.main-header-wrapper i{
-    padding-right: 10px;
-    /*font-size: .5em;
-    font-weight: bold;*/
+.no-display {
+  display: none;
 }
-.to-do-list{
-   list-style: none;
-    padding-left: 0;
-    width: 100%;
-    font-size: 24px;
-    font-family: "Bell MT";
-    color:#000;
-    display: inline-block;
+.number-input {
+  -moz-appearance: textfield;
 }
-.to-do-list li{
-    text-align: left;
-    border:1px solid transparent;
-    position: relative;
-    margin: auto;
-    width:70%;
+.number-input::-webkit-inner-spin-button,
+.number-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
-.to-do-list li:hover{
-   border:1px solid #dee2e6;
-    cursor:pointer;
+* {
+  box-sizing: border-box;
 }
-.to-do-list li span:first-child{
-    padding-right: 5px;
+*:before,
+*:after {
+  box-sizing: border-box;
 }
-.to-do-list li a[title="task completed"]{
-    position: absolute;
-    left:250px;
-    top:9px;
-    text-decoration: none;
+html,
+body {
+  height: 100%;
 }
-.to-do-list li a[title="task completed"] i{
-    font-size: .5em;
-    color:forestgreen;
+div,
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6,
+ul,
+p,
+label {
+  margin: 0;
+  padding: 0;
 }
-.to-do-list li a[title="edit task"]{
-    position: absolute;
-    left:280px;
-    top:7px;
-    text-decoration: none;
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
 }
-.to-do-list li a i{
-    font-size: .5em;
-    color:#6a8a9a;
+a {
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
-.to-do-list li a[title="task delete"]{
-    position: absolute;
-    left:310px;
-    top:7px;
-    text-decoration: none;
+input {
+  border: 0;
+  padding: 0;
+  margin: 0;
 }
-.to-do-list li a[title="task delete"] i{
-    font-size: .5em;
-    color:red;
+input:focus {
+  outline: none;
 }
-
-.projects-list{
-    border: 1px solid #dee2e6;
+.main-header-wrapper p:first-child {
+  margin-bottom: 0;
 }
-.projects-list thead th{
-    vertical-align: baseline;
-    font-size: 24px;
-    text-align: center;
+.main-header-wrapper p:last-child {
+  margin-bottom: 18px;
 }
-.projects-list th:nth-child(2n){
-    border-right: 2px solid #dee2e6;
-    border-left: 2px solid #dee2e6;
+.main-header-wrapper p:last-child a {
+  font-size: 24px;
+  color: #3f9fd0;
+}
+.main-header-wrapper p:last-child a:hover {
+  text-decoration: none;
+  color: #4d75a0;
+}
+.main-header-wrapper p:last-child a i {
+  padding-right: 6px;
+}
+.to-do-list {
+  width: 100%;
+  font-size: 24px;
+  font-family: "Bell MT";
+  color: #000;
+  display: inline-block;
+}
+.to-do-list li {
+  text-align: left;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  padding-left: 6px;
+  padding-right: 6px;
+  position: relative;
+  margin: auto;
+  width: 70%;
+}
+.to-do-list li:hover {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+.to-do-list li:hover a[title] {
+  display: inline;
+}
+.to-do-list li:hover a[title="save task"] {
+  display: none;
+}
+.to-do-list li:hover a[title="cancel edit task"] {
+  display: none;
+}
+.to-do-list li.active-edit {
+  border: 2px solid #636b6f;
+  border-radius: 0.25rem;
+}
+.to-do-list li.active-edit a[title="save task"] {
+  position: absolute;
+  left: 280px;
+  top: 0;
+  display: inline!important;
+}
+.to-do-list li.active-edit a[title="save task"] > i {
+  font-size: 0.5em;
+  color: forestgreen;
+}
+.to-do-list li.active-edit a[title="cancel edit task"] {
+  position: absolute;
+  left: 300px;
+  top: 0;
+  display: inline!important;
+}
+.to-do-list li.active-edit a[title="cancel edit task"] > i {
+  font-size: 0.5em;
+  color: red;
+}
+.to-do-list li.active-edit:hover {
+  cursor: default;
+}
+.to-do-list li.active-edit:hover a[title] {
+  display: none;
+}
+.to-do-list li span:first-child {
+  padding-right: 4px;
+}
+.to-do-list li a[title] {
+  display: none;
+}
+.to-do-list li a[title="complete task"] {
+  position: absolute;
+  left: 250px;
+  top: -10px;
+}
+.to-do-list li a[title="complete task"] > i {
+  font-size: 0.5em;
+  color: forestgreen;
+}
+.to-do-list li a[title="edit task"] {
+  position: absolute;
+  left: 280px;
+  top: -10px;
+}
+.to-do-list li a[title="edit task"] > i {
+  font-size: 0.5em;
+  color: #6a8a9a;
+}
+.to-do-list li a[title="delete task"] {
+  position: absolute;
+  left: 310px;
+  top: -10px;
+}
+.to-do-list li a[title="delete task"] > i {
+  font-size: 0.5em;
+  color: red;
+}
+.projects-list {
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+.projects-list thead th {
+  vertical-align: baseline;
+  font-size: 24px;
+  text-align: center;
+}
+.projects-list th {
+  border-right: 1px solid #dee2e6;
+  border-left: 1px solid #dee2e6;
 }

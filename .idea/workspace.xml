@@ -2,21 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1301a4cb-6bd3-4097-8178-c876a35c5a0f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/watcherTasks.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/less/functions.less" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/less/master.less" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/less/mixins.less" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/less/variables.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/_master.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/classes/Task.class.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/init objects/taskInitObj.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Http/Controllers/TasksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Controllers/TasksController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Providers/AppServiceProvider.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/app.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/app.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/master.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/master.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/js/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/css/master_1.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/master_1.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/less/functions.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/functions.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/less/master.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/master.less" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/less/mixins.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/mixins.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/layout/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/master.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/tasks/task.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tasks/task.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/web.php" beforeDir="false" afterPath="$PROJECT_DIR$/routes/web.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.mix.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -35,6 +32,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="CSS File" />
+        <option value="JavaScript File" />
       </list>
     </option>
   </component>
@@ -182,7 +180,8 @@
       <workItem from="1566913645518" duration="4589000" />
       <workItem from="1566976980637" duration="12381000" />
       <workItem from="1567060622698" duration="6991000" />
-      <workItem from="1567070129891" duration="13841000" />
+      <workItem from="1567070129891" duration="14246000" />
+      <workItem from="1567155730215" duration="12799000" />
     </task>
     <servers />
   </component>

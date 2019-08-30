@@ -11,5 +11,7 @@ const mix = require('laravel-mix');
  |
  */
 
-mix.less('resources/less/master.less', 'public/css/master_1.css').browserSync('laravelScratch.local');
+mix.less('resources/less/master.less', 'public/css/master.css')
+    .js('resources/js/_master.js', 'public/js/master.js')
+    .browserSync('laravelScratch.local');
 

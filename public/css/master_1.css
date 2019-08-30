@@ -10,6 +10,9 @@
 .no-focus-style:focus {
   outline: none;
 }
+.no-display {
+  display: none;
+}
 .number-input {
   -moz-appearance: textfield;
 }
@@ -107,6 +110,12 @@ input:focus {
 }
 .to-do-list li:hover a[title] {
   display: inline;
+}
+.to-do-list li span:first-child {
+  padding-right: 4px;
+}
+.to-do-list li label {
+  display: none;
 }
 .to-do-list li a[title] {
   display: none;
