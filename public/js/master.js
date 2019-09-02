@@ -97,15 +97,22 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
 /* harmony import */ var _init_objects_taskInitObj__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init objects/taskInitObj */ "./resources/js/init objects/taskInitObj.js");
+/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+
 
 
 
 (function ($, undefined) {
   $(function () {
     var url = location.pathname.substr(1);
+    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_2__["routing"]);
 
     try {
       switch (url) {
+        case "":
+          console.log("index page");
+          break;
+
         case "tasks":
           new _classes_Task_class__WEBPACK_IMPORTED_MODULE_0__["Task"](_init_objects_taskInitObj__WEBPACK_IMPORTED_MODULE_1__["taskInitObj"]).run();
           break;
@@ -154,28 +161,158 @@ function () {
           editTask = _this$_initObj.editTask,
           completeTask = _this$_initObj.completeTask,
           removeTask = _this$_initObj.removeTask;
-      $(container).on('click.editTask', editTask, $.proxy(this._editTaskHandLer, this));
+      $(container).on('click.initEditTask', editTask, $.proxy(this._initEditTaskHandler, this));
     }
   }, {
-    key: "_editTaskHandLer",
-    value: function _editTaskHandLer(event) {
+    key: "_initEditTaskHandler",
+    value: function _initEditTaskHandler(event) {
       event.preventDefault();
       var target = event.target;
       var isEditIcon = Array.from(target.classList).filter(function (item) {
         return item.includes('edit');
       });
       if (!isEditIcon.length) return false;
-      var readOnlyTaskElem$ = $(target.closest('a').previousElementSibling);
-      var readWriteTaskElem$ = readOnlyTaskElem$.prev('label');
+      this._currentEditTaskContainer$ = $(target.closest('li'));
+      Task.readOnlyToReadWriteTaskToggle(this._currentEditTaskContainer$, 'write');
+
+      this._currentEditTaskContainer$.addClass('active-edit');
+
+      this._previousEditTask();
+
+      if (this._currentEditTaskContainer$.data('current-task-val') === undefined) this._currentEditTaskContainer$.data('current-task-val', this._currentEditTaskContainer$.find('input').val());
+
+      this._currentEditTaskContainer$.on('input.editTaskHandler', 'input', $.proxy(this._editTaskHandler, this));
+    }
+  }, {
+    key: "_previousEditTask",
+    value: function _previousEditTask() {
+      var previousEditTask$ = $('.active-edit');
+      if (!previousEditTask$.length) return false;
+      var committedChangesIcon$ = previousEditTask$.find(this._initObj.saveTask).find('i');
+      var inputTaskValue$ = previousEditTask$.find('input');
+
+      if (committedChangesIcon$.hasClass('save-edit-task') === true) {
+        var needToSave = window.confirm("Имя задачи было изменено, сохранить данные?");
+        console.log(needToSave);
+      }
+
+      if (Task._isEmptyField(inputTaskValue$) === false) {
+        var _needToSave = window.confirm("Поле задача не может быть пустым? Отменить редактирование данного поля");
+
+        if (_needToSave === true) {
+          previousEditTask$.find('input').val(previousEditTask$.data('current-task-val'));
+          Task.readOnlyToReadWriteTaskToggle(previousEditTask$, 'read');
+        }
+      }
+
+      if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
+        previousEditTask$.removeClass('active-edit');
+      }
+
+      console.log(committedChangesIcon$);
+    }
+  }, {
+    key: "_editTaskHandler",
+    value: function _editTaskHandler(event) {
+      var target$ = $(event.target);
+
+      if (this._currentEditTaskContainer$.data('current-task-val') !== target$.val() && Task._isEmptyField(target$)) {
+        this._changeControlButtonsIconColor(true);
+      } else {
+        this._changeControlButtonsIconColor(false);
+      }
+    }
+  }, {
+    key: "_changeControlButtonsIconColor",
+    value: function _changeControlButtonsIconColor() {
+      var isChange = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
+      var saveEditButtonICon$ = $(this._initObj.saveTask, this._currentEditTaskContainer$).find('i');
+      var cancelSaveEditButtonICon$ = $(this._initObj.cancelEditTask, this._currentEditTaskContainer$).find('i');
+      if (isChange === true) Task.changeIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);else {
+        Task.setDisableIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);
+      }
+    }
+  }], [{
+    key: "readOnlyToReadWriteTaskToggle",
+    value: function readOnlyToReadWriteTaskToggle(context, mode) {
+      var readOnlyTaskElem$ = $('.read-only', context);
+      var readWriteTaskElem$ = $('.read-write', context);
+      console.log(readOnlyTaskElem$);
       console.log(readWriteTaskElem$);
-      readOnlyTaskElem$.addClass('no-display');
-      readWriteTaskElem$.removeClass('no-display').focus();
-      readWriteTaskElem$.closest('li').addClass('active-edit');
+
+      switch (mode) {
+        case "read":
+          readOnlyTaskElem$.removeClass('no-display');
+          readWriteTaskElem$.addClass('no-display');
+          break;
+
+        case "write":
+          readOnlyTaskElem$.addClass('no-display');
+          readWriteTaskElem$.removeClass('no-display').focus();
+          break;
+
+        default:
+          throw new Error("mode does not exists");
+      }
+    }
+  }, {
+    key: "changeIconColor",
+    value: function changeIconColor() {
+      for (var _len = arguments.length, icons = new Array(_len), _key = 0; _key < _len; _key++) {
+        icons[_key] = arguments[_key];
+      }
+
+      var saveIcon$ = icons[0],
+          cancelIcon$ = icons[1];
+      if (saveIcon$.hasClass('save-edit-task') === false) saveIcon$.addClass('save-edit-task');
+      if (cancelIcon$.hasClass('cancel-edit-task') === false) cancelIcon$.addClass('cancel-edit-task');
+    }
+  }, {
+    key: "setDisableIconColor",
+    value: function setDisableIconColor() {
+      for (var _len2 = arguments.length, icons = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        icons[_key2] = arguments[_key2];
+      }
+
+      var saveIcon$ = icons[0],
+          cancelIcon$ = icons[1];
+      if (saveIcon$.hasClass('save-edit-task') === true) saveIcon$.removeClass('save-edit-task').addClass('disable');
+      if (cancelIcon$.hasClass('cancel-edit-task') === true) cancelIcon$.removeClass('cancel-edit-task').addClass('disable');
+    }
+  }, {
+    key: "_isEmptyField",
+    value: function _isEmptyField(input$) {
+      if (input$.val() === '') {
+        input$.attr('placeholder', 'The field cannot be empty');
+        return false;
+      }
+
+      input$.removeAttr('placeholder');
+      return true;
     }
   }]);
 
   return Task;
 }();
+
+/***/ }),
+
+/***/ "./resources/js/init objects/routing.js":
+/*!**********************************************!*\
+  !*** ./resources/js/init objects/routing.js ***!
+  \**********************************************/
+/*! exports provided: routing */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "routing", function() { return routing; });
+var routing = {
+  index: '',
+  projects: '/projects',
+  tasks: '/tasks',
+  contacts: '/contacts'
+};
 
 /***/ }),
 
@@ -193,7 +330,9 @@ var taskInitObj = {
   container: '.to-do-list',
   editTask: '[title="edit task"]',
   completeTask: '[title="complete task"]',
-  removeTask: '[title="delete task"]'
+  removeTask: '[title="delete task"]',
+  saveTask: '[title="save task"]',
+  cancelEditTask: '[title="cancel edit task"]'
 };
 
 /***/ }),

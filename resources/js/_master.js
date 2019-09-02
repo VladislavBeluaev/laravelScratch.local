@@ -1,11 +1,16 @@
 import {Task} from "./classes/Task.class";
 import {taskInitObj} from "./init objects/taskInitObj";
+import{routing} from "./init objects/routing";
 
 (function ($,undefined) {
     $(function () {
         let url = location.pathname.substr(1);
+        let routingList = Object.keys(routing);
         try{
             switch (url) {
+                case "":
+                    console.log(`index page`);
+                    break;
                 case "tasks":
                     (new Task(taskInitObj)).run();
                     break;

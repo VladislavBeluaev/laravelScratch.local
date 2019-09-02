@@ -2,19 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1301a4cb-6bd3-4097-8178-c876a35c5a0f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/resources/js/_master.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/classes/Task.class.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/resources/js/init objects/taskInitObj.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/resources/js/init objects/routing.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/.htaccess" beforeDir="false" afterPath="$PROJECT_DIR$/public/.htaccess" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/public/css/master.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/master.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/css/master_1.css" beforeDir="false" afterPath="$PROJECT_DIR$/public/css/master_1.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/mix-manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/public/mix-manifest.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/master.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/master.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/_master.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/_master.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/classes/Task.class.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/classes/Task.class.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/js/init objects/taskInitObj.js" beforeDir="false" afterPath="$PROJECT_DIR$/resources/js/init objects/taskInitObj.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/less/functions.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/functions.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/less/master.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/master.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/less/mixins.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/mixins.less" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/resources/views/layout/master.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/layout/master.blade.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/less/variables.less" beforeDir="false" afterPath="$PROJECT_DIR$/resources/less/variables.less" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/tasks/task.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/tasks/task.blade.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/webpack.mix.js" beforeDir="false" afterPath="$PROJECT_DIR$/webpack.mix.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -182,6 +182,7 @@
       <workItem from="1567060622698" duration="6991000" />
       <workItem from="1567070129891" duration="14246000" />
       <workItem from="1567155730215" duration="12799000" />
+      <workItem from="1567407021685" duration="17851000" />
     </task>
     <servers />
   </component>
