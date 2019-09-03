@@ -95,9 +95,13 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
-/* harmony import */ var _init_objects_taskInitObj__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init objects/taskInitObj */ "./resources/js/init objects/taskInitObj.js");
-/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+/* harmony import */ var _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Ajax.class */ "./resources/js/classes/Ajax.class.js");
+/* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
+/* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
+/* harmony import */ var _init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/taskRequestParams */ "./resources/js/init objects/task/taskRequestParams.js");
+/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+
+
 
 
 
@@ -105,7 +109,7 @@ __webpack_require__.r(__webpack_exports__);
 (function ($, undefined) {
   $(function () {
     var url = location.pathname.substr(1);
-    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_2__["routing"]);
+    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_4__["routing"]);
 
     try {
       switch (url) {
@@ -114,7 +118,8 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_0__["Task"](_init_objects_taskInitObj__WEBPACK_IMPORTED_MODULE_1__["taskInitObj"]).run();
+          var XMLHttpRequest = new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"]();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], XMLHttpRequest.configure(_init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__["taskRequestParams"])).run();
           break;
 
         default:
@@ -125,6 +130,77 @@ __webpack_require__.r(__webpack_exports__);
     }
   });
 })(jQuery);
+
+/***/ }),
+
+/***/ "./resources/js/classes/Ajax.class.js":
+/*!********************************************!*\
+  !*** ./resources/js/classes/Ajax.class.js ***!
+  \********************************************/
+/*! exports provided: Ajax */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Ajax", function() { return Ajax; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var Ajax =
+/*#__PURE__*/
+function () {
+  function Ajax() {
+    _classCallCheck(this, Ajax);
+  }
+
+  _createClass(Ajax, [{
+    key: "configure",
+    value: function configure(requestParams) {
+      this.ajax = $.ajax({
+        type: requestParams.type,
+        url: requestParams.url,
+        headers: requestParams.headers
+      });
+      return this;
+    }
+  }, {
+    key: "request",
+    value: function request() {}
+  }, {
+    key: "response",
+    value: function response() {}
+  }, {
+    key: "_makeAjaxURLFromTemplate",
+    value: function _makeAjaxURLFromTemplate(templateURL) {
+      var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+      if (templateURL.includes('{') && templateURL.includes('}')) {
+        var urlFragments = templateURL.split('}');
+
+        if (params.length !== urlFragments.length - 1) {
+          throw new Error("The number of parameters does not match the number of replaced fragments");
+        }
+
+        var resultUrl = urlFragments.filter(function (item) {
+          return item !== '';
+        });
+        resultUrl.forEach(function (item, index, arr) {
+          var leftBracketPos = item.indexOf('{');
+          var newItem = item.replace(item.substr(leftBracketPos), params[index]);
+          arr.splice(index, 1, newItem);
+        });
+        return resultUrl.join('');
+      }
+
+      return templateURL;
+    }
+  }]);
+
+  return Ajax;
+}();
 
 /***/ }),
 
@@ -160,8 +236,12 @@ function () {
           container = _this$_initObj.container,
           editTask = _this$_initObj.editTask,
           completeTask = _this$_initObj.completeTask,
-          removeTask = _this$_initObj.removeTask;
+          removeTask = _this$_initObj.removeTask,
+          saveTask = _this$_initObj.saveTask,
+          cancelEditTask = _this$_initObj.cancelEditTask;
       $(container).on('click.initEditTask', editTask, $.proxy(this._initEditTaskHandler, this));
+      $(container).on('click.cancelEditTask', cancelEditTask, $.proxy(Task._cancelEditTaskHandler, this));
+      $(document.body).on('keydown.cancelEditTaskKeybord', $.proxy(Task._cancelEditTaskKeyboard, this));
     }
   }, {
     key: "_initEditTaskHandler",
@@ -172,44 +252,43 @@ function () {
         return item.includes('edit');
       });
       if (!isEditIcon.length) return false;
-      this._currentEditTaskContainer$ = $(target.closest('li'));
-      Task.readOnlyToReadWriteTaskToggle(this._currentEditTaskContainer$, 'write');
-
-      this._currentEditTaskContainer$.addClass('active-edit');
 
       this._previousEditTask();
 
-      if (this._currentEditTaskContainer$.data('current-task-val') === undefined) this._currentEditTaskContainer$.data('current-task-val', this._currentEditTaskContainer$.find('input').val());
+      this._currentEditTaskContainer$ = $(target.closest('li')).addClass(this._initObj.activeEditTask);
 
-      this._currentEditTaskContainer$.on('input.editTaskHandler', 'input', $.proxy(this._editTaskHandler, this));
+      try {
+        Task.readOnlyToReadWriteTaskToggle(this._currentEditTaskContainer$, 'write');
+
+        this._currentEditTaskContainer$.data('current-task-val', this._currentEditTaskContainer$.find('input').val());
+
+        this._currentEditTaskContainer$.on('input.editTaskHandler', 'input', $.proxy(this._editTaskHandler, this));
+      } catch (e) {
+        console.log(e.stack);
+      }
     }
   }, {
     key: "_previousEditTask",
     value: function _previousEditTask() {
-      var previousEditTask$ = $('.active-edit');
+      var previousEditTask$ = $(".".concat(this._initObj.activeEditTask));
       if (!previousEditTask$.length) return false;
       var committedChangesIcon$ = previousEditTask$.find(this._initObj.saveTask).find('i');
       var inputTaskValue$ = previousEditTask$.find('input');
 
       if (committedChangesIcon$.hasClass('save-edit-task') === true) {
-        var needToSave = window.confirm("Имя задачи было изменено, сохранить данные?");
-        console.log(needToSave);
+        var needToSave = window.confirm("Имя предыдущей задачи было изменено, сохранить данные?");
+        if (needToSave === false) Task.userCancelEditTask(previousEditTask$);
       }
 
       if (Task._isEmptyField(inputTaskValue$) === false) {
-        var _needToSave = window.confirm("Поле задача не может быть пустым? Отменить редактирование данного поля");
+        var _needToSave = window.confirm("Поле задача не может быть пустым. Отменить редактирование данного поля?");
 
-        if (_needToSave === true) {
-          previousEditTask$.find('input').val(previousEditTask$.data('current-task-val'));
-          Task.readOnlyToReadWriteTaskToggle(previousEditTask$, 'read');
-        }
+        if (_needToSave === true) Task.userCancelEditTask(previousEditTask$);
       }
 
       if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
-        previousEditTask$.removeClass('active-edit');
+        previousEditTask$.removeClass(this._initObj.activeEditTask);
       }
-
-      console.log(committedChangesIcon$);
     }
   }, {
     key: "_editTaskHandler",
@@ -237,8 +316,6 @@ function () {
     value: function readOnlyToReadWriteTaskToggle(context, mode) {
       var readOnlyTaskElem$ = $('.read-only', context);
       var readWriteTaskElem$ = $('.read-write', context);
-      console.log(readOnlyTaskElem$);
-      console.log(readWriteTaskElem$);
 
       switch (mode) {
         case "read":
@@ -254,6 +331,31 @@ function () {
         default:
           throw new Error("mode does not exists");
       }
+    }
+  }, {
+    key: "_cancelEditTaskHandler",
+    value: function _cancelEditTaskHandler(event) {
+      var target = event.target;
+      if (target.closest('a').title !== 'cancel edit task') return false;
+      var taskContainer$ = $(target.closest("li.".concat(Object.values(this)[0].activeEditTask)));
+      taskContainer$.find('input').val(taskContainer$.data('current-task-val'));
+      Task.readOnlyToReadWriteTaskToggle(taskContainer$, 'read');
+      taskContainer$.removeAttr('class');
+      event.preventDefault();
+      event.stopPropagation();
+
+      Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this, false); //no send ajax data
+
+    }
+  }, {
+    key: "userCancelEditTask",
+    value: function userCancelEditTask(taskContainer$) {
+      taskContainer$.find('a[title="cancel edit task"]').children(':first-child').trigger('click.cancelEditTask'); //no send ajax data
+    }
+  }, {
+    key: "_cancelEditTaskKeyboard",
+    value: function _cancelEditTaskKeyboard(event) {
+      if (event.code === 'Escape') Task.userCancelEditTask($(".".concat(Object.values(this)[0].activeEditTask)));
     }
   }, {
     key: "changeIconColor",
@@ -311,15 +413,16 @@ var routing = {
   index: '',
   projects: '/projects',
   tasks: '/tasks',
+  update_task: 'tasks/{task}/update',
   contacts: '/contacts'
 };
 
 /***/ }),
 
-/***/ "./resources/js/init objects/taskInitObj.js":
-/*!**************************************************!*\
-  !*** ./resources/js/init objects/taskInitObj.js ***!
-  \**************************************************/
+/***/ "./resources/js/init objects/task/taskInitObj.js":
+/*!*******************************************************!*\
+  !*** ./resources/js/init objects/task/taskInitObj.js ***!
+  \*******************************************************/
 /*! exports provided: taskInitObj */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -328,11 +431,37 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "taskInitObj", function() { return taskInitObj; });
 var taskInitObj = {
   container: '.to-do-list',
+  activeEditTask: 'active-edit',
   editTask: '[title="edit task"]',
   completeTask: '[title="complete task"]',
   removeTask: '[title="delete task"]',
   saveTask: '[title="save task"]',
   cancelEditTask: '[title="cancel edit task"]'
+};
+
+/***/ }),
+
+/***/ "./resources/js/init objects/task/taskRequestParams.js":
+/*!*************************************************************!*\
+  !*** ./resources/js/init objects/task/taskRequestParams.js ***!
+  \*************************************************************/
+/*! exports provided: taskRequestParams */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "taskRequestParams", function() { return taskRequestParams; });
+/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routing */ "./resources/js/init objects/routing.js");
+
+var taskRequestParams = {
+  type: "PATCH",
+  url: _routing__WEBPACK_IMPORTED_MODULE_0__["routing"].update_task,
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+    'Content-Type': 'application/json',
+    'charset': 'utf-8',
+    'Accept': 'application/json'
+  }
 };
 
 /***/ }),

@@ -28,8 +28,8 @@
                         class="fa fa-edit"></i></a>
                 <a href="{{--{{route('complete_task')}}--}}" title="complete task"><i class="fa fa-check"></i></a>
                 <a href="{{--{{route('delete_task')}}--}}" title="delete task"><i class="fa fa-times"></i></a>
-                <a href="{{--{{route('complete_task')}}--}}" title="save task" onclick="return false"><i class="fa fa-check-circle"></i></a>
-                <a href="{{--{{route('delete_task')}}--}}" title="cancel edit task" onclick="return false"><i class="fa fa-times-circle"></i></a>
+                <a href="{{route('update_task',[$task->getRouteKeyName()=>$task->id])}}" title="save task"><i class="fa fa-check-circle"></i></a>
+                <a href="{{--{{route('delete_task')}}--}}" title="cancel edit task"><i class="fa fa-times-circle"></i></a>
                 {{--<a href="" title="edit task"><i class="fa fa-edit"></i></a>--}}
             </li>
         @endforeach
