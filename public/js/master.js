@@ -118,8 +118,7 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          var XMLHttpRequest = new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"]();
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], XMLHttpRequest.configure(_init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__["taskRequestParams"])).run();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__["taskRequestParams"])).run();
           break;
 
         default:
@@ -152,19 +151,24 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Ajax =
 /*#__PURE__*/
 function () {
-  function Ajax() {
+  function Ajax(settings) {
     _classCallCheck(this, Ajax);
+
+    this.config_settings = settings;
   }
 
   _createClass(Ajax, [{
-    key: "configure",
-    value: function configure(requestParams) {
-      this.ajax = $.ajax({
+    key: "_configure",
+    value: function _configure(requestParams) {
+      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+      $.ajax({
         type: requestParams.type,
         url: requestParams.url,
-        headers: requestParams.headers
+        data: requestParams.data,
+        headers: requestParams.headers,
+        success: callback.success,
+        error: callback.error
       });
-      return this;
     }
   }, {
     key: "request",
@@ -223,10 +227,11 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Task =
 /*#__PURE__*/
 function () {
-  function Task(initObj) {
+  function Task(initObj, ajax) {
     _classCallCheck(this, Task);
 
     this._initObj = initObj;
+    this._ajax = ajax;
   }
 
   _createClass(Task, [{
@@ -240,8 +245,9 @@ function () {
           saveTask = _this$_initObj.saveTask,
           cancelEditTask = _this$_initObj.cancelEditTask;
       $(container).on('click.initEditTask', editTask, $.proxy(this._initEditTaskHandler, this));
+      $(container).on('click.saveEditTask', saveTask, $.proxy(this._saveEditTaskHandler, this));
       $(container).on('click.cancelEditTask', cancelEditTask, $.proxy(Task._cancelEditTaskHandler, this));
-      $(document.body).on('keydown.cancelEditTaskKeybord', $.proxy(Task._cancelEditTaskKeyboard, this));
+      $(document.body).on('keydown.cancelEditTaskKeyboard', $.proxy(Task._cancelEditTaskKeyboard, this));
     }
   }, {
     key: "_initEditTaskHandler",
@@ -266,6 +272,50 @@ function () {
       } catch (e) {
         console.log(e.stack);
       }
+    }
+  }, {
+    key: "_saveEditTaskHandler",
+    value: function _saveEditTaskHandler(event) {
+      var target = event.target;
+      if ($(target).hasClass('save-edit-task') === false) return false;
+      var saveIconWrapper = target.closest('a');
+      if (saveIconWrapper.title !== 'save task') return false;
+      $.ajax({
+        type: "PATCH",
+        url: saveIconWrapper.pathname,
+        data: JSON.stringify({
+          a: 'hello'
+        }),
+        headers: {
+          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+          'Content-Type': 'application/json',
+          'charset': 'utf-8',
+          'async': true,
+          'Accept': 'application/json'
+        },
+        success: function success(response) {
+          console.log(JSON.parse(response));
+        },
+        error: function error(data, textStatus, errorThrown) {
+          alert('BAD');
+        }
+      });
+      /*this._ajax.config_settings.url = saveIconWrapper.pathname;
+      this._ajax.config_settings.data = JSON.stringify({
+          description:Task.getReadWriteElem(`.${this._initObj.activeEditTask}`).find('input').val()
+      });
+      /!*this._ajax.config_settings.success = function(response){
+          //if(response)
+              console.log(response);
+      };*!/
+      /!* this._ajax.config_settings.error = function (request,status, error) {
+          console.log(error);
+          alert(status);
+      };*!/
+      console.log(this._ajax.config_settings);
+      this._ajax._configure(this._ajax.config_settings);*/
+
+      event.preventDefault(); //event.stopPropagation();
     }
   }, {
     key: "_previousEditTask",
@@ -314,8 +364,8 @@ function () {
   }], [{
     key: "readOnlyToReadWriteTaskToggle",
     value: function readOnlyToReadWriteTaskToggle(context, mode) {
-      var readOnlyTaskElem$ = $('.read-only', context);
-      var readWriteTaskElem$ = $('.read-write', context);
+      var readOnlyTaskElem$ = Task.getReadOnlyElem(context);
+      var readWriteTaskElem$ = Task.getReadWriteElem(context);
 
       switch (mode) {
         case "read":
@@ -392,6 +442,16 @@ function () {
       input$.removeAttr('placeholder');
       return true;
     }
+  }, {
+    key: "getReadOnlyElem",
+    value: function getReadOnlyElem(context) {
+      return $('.read-only', context);
+    }
+  }, {
+    key: "getReadWriteElem",
+    value: function getReadWriteElem(context) {
+      return $('.read-write', context);
+    }
   }]);
 
   return Task;
@@ -456,10 +516,12 @@ __webpack_require__.r(__webpack_exports__);
 var taskRequestParams = {
   type: "PATCH",
   url: _routing__WEBPACK_IMPORTED_MODULE_0__["routing"].update_task,
+  data: null,
   headers: {
     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
     'Content-Type': 'application/json',
     'charset': 'utf-8',
+    'async': true,
     'Accept': 'application/json'
   }
 };

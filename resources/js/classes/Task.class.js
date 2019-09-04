@@ -1,14 +1,15 @@
 export class Task {
-    constructor(initObj) {
+    constructor(initObj,ajax) {
         this._initObj = initObj;
+        this._ajax = ajax;
     }
 
     run() {
         let {container, editTask, completeTask, removeTask, saveTask, cancelEditTask} = this._initObj;
         $(container).on('click.initEditTask', editTask, $.proxy(this._initEditTaskHandler, this));
+        $(container).on('click.saveEditTask', saveTask, $.proxy(this._saveEditTaskHandler,this));
         $(container).on('click.cancelEditTask', cancelEditTask, $.proxy(Task._cancelEditTaskHandler,this));
-        $(document.body).on('keydown.cancelEditTaskKeybord',$.proxy(Task._cancelEditTaskKeyboard,this));
-
+        $(document.body).on('keydown.cancelEditTaskKeyboard',$.proxy(Task._cancelEditTaskKeyboard,this));
     }
 
     _initEditTaskHandler(event) {
@@ -27,10 +28,50 @@ export class Task {
         }
 
     }
+_saveEditTaskHandler(event){
+    let target = event.target;
+    if($(target).hasClass('save-edit-task')===false) return false;
+    let saveIconWrapper = target.closest('a');
+    if (saveIconWrapper.title !== 'save task') return false;
+    $.ajax({
+        type: "PATCH",
+        url: saveIconWrapper.pathname,
+        data: JSON.stringify({a:'hello'}),
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Content-Type': 'application/json',
+            'charset': 'utf-8',
+            'async':true,
+            'Accept': 'application/json'
+        },
+        success: function (response) {
+            console.log(JSON.parse(response));
+        },
+        error: function (data, textStatus, errorThrown) {
+            alert('BAD');
 
+        },
+    });
+    /*this._ajax.config_settings.url = saveIconWrapper.pathname;
+    this._ajax.config_settings.data = JSON.stringify({
+        description:Task.getReadWriteElem(`.${this._initObj.activeEditTask}`).find('input').val()
+    });
+    /!*this._ajax.config_settings.success = function(response){
+        //if(response)
+            console.log(response);
+    };*!/
+   /!* this._ajax.config_settings.error = function (request,status, error) {
+        console.log(error);
+        alert(status);
+    };*!/
+    console.log(this._ajax.config_settings);
+    this._ajax._configure(this._ajax.config_settings);*/
+    event.preventDefault();
+    //event.stopPropagation();
+}
     static readOnlyToReadWriteTaskToggle(context, mode) {
-        let readOnlyTaskElem$ = $('.read-only', context);
-        let readWriteTaskElem$ = $('.read-write', context);
+        let readOnlyTaskElem$ = Task.getReadOnlyElem(context);
+        let readWriteTaskElem$ =Task.getReadWriteElem(context);
         switch (mode) {
             case "read":
                 readOnlyTaskElem$.removeClass('no-display');
@@ -126,5 +167,11 @@ export class Task {
         }
         input$.removeAttr('placeholder');
         return true;
+    }
+    static getReadOnlyElem(context){
+        return $('.read-only', context);
+    }
+    static getReadWriteElem(context){
+        return $('.read-write', context);
     }
 }

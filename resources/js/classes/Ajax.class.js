@@ -1,12 +1,16 @@
 export class Ajax {
-
-    configure(requestParams) {
-        this.ajax = $.ajax({
+    constructor(settings){
+        this.config_settings = settings;
+    }
+    _configure(requestParams,callback = {}) {
+        $.ajax({
             type: requestParams.type,
             url: requestParams.url,
-            headers: requestParams.headers
+            data:requestParams.data,
+            headers: requestParams.headers,
+            success:callback.success,
+            error:callback.error
         });
-        return this;
     }
 
     request() {

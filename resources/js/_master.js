@@ -14,9 +14,8 @@ import{routing} from "./init objects/routing";
                     console.log(`index page`);
                     break;
                 case "tasks":
-                    let XMLHttpRequest = new Ajax();
 
-                    (new Task(taskInitObj,XMLHttpRequest.configure(taskRequestParams))).run();
+                    (new Task(taskInitObj,new Ajax(taskRequestParams))).run();
                     break;
                 default:
                     throw new Error("404 Page not found!!");

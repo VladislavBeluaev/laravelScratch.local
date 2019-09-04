@@ -38,7 +38,8 @@ class TasksController extends Controller
 
     function update(Task $task)
     {
-
+        //dd($task->description);
+       echo json_encode($task->description);
     }
 
     function destroy()
