@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Ajax\AjaxTaskController;
 use App\Task;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
@@ -36,10 +37,11 @@ class TasksController extends Controller
     function edit(Task $task){
     }
 
-    function update(Task $task)
+    function update(Task $task, AjaxTaskController $ajax_controller)
     {
         //dd($task->description);
-       echo json_encode($task->description);
+        $ajax_controller->update($task);
+       //echo json_encode($task->description);
     }
 
     function destroy()

@@ -33,41 +33,36 @@ _saveEditTaskHandler(event){
     if($(target).hasClass('save-edit-task')===false) return false;
     let saveIconWrapper = target.closest('a');
     if (saveIconWrapper.title !== 'save task') return false;
-    $.ajax({
-        type: "PATCH",
-        url: saveIconWrapper.pathname,
-        data: JSON.stringify({a:'hello'}),
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-            'Content-Type': 'application/json',
-            'charset': 'utf-8',
-            'async':true,
-            'Accept': 'application/json'
+    let currentEditTaskContainer$ = $(`.${this._initObj.activeEditTask}`);
+    let self = this;
+    this._ajax.req_settings.url =saveIconWrapper.pathname;
+    this._ajax.req_settings.data =JSON.stringify({
+        description:Task.getReadWriteInputVal(currentEditTaskContainer$)
+    });
+    this._ajax.send({
+        success:function (response) {
+            try{
+                if(JSON.parse(response).update===true)
+                    Task.save.call(self,currentEditTaskContainer$);
+            }
+            catch (e) {
+                console.log(e.stack);
+            }
         },
-        success: function (response) {
-            console.log(JSON.parse(response));
-        },
-        error: function (data, textStatus, errorThrown) {
-            alert('BAD');
+        error:function (data, textStatus, errorThrown) {
+            console.log(data.getAllResponseHeaders());
+            console.log(errorThrown);
 
         },
     });
-    /*this._ajax.config_settings.url = saveIconWrapper.pathname;
-    this._ajax.config_settings.data = JSON.stringify({
-        description:Task.getReadWriteElem(`.${this._initObj.activeEditTask}`).find('input').val()
-    });
-    /!*this._ajax.config_settings.success = function(response){
-        //if(response)
-            console.log(response);
-    };*!/
-   /!* this._ajax.config_settings.error = function (request,status, error) {
-        console.log(error);
-        alert(status);
-    };*!/
-    console.log(this._ajax.config_settings);
-    this._ajax._configure(this._ajax.config_settings);*/
     event.preventDefault();
-    //event.stopPropagation();
+    event.stopPropagation();
+}
+static save(taskItemContainer$){
+    Task.readOnlyToReadWriteTaskToggle(taskItemContainer$,'read');
+    taskItemContainer$.removeAttr('class');
+    Task.getReadOnlyElem(taskItemContainer$).text(Task.getReadWriteInputVal(taskItemContainer$));
+    Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this,false);
 }
     static readOnlyToReadWriteTaskToggle(context, mode) {
         let readOnlyTaskElem$ = Task.getReadOnlyElem(context);
@@ -93,14 +88,22 @@ _saveEditTaskHandler(event){
         let inputTaskValue$ = previousEditTask$.find('input');
         if (committedChangesIcon$.hasClass('save-edit-task') === true) {
             let needToSave = window.confirm("Имя предыдущей задачи было изменено, сохранить данные?");
+            console.log(needToSave);
             if (needToSave === false)
-                Task.userCancelEditTask(previousEditTask$);
+                Task.userCancelEditTask.call(this,previousEditTask$);
+
+            Task.userSaveTask.call(this,previousEditTask$);
 
         }
         if (Task._isEmptyField(inputTaskValue$) === false) {
             let needToSave = window.confirm("Поле задача не может быть пустым. Отменить редактирование данного поля?");
             if (needToSave === true)
-                Task.userCancelEditTask(previousEditTask$);
+                Task.userCancelEditTask.call(this,previousEditTask$);
+            else{
+                console.log('here');
+                Task.userSaveTask.call(this,previousEditTask$);
+            }
+
         }
         if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
             previousEditTask$.removeClass(this._initObj.activeEditTask);
@@ -120,14 +123,18 @@ _saveEditTaskHandler(event){
         Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this,false);
         //no send ajax data
     }
-
+    static userSaveTask(taskContainer$){
+        taskContainer$.find(Object.values(this)[0].saveTask).children(':first-child').trigger('click.saveEditTask');
+        //send ajax data
+    }
     static userCancelEditTask(taskContainer$) {
-        taskContainer$.find('a[title="cancel edit task"]').children(':first-child').trigger('click.cancelEditTask');
+        taskContainer$.find(Object.values(this)[0].cancelEditTask).children(':first-child').trigger('click.cancelEditTask');
+        return -1;
         //no send ajax data
     }
     static _cancelEditTaskKeyboard(event){
        if(event.code==='Escape')
-        Task.userCancelEditTask($(`.${Object.values(this)[0].activeEditTask}`));
+        Task.userCancelEditTask.call(this,$(`.${Object.values(this)[0].activeEditTask}`));
     }
 
     _editTaskHandler(event) {
@@ -156,8 +163,8 @@ _saveEditTaskHandler(event){
 
     static setDisableIconColor(...icons) {
         let [saveIcon$, cancelIcon$] = icons;
-        if (saveIcon$.hasClass('save-edit-task') === true) saveIcon$.removeClass('save-edit-task').addClass('disable');
-        if (cancelIcon$.hasClass('cancel-edit-task') === true) cancelIcon$.removeClass('cancel-edit-task').addClass('disable');
+        if (saveIcon$.hasClass('save-edit-task') === true) saveIcon$.removeClass('save-edit-task');
+        if (cancelIcon$.hasClass('cancel-edit-task') === true) cancelIcon$.removeClass('cancel-edit-task');
     }
 
     static _isEmptyField(input$) {
@@ -173,5 +180,8 @@ _saveEditTaskHandler(event){
     }
     static getReadWriteElem(context){
         return $('.read-write', context);
+    }
+    static getReadWriteInputVal(context){
+       return Task.getReadWriteElem(context).find('input').val();
     }
 }

@@ -98,7 +98,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Ajax.class */ "./resources/js/classes/Ajax.class.js");
 /* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
 /* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
-/* harmony import */ var _init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/taskRequestParams */ "./resources/js/init objects/task/taskRequestParams.js");
+/* harmony import */ var _init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/ajaxReqSettings */ "./resources/js/init objects/task/ajaxReqSettings.js");
 /* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
 
 
@@ -118,7 +118,7 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_taskRequestParams__WEBPACK_IMPORTED_MODULE_3__["taskRequestParams"])).run();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_3__["ajaxReqSettings"])).run();
           break;
 
         default:
@@ -154,28 +154,14 @@ function () {
   function Ajax(settings) {
     _classCallCheck(this, Ajax);
 
-    this.config_settings = settings;
+    this.req_settings = settings;
   }
 
   _createClass(Ajax, [{
-    key: "_configure",
-    value: function _configure(requestParams) {
-      var callback = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-      $.ajax({
-        type: requestParams.type,
-        url: requestParams.url,
-        data: requestParams.data,
-        headers: requestParams.headers,
-        success: callback.success,
-        error: callback.error
-      });
+    key: "send",
+    value: function send(callbackEvents) {
+      $.ajax(Object.assign(this.req_settings, callbackEvents));
     }
-  }, {
-    key: "request",
-    value: function request() {}
-  }, {
-    key: "response",
-    value: function response() {}
   }, {
     key: "_makeAjaxURLFromTemplate",
     value: function _makeAjaxURLFromTemplate(templateURL) {
@@ -280,42 +266,29 @@ function () {
       if ($(target).hasClass('save-edit-task') === false) return false;
       var saveIconWrapper = target.closest('a');
       if (saveIconWrapper.title !== 'save task') return false;
-      $.ajax({
-        type: "PATCH",
-        url: saveIconWrapper.pathname,
-        data: JSON.stringify({
-          a: 'hello'
-        }),
-        headers: {
-          'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-          'Content-Type': 'application/json',
-          'charset': 'utf-8',
-          'async': true,
-          'Accept': 'application/json'
-        },
+      var currentEditTaskContainer$ = $(".".concat(this._initObj.activeEditTask));
+      var self = this;
+      this._ajax.req_settings.url = saveIconWrapper.pathname;
+      this._ajax.req_settings.data = JSON.stringify({
+        description: Task.getReadWriteInputVal(currentEditTaskContainer$)
+      });
+
+      this._ajax.send({
         success: function success(response) {
-          console.log(JSON.parse(response));
+          try {
+            if (JSON.parse(response).update === true) Task.save.call(self, currentEditTaskContainer$);
+          } catch (e) {
+            console.log(e.stack);
+          }
         },
         error: function error(data, textStatus, errorThrown) {
-          alert('BAD');
+          console.log(data.getAllResponseHeaders());
+          console.log(errorThrown);
         }
       });
-      /*this._ajax.config_settings.url = saveIconWrapper.pathname;
-      this._ajax.config_settings.data = JSON.stringify({
-          description:Task.getReadWriteElem(`.${this._initObj.activeEditTask}`).find('input').val()
-      });
-      /!*this._ajax.config_settings.success = function(response){
-          //if(response)
-              console.log(response);
-      };*!/
-      /!* this._ajax.config_settings.error = function (request,status, error) {
-          console.log(error);
-          alert(status);
-      };*!/
-      console.log(this._ajax.config_settings);
-      this._ajax._configure(this._ajax.config_settings);*/
 
-      event.preventDefault(); //event.stopPropagation();
+      event.preventDefault();
+      event.stopPropagation();
     }
   }, {
     key: "_previousEditTask",
@@ -327,13 +300,18 @@ function () {
 
       if (committedChangesIcon$.hasClass('save-edit-task') === true) {
         var needToSave = window.confirm("Имя предыдущей задачи было изменено, сохранить данные?");
-        if (needToSave === false) Task.userCancelEditTask(previousEditTask$);
+        console.log(needToSave);
+        if (needToSave === false) Task.userCancelEditTask.call(this, previousEditTask$);
+        Task.userSaveTask.call(this, previousEditTask$);
       }
 
       if (Task._isEmptyField(inputTaskValue$) === false) {
         var _needToSave = window.confirm("Поле задача не может быть пустым. Отменить редактирование данного поля?");
 
-        if (_needToSave === true) Task.userCancelEditTask(previousEditTask$);
+        if (_needToSave === true) Task.userCancelEditTask.call(this, previousEditTask$);else {
+          console.log('here');
+          Task.userSaveTask.call(this, previousEditTask$);
+        }
       }
 
       if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
@@ -362,6 +340,15 @@ function () {
       }
     }
   }], [{
+    key: "save",
+    value: function save(taskItemContainer$) {
+      Task.readOnlyToReadWriteTaskToggle(taskItemContainer$, 'read');
+      taskItemContainer$.removeAttr('class');
+      Task.getReadOnlyElem(taskItemContainer$).text(Task.getReadWriteInputVal(taskItemContainer$));
+
+      Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this, false);
+    }
+  }, {
     key: "readOnlyToReadWriteTaskToggle",
     value: function readOnlyToReadWriteTaskToggle(context, mode) {
       var readOnlyTaskElem$ = Task.getReadOnlyElem(context);
@@ -398,14 +385,20 @@ function () {
 
     }
   }, {
+    key: "userSaveTask",
+    value: function userSaveTask(taskContainer$) {
+      taskContainer$.find(Object.values(this)[0].saveTask).children(':first-child').trigger('click.saveEditTask'); //send ajax data
+    }
+  }, {
     key: "userCancelEditTask",
     value: function userCancelEditTask(taskContainer$) {
-      taskContainer$.find('a[title="cancel edit task"]').children(':first-child').trigger('click.cancelEditTask'); //no send ajax data
+      taskContainer$.find(Object.values(this)[0].cancelEditTask).children(':first-child').trigger('click.cancelEditTask');
+      return -1; //no send ajax data
     }
   }, {
     key: "_cancelEditTaskKeyboard",
     value: function _cancelEditTaskKeyboard(event) {
-      if (event.code === 'Escape') Task.userCancelEditTask($(".".concat(Object.values(this)[0].activeEditTask)));
+      if (event.code === 'Escape') Task.userCancelEditTask.call(this, $(".".concat(Object.values(this)[0].activeEditTask)));
     }
   }, {
     key: "changeIconColor",
@@ -428,8 +421,8 @@ function () {
 
       var saveIcon$ = icons[0],
           cancelIcon$ = icons[1];
-      if (saveIcon$.hasClass('save-edit-task') === true) saveIcon$.removeClass('save-edit-task').addClass('disable');
-      if (cancelIcon$.hasClass('cancel-edit-task') === true) cancelIcon$.removeClass('cancel-edit-task').addClass('disable');
+      if (saveIcon$.hasClass('save-edit-task') === true) saveIcon$.removeClass('save-edit-task');
+      if (cancelIcon$.hasClass('cancel-edit-task') === true) cancelIcon$.removeClass('cancel-edit-task');
     }
   }, {
     key: "_isEmptyField",
@@ -451,6 +444,11 @@ function () {
     key: "getReadWriteElem",
     value: function getReadWriteElem(context) {
       return $('.read-write', context);
+    }
+  }, {
+    key: "getReadWriteInputVal",
+    value: function getReadWriteInputVal(context) {
+      return Task.getReadWriteElem(context).find('input').val();
     }
   }]);
 
@@ -479,6 +477,33 @@ var routing = {
 
 /***/ }),
 
+/***/ "./resources/js/init objects/task/ajaxReqSettings.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/init objects/task/ajaxReqSettings.js ***!
+  \***********************************************************/
+/*! exports provided: ajaxReqSettings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ajaxReqSettings", function() { return ajaxReqSettings; });
+/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routing */ "./resources/js/init objects/routing.js");
+
+var ajaxReqSettings = {
+  type: "PATCH",
+  url: _routing__WEBPACK_IMPORTED_MODULE_0__["routing"].update_task,
+  data: null,
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+    'Content-Type': 'application/json',
+    'charset': 'utf-8',
+    'async': true,
+    'Accept': 'application/json'
+  }
+};
+
+/***/ }),
+
 /***/ "./resources/js/init objects/task/taskInitObj.js":
 /*!*******************************************************!*\
   !*** ./resources/js/init objects/task/taskInitObj.js ***!
@@ -497,33 +522,6 @@ var taskInitObj = {
   removeTask: '[title="delete task"]',
   saveTask: '[title="save task"]',
   cancelEditTask: '[title="cancel edit task"]'
-};
-
-/***/ }),
-
-/***/ "./resources/js/init objects/task/taskRequestParams.js":
-/*!*************************************************************!*\
-  !*** ./resources/js/init objects/task/taskRequestParams.js ***!
-  \*************************************************************/
-/*! exports provided: taskRequestParams */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "taskRequestParams", function() { return taskRequestParams; });
-/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routing */ "./resources/js/init objects/routing.js");
-
-var taskRequestParams = {
-  type: "PATCH",
-  url: _routing__WEBPACK_IMPORTED_MODULE_0__["routing"].update_task,
-  data: null,
-  headers: {
-    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-    'Content-Type': 'application/json',
-    'charset': 'utf-8',
-    'async': true,
-    'Accept': 'application/json'
-  }
 };
 
 /***/ }),

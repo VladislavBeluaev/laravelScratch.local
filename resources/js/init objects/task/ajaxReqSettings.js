@@ -1,6 +1,6 @@
 import {routing} from "../routing";
 export
-let taskRequestParams = {
+let ajaxReqSettings = {
     type: "PATCH",
     url: routing.update_task,
     data: null,

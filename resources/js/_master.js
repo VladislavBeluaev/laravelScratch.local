@@ -1,7 +1,7 @@
 import {Ajax} from "./classes/Ajax.class";
 import {Task} from "./classes/Task.class";
 import {taskInitObj} from "./init objects/task/taskInitObj";
-import {taskRequestParams} from "./init objects/task/taskRequestParams";
+import {ajaxReqSettings} from "./init objects/task/ajaxReqSettings";
 import{routing} from "./init objects/routing";
 
 (function ($,undefined) {
@@ -15,7 +15,7 @@ import{routing} from "./init objects/routing";
                     break;
                 case "tasks":
 
-                    (new Task(taskInitObj,new Ajax(taskRequestParams))).run();
+                    (new Task(taskInitObj,new Ajax(ajaxReqSettings))).run();
                     break;
                 default:
                     throw new Error("404 Page not found!!");

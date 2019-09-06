@@ -1,26 +1,10 @@
 export class Ajax {
     constructor(settings){
-        this.config_settings = settings;
+        this.req_settings = settings;
     }
-    _configure(requestParams,callback = {}) {
-        $.ajax({
-            type: requestParams.type,
-            url: requestParams.url,
-            data:requestParams.data,
-            headers: requestParams.headers,
-            success:callback.success,
-            error:callback.error
-        });
+    send(callbackEvents) {
+        $.ajax(Object.assign(this.req_settings,callbackEvents));
     }
-
-    request() {
-
-    }
-
-    response() {
-
-    }
-
     _makeAjaxURLFromTemplate(templateURL,params=[]) {
         if(templateURL.includes('{') && templateURL.includes('}')){
             let urlFragments = templateURL.split('}');
