@@ -234,6 +234,8 @@ function () {
       $(container).on('click.saveEditTask', saveTask, $.proxy(this._saveEditTaskHandler, this));
       $(container).on('click.cancelEditTask', cancelEditTask, $.proxy(Task._cancelEditTaskHandler, this));
       $(document.body).on('keydown.cancelEditTaskKeyboard', $.proxy(Task._cancelEditTaskKeyboard, this));
+      $(container).on('click.completeTask', completeTask, $.proxy(this._completeTasksHandler, this));
+      $(container).on('click.removeTask', removeTask, $.proxy(this._removeTasksHandler, this));
     }
   }, {
     key: "_initEditTaskHandler",
@@ -268,9 +270,13 @@ function () {
       if (saveIconWrapper.title !== 'save task') return false;
       var currentEditTaskContainer$ = $(".".concat(this._initObj.activeEditTask));
       var self = this;
-      this._ajax.req_settings.url = saveIconWrapper.pathname;
-      this._ajax.req_settings.data = JSON.stringify({
-        description: Task.getReadWriteInputVal(currentEditTaskContainer$)
+
+      this._setRequestSettings({
+        type: "PATCH",
+        url: saveIconWrapper.pathname,
+        data: JSON.stringify({
+          description: Task.getReadWriteInputVal(currentEditTaskContainer$)
+        })
       });
 
       this._ajax.send({
@@ -324,6 +330,91 @@ function () {
       } else {
         this._changeControlButtonsIconColor(false, this._currentEditTaskContainer$);
       }
+    }
+  }, {
+    key: "_completeTasksHandler",
+    value: function _completeTasksHandler(event) {
+      var target = event.target;
+      var completeIconWrapper = target.closest('a');
+      if (completeIconWrapper.title !== 'complete task') return false;
+      var answer = confirm('Вы действительно хотите завершить задачу?');
+      if (answer === false) return false;
+      var completeTaskContainer$ = $(target.closest('li'));
+
+      this._setRequestSettings({
+        type: "PATCH",
+        url: completeIconWrapper.pathname,
+        data: JSON.stringify({
+          is_completed: true
+        })
+      });
+
+      this._ajax.send({
+        success: function success(response) {
+          try {
+            if (JSON.parse(response).is_completed === true) {
+              Task.successAjaxHandler(completeTaskContainer$, {
+                first: function first() {
+                  $(this).addClass('complete-task');
+                }
+              });
+            }
+          } catch (e) {
+            console.log(e.stack);
+          }
+        },
+        error: function error(data, textStatus, errorThrown) {
+          console.log(data.getAllResponseHeaders());
+          console.log(errorThrown);
+        }
+      });
+
+      event.preventDefault();
+    }
+  }, {
+    key: "_removeTasksHandler",
+    value: function _removeTasksHandler(event) {
+      var target = event.target;
+      var removeIconWrapper = target.closest('a');
+      if (removeIconWrapper.title !== 'delete task') return false;
+      var answer = confirm('Вы действительно хотите удалить задачу?');
+      if (answer === false) return false;
+      var removeTaskContainer$ = $(target.closest('li'));
+
+      this._setRequestSettings({
+        type: "DELETE",
+        url: removeIconWrapper.pathname,
+        data: JSON.stringify({
+          is_deleted: 'recycle'
+        })
+      });
+
+      this._ajax.send({
+        success: function success(response) {
+          try {
+            console.log(JSON.parse(response).is_deleted);
+
+            if (JSON.parse(response).is_deleted === true) {
+              Task.successAjaxHandler(removeTaskContainer$);
+            }
+          } catch (e) {
+            console.log(e.stack);
+          }
+        },
+        error: function error(data, textStatus, errorThrown) {
+          console.log(data.getAllResponseHeaders());
+          console.log(errorThrown);
+        }
+      });
+
+      event.preventDefault();
+    }
+  }, {
+    key: "_setRequestSettings",
+    value: function _setRequestSettings(settings) {
+      this._ajax.req_settings.type = settings.type;
+      this._ajax.req_settings.url = settings.url;
+      this._ajax.req_settings.data = settings.data;
     }
   }, {
     key: "_changeControlButtonsIconColor",
@@ -396,6 +487,35 @@ function () {
     key: "_cancelEditTaskKeyboard",
     value: function _cancelEditTaskKeyboard(event) {
       if (event.code === 'Escape') Task.userCancelEditTask.call(this, $(".".concat(Object.values(this)[0].activeEditTask)));
+    }
+  }, {
+    key: "successAjaxHandler",
+    value: function successAjaxHandler($taskContainer$) {
+      //let queueFunctions = fxQueue;
+      var $taskContainer$Queue = $taskContainer$.queue();
+      $taskContainer$Queue.unshift(function (next) {
+        $(this).fadeOut();
+        next();
+      });
+      $taskContainer$Queue.unshift(function (next) {
+        var siblingsCollection = $(this).siblings('li');
+        $(this).remove();
+        var listNumberElem = 'span:first-child';
+        siblingsCollection.sort(function (x, y) {
+          return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
+        }).each(function (i, item) {
+          $(item).find(listNumberElem).text(i + 1);
+        });
+        next();
+      });
+      $taskContainer$Queue[0]();
+      /*if(fxQueue.length!==0){
+          fxQueue.forEach((item,i)=>{
+              console.log(Object.keys(item)[0]);
+              /!*switch (Object.keys(item)[0]) {
+               }*!/
+          });
+      }*/
     }
   }, {
     key: "changeIconColor",

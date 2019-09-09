@@ -13,5 +13,5 @@ interface Ajax
     function create();
     function read();
     function update(Model $model);
-    function delete();
+    function destroy(Model $model);
 }

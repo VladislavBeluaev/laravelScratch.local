@@ -19,15 +19,15 @@
 @endsection
 @section('content')
     <ul class="to-do-list">
-        @foreach($tasks as $task)
+        @foreach($tasks as $index=>$task)
             {{--<li>{{$task->description}}</li>--}}
-            <li><span>{{$task->id}}.</span>
+            <li><span>{{$index+1}}.</span>
                 <label class="read-write no-display"><input type="text" value="{{$task->description}}"></label>
                 <span class="read-only">{{$task->description}}</span>
                 <a href="{{route('edit_task',[$task->getRouteKeyName()=>$task->id])}}" title="edit task"><i
                         class="fa fa-edit"></i></a>
-                <a href="{{--{{route('complete_task')}}--}}" title="complete task"><i class="fa fa-check"></i></a>
-                <a href="{{--{{route('delete_task')}}--}}" title="delete task"><i class="fa fa-times"></i></a>
+                <a href="{{route('complete_task',[$task->getRouteKeyName()=>$task->id])}}" title="complete task"><i class="fa fa-check"></i></a>
+                <a href="{{route('destroy_task',[$task->getRouteKeyName()=>$task->id])}}" title="delete task"><i class="fa fa-times"></i></a>
                 <a href="{{route('update_task',[$task->getRouteKeyName()=>$task->id])}}" title="save task"><i class="fa fa-check-circle"></i></a>
                 <a href="{{--{{route('delete_task')}}--}}" title="cancel edit task"><i class="fa fa-times-circle"></i></a>
                 {{--<a href="" title="edit task"><i class="fa fa-edit"></i></a>--}}

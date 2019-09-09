@@ -37,10 +37,17 @@ class AjaxTaskController extends Controller implements Ajax
         ]));
         */
     }
+    function complete(Model $model){
+        $complete_task = json_decode($this->request->getContent(), true);
+        $result = ['is_completed'=>$model->fill($complete_task)->save()];
+        echo json_encode($result);
+    }
 
-    function delete()
+    function destroy(Model $model)
     {
-        // TODO: Implement delete() method.
+        $complete_task = json_decode($this->request->getContent(), true);
+        $result = ['is_deleted'=>$model->fill($complete_task)->save()];
+        echo json_encode($result);
     }
     protected $model;
     protected $request;

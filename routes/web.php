@@ -26,7 +26,7 @@ Route::group(['prefix'=>'/tasks'],function(){
     Route::patch('/{task}/complete','TasksController@complete')->name('complete_task');
     Route::get('/{task}/edit','TasksController@edit')->name('edit_task');
     Route::patch('/{task}/update','TasksController@update')->name('update_task');/*->middleware(['ajax_response_headers']);*/
-    Route::delete('/{task}','TasksController@destroy');
+    Route::delete('/{task}/delete','TasksController@destroy')->name('destroy_task');
 });
 
 Route::get('/about','PagesController@about')->name('about');
