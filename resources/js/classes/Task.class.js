@@ -62,7 +62,7 @@ static save(taskItemContainer$){
     Task.readOnlyToReadWriteTaskToggle(taskItemContainer$,'read');
     taskItemContainer$.removeAttr('class');
     Task.getReadOnlyElem(taskItemContainer$).text(Task.getReadWriteInputVal(taskItemContainer$));
-    Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this,false);
+    Object.getPrototypeOf(this)._changeControlButtonsIconColor.apply(this,[false,taskItemContainer$]);
 }
     static readOnlyToReadWriteTaskToggle(context, mode) {
         let readOnlyTaskElem$ = Task.getReadOnlyElem(context);
@@ -96,13 +96,8 @@ static save(taskItemContainer$){
 
         }
         if (Task._isEmptyField(inputTaskValue$) === false) {
-            let needToSave = window.confirm("Поле задача не может быть пустым. Отменить редактирование данного поля?");
-            if (needToSave === true)
-                Task.userCancelEditTask.call(this,previousEditTask$);
-            else{
-                console.log('here');
-                Task.userSaveTask.call(this,previousEditTask$);
-            }
+            alert("Поле задача не может быть пустым!");
+            Task.userCancelEditTask.call(this,previousEditTask$);
 
         }
         if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
@@ -120,7 +115,7 @@ static save(taskItemContainer$){
         taskContainer$.removeAttr('class');
         event.preventDefault();
         event.stopPropagation();
-        Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this,false);
+        Object.getPrototypeOf(this)._changeControlButtonsIconColor.apply(this,[false,taskContainer$]);
         //no send ajax data
     }
     static userSaveTask(taskContainer$){
@@ -140,15 +135,15 @@ static save(taskItemContainer$){
     _editTaskHandler(event) {
         let target$ = $(event.target);
         if (this._currentEditTaskContainer$.data('current-task-val') !== target$.val() && Task._isEmptyField(target$)) {
-            this._changeControlButtonsIconColor(true);
+            this._changeControlButtonsIconColor(true,this._currentEditTaskContainer$);
         } else {
-            this._changeControlButtonsIconColor(false);
+            this._changeControlButtonsIconColor(false,this._currentEditTaskContainer$);
         }
     }
 
-    _changeControlButtonsIconColor(isChange = true) {
-        let saveEditButtonICon$ = $(this._initObj.saveTask, this._currentEditTaskContainer$).find('i');
-        let cancelSaveEditButtonICon$ = $(this._initObj.cancelEditTask, this._currentEditTaskContainer$).find('i');
+    _changeControlButtonsIconColor(isChange = true,context$) {
+        let saveEditButtonICon$ = $(this._initObj.saveTask, context$).find('i');
+        let cancelSaveEditButtonICon$ = $(this._initObj.cancelEditTask, context$).find('i');
         if (isChange === true) Task.changeIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);
         else {
             Task.setDisableIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);

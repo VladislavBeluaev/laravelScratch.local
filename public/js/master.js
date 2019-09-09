@@ -306,12 +306,8 @@ function () {
       }
 
       if (Task._isEmptyField(inputTaskValue$) === false) {
-        var _needToSave = window.confirm("Поле задача не может быть пустым. Отменить редактирование данного поля?");
-
-        if (_needToSave === true) Task.userCancelEditTask.call(this, previousEditTask$);else {
-          console.log('here');
-          Task.userSaveTask.call(this, previousEditTask$);
-        }
+        alert("Поле задача не может быть пустым!");
+        Task.userCancelEditTask.call(this, previousEditTask$);
       }
 
       if (committedChangesIcon$.hasClass('save-edit-task') === false && Task._isEmptyField(inputTaskValue$)) {
@@ -324,17 +320,18 @@ function () {
       var target$ = $(event.target);
 
       if (this._currentEditTaskContainer$.data('current-task-val') !== target$.val() && Task._isEmptyField(target$)) {
-        this._changeControlButtonsIconColor(true);
+        this._changeControlButtonsIconColor(true, this._currentEditTaskContainer$);
       } else {
-        this._changeControlButtonsIconColor(false);
+        this._changeControlButtonsIconColor(false, this._currentEditTaskContainer$);
       }
     }
   }, {
     key: "_changeControlButtonsIconColor",
     value: function _changeControlButtonsIconColor() {
       var isChange = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
-      var saveEditButtonICon$ = $(this._initObj.saveTask, this._currentEditTaskContainer$).find('i');
-      var cancelSaveEditButtonICon$ = $(this._initObj.cancelEditTask, this._currentEditTaskContainer$).find('i');
+      var context$ = arguments.length > 1 ? arguments[1] : undefined;
+      var saveEditButtonICon$ = $(this._initObj.saveTask, context$).find('i');
+      var cancelSaveEditButtonICon$ = $(this._initObj.cancelEditTask, context$).find('i');
       if (isChange === true) Task.changeIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);else {
         Task.setDisableIconColor(saveEditButtonICon$, cancelSaveEditButtonICon$);
       }
@@ -346,7 +343,7 @@ function () {
       taskItemContainer$.removeAttr('class');
       Task.getReadOnlyElem(taskItemContainer$).text(Task.getReadWriteInputVal(taskItemContainer$));
 
-      Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this, false);
+      Object.getPrototypeOf(this)._changeControlButtonsIconColor.apply(this, [false, taskItemContainer$]);
     }
   }, {
     key: "readOnlyToReadWriteTaskToggle",
@@ -381,7 +378,7 @@ function () {
       event.preventDefault();
       event.stopPropagation();
 
-      Object.getPrototypeOf(this)._changeControlButtonsIconColor.call(this, false); //no send ajax data
+      Object.getPrototypeOf(this)._changeControlButtonsIconColor.apply(this, [false, taskContainer$]); //no send ajax data
 
     }
   }, {
