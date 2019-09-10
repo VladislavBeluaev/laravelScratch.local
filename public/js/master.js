@@ -97,9 +97,11 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Ajax.class */ "./resources/js/classes/Ajax.class.js");
 /* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
-/* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
-/* harmony import */ var _init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/ajaxReqSettings */ "./resources/js/init objects/task/ajaxReqSettings.js");
-/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+/* harmony import */ var _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./classes/TestPromise.class */ "./resources/js/classes/TestPromise.class.js");
+/* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
+/* harmony import */ var _init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init objects/task/ajaxReqSettings */ "./resources/js/init objects/task/ajaxReqSettings.js");
+/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+
 
 
 
@@ -109,7 +111,7 @@ __webpack_require__.r(__webpack_exports__);
 (function ($, undefined) {
   $(function () {
     var url = location.pathname.substr(1);
-    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_4__["routing"]);
+    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_5__["routing"]);
 
     try {
       switch (url) {
@@ -118,7 +120,8 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_2__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_3__["ajaxReqSettings"])).run();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_3__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_4__["ajaxReqSettings"])).run();
+          new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_2__["TestPromises"](5).run();
           break;
 
         default:
@@ -570,6 +573,94 @@ function () {
   }]);
 
   return Task;
+}();
+
+/***/ }),
+
+/***/ "./resources/js/classes/TestPromise.class.js":
+/*!***************************************************!*\
+  !*** ./resources/js/classes/TestPromise.class.js ***!
+  \***************************************************/
+/*! exports provided: TestPromises */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TestPromises", function() { return TestPromises; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var TestPromises =
+/*#__PURE__*/
+function () {
+  function TestPromises(a) {
+    _classCallCheck(this, TestPromises);
+  }
+
+  _createClass(TestPromises, [{
+    key: "run",
+    value: function run() {
+      console.log('Request data...'); //this._emulateBackendResponse();
+
+      this.promiseBackendResponse();
+    }
+  }, {
+    key: "_emulateBackendResponse",
+    value: function _emulateBackendResponse() {
+      setTimeout(function () {
+        console.log('Preparing data...');
+        var backEndData = {
+          server: "aws",
+          port: '1092',
+          status: 'working'
+        };
+        setTimeout(function () {
+          backEndData.modified = true;
+          console.log('Getting data', backEndData);
+        }, 2000);
+      }, 2000);
+    }
+  }, {
+    key: "promiseBackendResponse",
+    value: function promiseBackendResponse() {
+      var backPromise = new Promise(function (resolve, reject) {
+        var isConnected = Math.random();
+        var backEndData = {
+          server: "aws",
+          port: '1092',
+          status: 'working'
+        };
+        console.log('Preparing answer...');
+        setTimeout(function () {
+          if (isConnected > 0.5) {
+            console.log('Preparing data...');
+            resolve(backEndData);
+          } else {
+            console.log('Connection error!');
+            backEndData.status = 'closed';
+            reject(backEndData);
+          }
+        }, 2000);
+      });
+
+      var publishedConnectionResult = function publishedConnectionResult(result) {
+        return Promise.resolve('Connected complete');
+      };
+
+      backPromise.then(function (clientData) {
+        setTimeout(function () {
+          console.log('Server answer', clientData);
+        }, 2000);
+      }).then(publishedConnectionResult)["catch"](function (errorClientData) {
+        console.log('Server answer', errorClientData);
+      });
+    }
+  }]);
+
+  return TestPromises;
 }();
 
 /***/ }),
