@@ -16,8 +16,9 @@ Route::group(['prefix'=>'/projects'],function(){
     Route::get('/create','ProjectController@create')->name('create_projects');
     Route::post('/create','ProjectController@store');
     Route::get('/{project}','ProjectController@show')->name('show_project');
-    Route::patch('/{project}/edit','ProjectController@update')->name('update_project');
-    Route::delete('/{project}','ProjectController@destroy');
+    Route::get('/{project}/edit','ProjectController@edit')->name('edit_project');
+    Route::patch('/{project}/update','ProjectController@update')->name('update_project');
+    Route::delete('/{project}/delete','ProjectController@destroy');
 });
 Route::group(['prefix'=>'/tasks'],function(){
     Route::get('','PagesController@tasks')->name('tasks');

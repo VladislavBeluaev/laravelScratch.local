@@ -14,8 +14,11 @@
 html, body {
     height: 100%
 }
+.content{
+    width: 99%;
+}
 
-div, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, ul, p,label {
+div, h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6, ul, p, label {
     .no-margin;
     .no-padding;
 }
@@ -25,19 +28,29 @@ ul {
     .no-margin;
     .no-padding;
 }
-a{
+
+a {
     text-decoration: none;
     .no-margin;
     .no-padding;
     .no-border;
 }
-input,textarea{
+
+input, textarea {
     .no-border;
     .no-padding;
     .no-margin;
-    .placeholder({ text-align: left; font-weight: bold;font-size: 16px;font-family: @defaultFontFamily; color: @task_delete_color; });
-    &:focus{
+    .placeholder({
+        text-align: left;
+        font-weight: bold;
+        font-size: 16px;
+        font-family: @defaultFontFamily;
+        color: @task_delete_color;
+    });
+
+    &:focus {
         outline: none;
+        box-shadow: none !important;
     }
 }
 
@@ -68,7 +81,8 @@ input,textarea{
 }
 
 .to-do-list {
-    width: 100%;
+    width: 70%;
+    margin-left: @defaultGutter*10;
     font-size: @defaultFontSize*1.5;
     font-family: @to_do_listFontFamily;
     color: @defaultFontColor;
@@ -87,64 +101,112 @@ input,textarea{
             .border_settings(1px solid #dee2e6);
             cursor: pointer;
             .show_task_control_buttons();
-            &.complete-task{
+
+            &.complete-task {
                 .hide_control_buttons();
             }
         }
-        &.active-edit{
+
+        &.active-edit {
             .border_settings(2px solid #636b6f);
 
-           a{
-                &[title="save task"]{
-                    .task_control_buttons(280px,0,@disable_btn_color);
-                    display: inline!important;
+            a {
+                &[title="save task"] {
+                    .task_control_buttons(460px, 0, @disable_btn_color);
+                    display: inline !important;
                 }
-                &[title="cancel edit task"]{
-                    .task_control_buttons(300px,0,@task_delete_color);
-                    display: inline!important;
+
+                &[title="cancel edit task"] {
+                    .task_control_buttons(490px, 0, @task_delete_color);
+                    display: inline !important;
                 }
             }
-            &:hover{
+
+            &:hover {
                 cursor: default;
-                a{
-                    &[title]{
+
+                a {
+                    &[title] {
                         display: none;
                     }
                 }
             }
         }
+
         span {
-            &:first-child{
+            &:first-child {
                 padding-right: @defaultGutter/6;
             }
         }
-        a{
-            &[title]{
+        label{
+            width: 90%;
+        }
+
+        a {
+            &[title] {
                 display: none;
             }
-            &[title="complete task"]{
-                .task_control_buttons(250px,-10px,@task_completed_color);
+
+            &[title="complete task"] {
+                .task_control_buttons(430px, -10px, @task_completed_color);
             }
-            &[title="edit task"]{
-                .task_control_buttons(280px,-10px,@edit_task_color);
+
+            &[title="edit task"] {
+                .task_control_buttons(460px, -10px, @edit_task_color);
             }
-            &[title="delete task"]{
-                .task_control_buttons(310px,-10px,@task_delete_color);
+
+            &[title="delete task"] {
+                .task_control_buttons(490px, -10px, @task_delete_color);
             }
         }
     }
 }
-.projects-list{
+
+.projects-list {
     .border_settings(1px solid #dee2e6);
-    thead{
-        th{
+
+    thead {
+        th {
             vertical-align: baseline;
             font-size: @defaultFontSize*1.5;
             .alignTo(center);
+            a{
+                color:@bodyColor;
+            }
         }
     }
-    th{
+
+    th {
         .border_r_settings(1px solid #dee2e6);
         .border_l_settings(1px solid #dee2e6);
     }
+}
+
+.project-manager {
+    input{
+        &[placeholder="Project title"]{
+            font-weight: @defaultFontWeight;
+        }
+    }
+    textarea {
+        &[name="description"] {
+            height: @textareaDefaultHeight;
+            font-weight: @defaultFontWeight;
+        }
+    }
+    button{
+        &[type="submit"]{
+            font-weight: @defaultFontWeight*1.5;
+        }
+    }
+}
+.project-header{
+    position: relative;
+    &:hover{
+        cursor: pointer;
+    }
+
+}
+article{
+    font-size: @defaultFontSize*1.5;
 }

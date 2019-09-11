@@ -20,27 +20,18 @@ class TasksController extends Controller
         return $this->task->get();
     }
 
-    function allWithFilters(array $filters)
+    function allWithFilters(array $filters=[])
     {
-        $no_filter_data = $this->all();
-        $filter_data = $no_filter_data->filter(function ($data) use($filters){
-            foreach ($filters as $key => $value) {
-                if ($data[$key] !== $value) {
-                    return false;
-                }
+        $filters_count = count($filters);
+        if($filters_count===0) return $this->all();
+        else{
+            $filters_data = $this->all();
+            while(count($filters)){
+                $filter = array_shift($filters);
+                $filters_data = $filters_data->where(key($filter),$filter[key($filter)]);
             }
-            return true;
-        });
-        return $filter_data->all();
-    }
-
-    private function filterCollection($row,array $filters)
-    {
-        $result = "";
-        foreach ($filters as $key=>$value){
-            $result.= "{$row->$key}== $value ||";
+            return $filters_data->values();
         }
-        return $result;
     }
 
     function get(Integer $id)
@@ -63,7 +54,7 @@ class TasksController extends Controller
     {
     }
 
-    function update(Task $task/*AjaxTaskController $ajax_controller*/)
+    function update(Task $task)
     {
         return $this->ajax_controller->update($task);
     }

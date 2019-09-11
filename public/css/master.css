@@ -45,6 +45,9 @@ html,
 body {
   height: 100%;
 }
+.content {
+  width: 99%;
+}
 div,
 h1,
 .h1,
@@ -148,6 +151,7 @@ textarea:-ms-input-placeholder {
 input:focus,
 textarea:focus {
   outline: none;
+  box-shadow: none !important;
 }
 .main-header-wrapper p:first-child {
   margin-bottom: 0;
@@ -167,7 +171,8 @@ textarea:focus {
   padding-right: 6px;
 }
 .to-do-list {
-  width: 100%;
+  width: 70%;
+  margin-left: 240px;
   font-size: 24px;
   font-family: "Bell MT";
   color: #000;
@@ -206,9 +211,9 @@ textarea:focus {
 }
 .to-do-list li.active-edit a[title="save task"] {
   position: absolute;
-  left: 280px;
+  left: 460px;
   top: 0;
-  display: inline!important;
+  display: inline !important;
 }
 .to-do-list li.active-edit a[title="save task"] > i {
   font-size: 0.5em;
@@ -216,9 +221,9 @@ textarea:focus {
 }
 .to-do-list li.active-edit a[title="cancel edit task"] {
   position: absolute;
-  left: 300px;
+  left: 490px;
   top: 0;
-  display: inline!important;
+  display: inline !important;
 }
 .to-do-list li.active-edit a[title="cancel edit task"] > i {
   font-size: 0.5em;
@@ -233,12 +238,15 @@ textarea:focus {
 .to-do-list li span:first-child {
   padding-right: 4px;
 }
+.to-do-list li label {
+  width: 90%;
+}
 .to-do-list li a[title] {
   display: none;
 }
 .to-do-list li a[title="complete task"] {
   position: absolute;
-  left: 250px;
+  left: 430px;
   top: -10px;
 }
 .to-do-list li a[title="complete task"] > i {
@@ -247,7 +255,7 @@ textarea:focus {
 }
 .to-do-list li a[title="edit task"] {
   position: absolute;
-  left: 280px;
+  left: 460px;
   top: -10px;
 }
 .to-do-list li a[title="edit task"] > i {
@@ -256,7 +264,7 @@ textarea:focus {
 }
 .to-do-list li a[title="delete task"] {
   position: absolute;
-  left: 310px;
+  left: 490px;
   top: -10px;
 }
 .to-do-list li a[title="delete task"] > i {
@@ -272,7 +280,29 @@ textarea:focus {
   font-size: 24px;
   text-align: center;
 }
+.projects-list thead th a {
+  color: #636b6f;
+}
 .projects-list th {
   border-right: 1px solid #dee2e6;
   border-left: 1px solid #dee2e6;
+}
+.project-manager input[placeholder="Project title"] {
+  font-weight: 600;
+}
+.project-manager textarea[name="description"] {
+  height: 200px;
+  font-weight: 600;
+}
+.project-manager button[type="submit"] {
+  font-weight: 900;
+}
+.project-header {
+  position: relative;
+}
+.project-header:hover {
+  cursor: pointer;
+}
+article {
+  font-size: 24px;
 }

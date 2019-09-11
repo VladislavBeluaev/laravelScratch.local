@@ -18,16 +18,19 @@ class ProjectController extends Controller
         return $this->project->get();
     }
 
-    function get(Integer $id)
+    function show(Project $project)
     {
-        return $this->project->where('id', $id);
+        //dd($project);
+        return view('projects.project')->withProject($project);
     }
+    function edit(Project $project){
 
+        return view('projects.edit')->withProject($project);
+    }
     function create()
     {
         return view('projects.create');
     }
-
     function store()
     {
         $this->project->insert(request()->except('_token'));

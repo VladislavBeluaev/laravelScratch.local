@@ -1,23 +1,24 @@
 @extends('layout.master')
 
-@section('title',"Project")
+@section('title',"Update project")
 
 @section('main_menu_links')
     <a href="{{route('home')}}">Home</a>
+    <a href="{{route('projects')}}">Projects</a>
     <a href="{{route('tasks')}}">Tasks</a>
     <a href="{{route('contacts')}}">Contacts</a>
     <a href="{{route('about')}}">About</a>
 @endsection
 
-@section('h1','Create new Project')
+@section('h1','Update Project')
 
 @section('content')
     <!-- Default form register -->
-    <form class="text-center border border-light p-5 project-manager" action="{{route('create_projects')}}" method="POST">
+    <form class="text-center border border-light p-5 project-manager"  action="{{route('create_projects')}}" method="POST">
         {{csrf_field()}}
-        <input type="text" name="title"  class="form-control mb-4" placeholder="Project title">
-        <textarea name="description" class="form-control mb-4" placeholder="Project description"></textarea>
-        <button class="btn btn-info my-4 btn-block" type="submit">Create project</button>
+        <input type="text" name="title" class="form-control mb-4" placeholder="Project title" value="{{$project->title}}">
+        <textarea name="description" class="form-control mb-4" placeholder="Project description">{{$project->description}}</textarea>
+        <button class="btn btn-info my-4 btn-block" type="submit">Update project</button>
     </form>
     {{-- <div class="form-row mb-4">
        <div class="col">
