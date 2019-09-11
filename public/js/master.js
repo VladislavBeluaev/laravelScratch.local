@@ -340,6 +340,9 @@ function () {
       var target = event.target;
       var completeIconWrapper = target.closest('a');
       if (completeIconWrapper.title !== 'complete task') return false;
+
+      this._previousEditTask();
+
       var answer = confirm('Вы действительно хотите завершить задачу?');
       if (answer === false) return false;
       var completeTaskContainer$ = $(target.closest('li'));
@@ -380,6 +383,9 @@ function () {
       var target = event.target;
       var removeIconWrapper = target.closest('a');
       if (removeIconWrapper.title !== 'delete task') return false;
+
+      this._previousEditTask();
+
       var answer = confirm('Вы действительно хотите удалить задачу?');
       if (answer === false) return false;
       var removeTaskContainer$ = $(target.closest('li'));
@@ -494,13 +500,12 @@ function () {
   }, {
     key: "successAjaxHandler",
     value: function successAjaxHandler($taskContainer$) {
-      //let queueFunctions = fxQueue;
-      var $taskContainer$Queue = $taskContainer$.queue();
-      $taskContainer$Queue.unshift(function (next) {
-        $(this).fadeOut();
-        next();
+      var taskQueueContainer = $taskContainer$.queue();
+      taskQueueContainer.push(function () {
+        $(this).fadeOut(400);
+        this.dequeue();
       });
-      $taskContainer$Queue.unshift(function (next) {
+      taskQueueContainer.push(function () {
         var siblingsCollection = $(this).siblings('li');
         $(this).remove();
         var listNumberElem = 'span:first-child';
@@ -509,22 +514,56 @@ function () {
         }).each(function (i, item) {
           $(item).find(listNumberElem).text(i + 1);
         });
-        next();
+        this.dequeue();
       });
-      $taskContainer$Queue[0]();
-      /*if(fxQueue.length!==0){
-          fxQueue.forEach((item,i)=>{
-              console.log(Object.keys(item)[0]);
-              /!*switch (Object.keys(item)[0]) {
-               }*!/
+
+      for (var _len = arguments.length, fxQueue = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+        fxQueue[_key - 1] = arguments[_key];
+      }
+
+      if (fxQueue.length) {
+        fxQueue.forEach(function (item) {
+          var objectKey = Object.keys(item)[0];
+
+          switch (objectKey) {
+            case "first":
+              console.log(item.first);
+              taskQueueContainer.unshift(item.first);
+              break;
+
+            case "last":
+              taskQueueContainer.push(item.last);
+              break;
+
+            default:
+              throw new Error('Wrong format sending queue handlers');
+          }
+        });
+      }
+
+      taskQueueContainer.shift().call($taskContainer$);
+
+      while (taskQueueContainer.length) {
+        setTimeout(taskQueueContainer.shift().bind($taskContainer$), 200);
+      }
+      /*new Promise(resolve => {
+          taskQueueContainer.shift().call($taskContainer$);
+          setTimeout(resolve,0,taskQueueContainer);
+      }).then((taskQueueContainer)=>{
+          taskQueueContainer.shift().call($taskContainer$);
+          return new Promise(resolve => {
+              setTimeout(resolve,1000,taskQueueContainer);
           });
-      }*/
+      }).then((taskQueueContainer)=>{
+          taskQueueContainer.shift().call($taskContainer$);
+      });*/
+
     }
   }, {
     key: "changeIconColor",
     value: function changeIconColor() {
-      for (var _len = arguments.length, icons = new Array(_len), _key = 0; _key < _len; _key++) {
-        icons[_key] = arguments[_key];
+      for (var _len2 = arguments.length, icons = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+        icons[_key2] = arguments[_key2];
       }
 
       var saveIcon$ = icons[0],
@@ -535,8 +574,8 @@ function () {
   }, {
     key: "setDisableIconColor",
     value: function setDisableIconColor() {
-      for (var _len2 = arguments.length, icons = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        icons[_key2] = arguments[_key2];
+      for (var _len3 = arguments.length, icons = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        icons[_key3] = arguments[_key3];
       }
 
       var saveIcon$ = icons[0],
@@ -604,60 +643,144 @@ function () {
     key: "run",
     value: function run() {
       console.log('Request data...'); //this._emulateBackendResponse();
+      //this.promiseBackendResponse();
+      //his._emulatePromise();
+      //this._delayPromise(3000);
 
-      this.promiseBackendResponse();
+      this._chainPromises();
     }
   }, {
-    key: "_emulateBackendResponse",
-    value: function _emulateBackendResponse() {
-      setTimeout(function () {
-        console.log('Preparing data...');
-        var backEndData = {
-          server: "aws",
-          port: '1092',
-          status: 'working'
-        };
-        setTimeout(function () {
-          backEndData.modified = true;
-          console.log('Getting data', backEndData);
-        }, 2000);
-      }, 2000);
-    }
-  }, {
-    key: "promiseBackendResponse",
-    value: function promiseBackendResponse() {
-      var backPromise = new Promise(function (resolve, reject) {
-        var isConnected = Math.random();
-        var backEndData = {
-          server: "aws",
-          port: '1092',
-          status: 'working'
-        };
-        console.log('Preparing answer...');
-        setTimeout(function () {
-          if (isConnected > 0.5) {
-            console.log('Preparing data...');
-            resolve(backEndData);
-          } else {
-            console.log('Connection error!');
-            backEndData.status = 'closed';
-            reject(backEndData);
-          }
-        }, 2000);
+    key: "_chainPromises",
+    value: function _chainPromises() {
+      var chain = new Promise(function (resolve) {
+        setTimeout(resolve, 1000, 1);
       });
-
-      var publishedConnectionResult = function publishedConnectionResult(result) {
-        return Promise.resolve('Connected complete');
+      var foo1 = chain.then(function (result) {
+        console.log(result);
+        return result * 2;
+      });
+      var foo2 = foo1.then(function (res) {
+        console.log(res);
+        return res * 2;
+      });
+      var foo3 = foo2.then(function (foo2) {
+        console.log(foo2);
+      });
+    }
+  }, {
+    key: "_delayPromise",
+    value: function _delayPromise(ms) {
+      var delPromise = function delPromise(ms) {
+        return new Promise(function (resolve) {
+          setTimeout(resolve, ms, "done");
+        });
       };
 
-      backPromise.then(function (clientData) {
-        setTimeout(function () {
-          console.log('Server answer', clientData);
-        }, 2000);
-      }).then(publishedConnectionResult)["catch"](function (errorClientData) {
-        console.log('Server answer', errorClientData);
+      delPromise(3000).then(function (result) {
+        return alert("\u0432\u044B\u043F\u043E\u043B\u043D\u0438\u043B\u043E\u0441\u044C \u0447\u0435\u0440\u0435\u0437 3 \u0441\u0435\u043A\u0443\u043D\u0434\u044B c \u0440\u0435\u0437\u0443\u043B\u044C\u0442\u0430\u0442\u043E\u043C ".concat(result));
       });
     }
+  }, {
+    key: "_emulatePromise",
+    value: function _emulatePromise() {
+      var getPhone = new Promise(function (resolve, reject) {
+        var hasMoney = confirm("Do you have money?");
+
+        if (hasMoney === true) {
+          resolve({
+            phoneMaker: 'Iphone',
+            phoneModel: '8 plus',
+            price: '800$',
+            color: 'space gray',
+            toString: function toString() {
+              return "I have ".concat(this.phoneMaker, " ").concat(this.phoneModel, " in ").concat(this.color, " color.");
+            }
+          });
+        } else {
+          reject(new Error('You don\'t have enough money to buy this phone'));
+        }
+      });
+
+      var havePhone = function havePhone(phone) {
+        if ($.isPlainObject(phone)) {
+          console.log(phone.toString());
+          return true;
+        }
+
+        if ($.type(phone) === 'string') {
+          console.log(phone);
+        }
+
+        return true;
+      };
+
+      var notHasPhone = function notHasPhone(error) {
+        if (error instanceof Error) {
+          console.log(error.message);
+        }
+      };
+
+      var notifyFriends = function notifyFriends(phone) {
+        var outPut = "I buy new ".concat(phone.phoneMaker, "!!");
+        return Promise.resolve(outPut);
+      };
+
+      function buyPhone() {
+        getPhone.then(notifyFriends).then(havePhone)["catch"](notHasPhone);
+      }
+
+      buyPhone();
+    }
+    /*_emulateBackendResponse() {
+        setTimeout(() => {
+            console.log('Preparing data...');
+            const backEndData = {
+                server: "aws",
+                port: '1092',
+                status: 'working'
+            };
+            setTimeout(() => {
+                backEndData.modified = true;
+                console.log('Getting data', backEndData);
+            }, 2000);
+        }, 2000);
+    }*/
+
+    /*promiseBackendResponse() {
+        let backPromise = new Promise(function (resolve, reject) {
+            let isConnected = Math.random();
+            const backEndData = {
+                server: "aws",
+                port: '1092',
+                status: 'working'
+            };
+            console.log('Preparing answer...');
+            setTimeout(()=>{
+                if (isConnected > 0.5){
+                    console.log('Preparing data...');
+                    resolve(backEndData);
+                }
+                else{
+                    console.log('Connection error!');
+                    backEndData.status = 'closed';
+                    reject(backEndData);
+                }
+            },2000);
+        });
+        let publishedConnectionResult = function(backEndData){
+          return Promise.resolve('Connected complete'+` with status ${backEndData.status}`);
+        };
+        backPromise
+            .then(publishedConnectionResult)
+            .then((clientData)=>{
+            setTimeout(()=>{
+                console.log('Server answer',clientData);
+            },2000);
+        }).catch((errorClientData)=>{
+            console.log('Server answer',errorClientData);
+        });
+    }*/
+
   }]);
 
   return TestPromises;

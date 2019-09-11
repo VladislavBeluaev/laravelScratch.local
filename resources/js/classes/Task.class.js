@@ -156,6 +156,7 @@ export class Task {
         let target = event.target;
         let completeIconWrapper = target.closest('a');
         if (completeIconWrapper.title !== 'complete task') return false;
+        this._previousEditTask();
         let answer = confirm('Вы действительно хотите завершить задачу?');
         if (answer === false) return false;
         let completeTaskContainer$ = $(target.closest('li'));
@@ -170,8 +171,8 @@ export class Task {
             success: function (response) {
                 try {
                     if (JSON.parse(response).is_completed === true) {
-                        Task.successAjaxHandler(completeTaskContainer$,{
-                            first:function () {
+                        Task.successAjaxHandler(completeTaskContainer$, {
+                            first: function () {
                                 $(this).addClass('complete-task');
                             }
                         });
@@ -193,6 +194,7 @@ export class Task {
         let target = event.target;
         let removeIconWrapper = target.closest('a');
         if (removeIconWrapper.title !== 'delete task') return false;
+        this._previousEditTask();
         let answer = confirm('Вы действительно хотите удалить задачу?');
         if (answer === false) return false;
         let removeTaskContainer$ = $(target.closest('li'));
@@ -229,34 +231,57 @@ export class Task {
         this._ajax.req_settings.url = settings.url;
         this._ajax.req_settings.data = settings.data
     }
-    static successAjaxHandler($taskContainer$,...fxQueue){
-        //let queueFunctions = fxQueue;
-        let $taskContainer$Queue = $taskContainer$.queue();
-            $taskContainer$Queue.unshift(function (next) {
-                $(this).fadeOut();
-                next();
 
+    static successAjaxHandler($taskContainer$, ...fxQueue) {
+        let taskQueueContainer = $taskContainer$.queue();
+
+            taskQueueContainer.push(function () {
+                $(this).fadeOut(400);
+                this.dequeue();
             });
-            $taskContainer$Queue.unshift(function (next) {
-                let siblingsCollection =$(this).siblings('li');
+            taskQueueContainer.push(function () {
+                let siblingsCollection = $(this).siblings('li');
                 $(this).remove();
                 let listNumberElem = 'span:first-child';
-                siblingsCollection.sort((x,y)=>{
-                    return $(x).find(listNumberElem).text()-$(y).find(listNumberElem).text();
-                }).each((i,item)=>{
-                    $(item).find(listNumberElem).text(i+1);
+                siblingsCollection.sort((x, y) => {
+                    return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
+                }).each((i, item) => {
+                    $(item).find(listNumberElem).text(i + 1);
                 });
-                next();
+                this.dequeue();
             });
-        $taskContainer$Queue[0]();
-            /*if(fxQueue.length!==0){
-                fxQueue.forEach((item,i)=>{
-                    console.log(Object.keys(item)[0]);
-                    /!*switch (Object.keys(item)[0]) {
+            if(fxQueue.length){
+                fxQueue.forEach(item => {
 
-                    }*!/
+                    let objectKey = Object.keys(item)[0];
+                    switch (objectKey) {
+                        case "first":
+                            console.log(item.first);
+                            taskQueueContainer.unshift(item.first);
+                            break;
+                        case "last":
+                            taskQueueContainer.push(item.last);
+                            break;
+                        default:
+                            throw new Error('Wrong format sending queue handlers');
+                    }
                 });
-            }*/
+            }
+        taskQueueContainer.shift().call($taskContainer$);
+            while(taskQueueContainer.length){
+                setTimeout(taskQueueContainer.shift().bind($taskContainer$),200);
+            }
+            /*new Promise(resolve => {
+                taskQueueContainer.shift().call($taskContainer$);
+                setTimeout(resolve,0,taskQueueContainer);
+            }).then((taskQueueContainer)=>{
+                taskQueueContainer.shift().call($taskContainer$);
+                return new Promise(resolve => {
+                    setTimeout(resolve,1000,taskQueueContainer);
+                });
+            }).then((taskQueueContainer)=>{
+                taskQueueContainer.shift().call($taskContainer$);
+            });*/
     }
 
     _changeControlButtonsIconColor(isChange = true, context$) {

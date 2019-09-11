@@ -25,6 +25,7 @@ class PagesController extends Controller
 
     function tasks(TasksController $controller)
     {
+        dd($controller->allWithFilters(['is_completed'=>false,'is_deleted'=>'']));
         return view('tasks.task')->withTasks($controller->all());
     }
 
