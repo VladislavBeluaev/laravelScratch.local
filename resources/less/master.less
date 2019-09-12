@@ -14,7 +14,8 @@
 html, body {
     height: 100%
 }
-.content{
+
+.content {
     width: 99%;
 }
 
@@ -138,7 +139,8 @@ input, textarea {
                 padding-right: @defaultGutter/6;
             }
         }
-        label{
+
+        label {
             width: 90%;
         }
 
@@ -170,8 +172,9 @@ input, textarea {
             vertical-align: baseline;
             font-size: @defaultFontSize*1.5;
             .alignTo(center);
-            a{
-                color:@bodyColor;
+
+            a {
+                color: @bodyColor;
             }
         }
     }
@@ -183,30 +186,65 @@ input, textarea {
 }
 
 .project-manager {
-    input{
-        &[placeholder="Project title"]{
+    input {
+        &[placeholder="Project title"] {
             font-weight: @defaultFontWeight;
         }
     }
+
     textarea {
         &[name="description"] {
             height: @textareaDefaultHeight;
             font-weight: @defaultFontWeight;
         }
     }
-    button{
-        &[type="submit"]{
+
+    button {
+        &[type="submit"] {
             font-weight: @defaultFontWeight*1.5;
         }
     }
 }
-.project-header{
-    position: relative;
-    &:hover{
-        cursor: pointer;
-    }
 
+.project-content {
+    display: inline-block;
+    margin-bottom: 0;
+    .project-wrapper-content {
+        display: flex;
+        /*grid-template-columns:.7fr .1fr .3fr;
+        grid-template-rows:1fr;*/
+        justify-content: center;
+        align-items: center;
+        font-size: @defaultFontSize;
+        &:hover{
+            cursor: pointer;
+            p{
+                .show_project_control_buttons();
+            }
+        }
+        p {
+            .hide_project_control_buttons();
+
+            &:first-child {
+                font-size: @defaultFontSize*4;
+            }
+
+            &:nth-child(2) {
+                margin-left: @defaultGutter;
+                margin-right: @defaultGutter;
+            }
+            a{
+                &[title="edit project"]{
+                    .project_icon_color(@edit_task_color);
+                }
+                &[title="delete project"]{
+                    .project_icon_color(@task_delete_color);
+                }
+            }
+        }
+    }
 }
-article{
+
+article {
     font-size: @defaultFontSize*1.5;
 }

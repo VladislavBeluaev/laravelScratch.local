@@ -14,8 +14,11 @@
 
 @section('content')
     <!-- Default form register -->
-    <form class="text-center border border-light p-5 project-manager"  action="{{route('create_projects')}}" method="POST">
-        {{csrf_field()}}
+    <form class="text-center border border-light p-5 project-manager"  action="{{route('update_project',[$project->id])}}" method="POST">
+        @method("PATCH")
+        @csrf
+        {{--{{method_field("PATCH")}}
+        {{csrf_field()}}--}}
         <input type="text" name="title" class="form-control mb-4" placeholder="Project title" value="{{$project->title}}">
         <textarea name="description" class="form-control mb-4" placeholder="Project description">{{$project->description}}</textarea>
         <button class="btn btn-info my-4 btn-block" type="submit">Update project</button>

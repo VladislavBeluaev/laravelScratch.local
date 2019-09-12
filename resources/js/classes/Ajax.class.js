@@ -5,6 +5,19 @@ export class Ajax {
     send(callbackEvents) {
         $.ajax(Object.assign(this.req_settings,callbackEvents));
     }
+    call(){
+        return new Promise((resolve,reject)=>{
+            let callbackEvents = {
+                success:function (response) {
+                    resolve(response);
+                },
+                error:function (jqXHR, textStatus, errorThrown) {
+                    reject(errorThrown);
+                }
+            };
+            $.ajax(Object.assign(this.req_settings,callbackEvents));
+        });
+    }
     _makeAjaxURLFromTemplate(templateURL,params=[]) {
         if(templateURL.includes('{') && templateURL.includes('}')){
             let urlFragments = templateURL.split('}');

@@ -49,6 +49,5 @@ class AjaxTaskController extends Controller implements Ajax
         $result = ['is_deleted'=>$model->fill($complete_task)->save()];
         echo json_encode($result);
     }
-    protected $model;
     protected $request;
 }

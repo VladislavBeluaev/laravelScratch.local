@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Ajax\AjaxProjectController;
 use App\Project;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
 
 class ProjectController extends Controller
 {
-    function __construct(Project $project)
+    function __construct(Project $project,AjaxProjectController $ajax_controller)
     {
         $this->project = $project;
+        $this->ajax_controller = $ajax_controller;
     }
 
     function all()
@@ -27,6 +29,17 @@ class ProjectController extends Controller
 
         return view('projects.edit')->withProject($project);
     }
+    function update(Project $project){
+        $result = $project->fill(request()->except(['_token','_method']))->save();
+        /*$project->title = request('title');
+        $project->description = request('description');
+        $project->save();*/
+        if(!$result) return redirect()->back();
+        return redirect('projects');
+    }
+    function destroy(Project $project){
+        return $this->ajax_controller->destroy($project);
+    }
     function create()
     {
         return view('projects.create');
@@ -38,4 +51,5 @@ class ProjectController extends Controller
     }
 
     protected $project;
+    protected $ajax_controller;
 }

@@ -11,10 +11,14 @@
 @endsection
 
 @section('h1')
-    <div class="main-header-wrapper project-header">
-        <p class="main-header-content">{{$project->title}}</p>
-        <p><a href="{{route('edit_project',[$project->getRouteKeyName()=>$project->id])}}" title="edit project"><i class="fa fa-edit"></i></a></p>
-        <p><a href="{{route('edit_project',[$project->getRouteKeyName()=>$project->id])}}" title="remove project"><i class="fa fa-times"></i></a></p>
+    <div class="project-content">
+        <div class="project-wrapper-content">
+            <p>{{$project->title}}</p>
+            <p><a href="{{route('edit_project',[$project->getRouteKeyName()=>$project->id])}}" title="edit project"><i
+                        class="fa fa-edit"></i></a></p>
+            <p><a href="{{route('destroy_project',[$project->getRouteKeyName()=>$project->id])}}" title="delete project"><i
+                        class="fa fa-times"></i></a></p>
+        </div>
     </div>
 @endsection
 
@@ -22,4 +26,4 @@
     <article>
         {{$project->description}}
     </article>
-    @endsection
+@endsection

@@ -297,11 +297,41 @@ textarea:focus {
 .project-manager button[type="submit"] {
   font-weight: 900;
 }
-.project-header {
-  position: relative;
+.project-content {
+  display: inline-block;
+  margin-bottom: 0;
 }
-.project-header:hover {
+.project-content .project-wrapper-content {
+  display: flex;
+  /*grid-template-columns:.7fr .1fr .3fr;
+        grid-template-rows:1fr;*/
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.project-content .project-wrapper-content:hover {
   cursor: pointer;
+}
+.project-content .project-wrapper-content:hover p:nth-child(2),
+.project-content .project-wrapper-content:hover p:nth-child(3) {
+  visibility: visible;
+}
+.project-content .project-wrapper-content p:nth-child(2),
+.project-content .project-wrapper-content p:nth-child(3) {
+  visibility: hidden;
+}
+.project-content .project-wrapper-content p:first-child {
+  font-size: 64px;
+}
+.project-content .project-wrapper-content p:nth-child(2) {
+  margin-left: 24px;
+  margin-right: 24px;
+}
+.project-content .project-wrapper-content p a[title="edit project"] > i {
+  color: #6a8a9a;
+}
+.project-content .project-wrapper-content p a[title="delete project"] > i {
+  color: red;
 }
 article {
   font-size: 24px;
