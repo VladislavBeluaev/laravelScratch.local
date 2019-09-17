@@ -704,8 +704,9 @@ function () {
           success: function success(response) {
             resolve(response);
           },
-          error: function error(jqXHR, textStatus, errorThrown) {
-            reject(errorThrown);
+          error: function error(jqXHR) {
+            var errorMessage = jqXHR.responseJSON.message + " Status code ".concat(jqXHR.status);
+            reject(errorMessage);
           }
         };
         $.ajax(Object.assign(_this.req_settings, callbackEvents));
@@ -794,7 +795,6 @@ function (_Model) {
     value: function run() {
       _get(_getPrototypeOf(Project.prototype), "run", this).call(this);
 
-      console.log('here');
       var _this$_initObj = this._initObj,
           container = _this$_initObj.container,
           removeTask = _this$_initObj.removeTask;
@@ -806,6 +806,8 @@ function (_Model) {
       var target = event.target;
       var targetWrapper$ = $(this._initObj.removeProject);
       if (targetWrapper$[0] !== target.closest('a')) return;
+      var userAnswer = confirm("Do you really want delete this project?");
+      if (userAnswer === false) return false;
 
       this._setRequestSettings({
         url: targetWrapper$[0].pathname,
@@ -814,9 +816,17 @@ function (_Model) {
         })
       });
 
-      this._ajax.call().then(function (response) {
-        console.log(response);
-      });
+      try {
+        this._ajax.call().then(function (response) {
+          var redirectUrl = JSON.parse(response).redirectTo;
+          if (!redirectUrl) throw new Error("Not found redirectUrl. Check ajax return redirectUrl json");
+          window.location.replace(redirectUrl);
+        })["catch"](function (errorMes) {
+          console.log(errorMes);
+        });
+      } catch (error) {
+        console.log(error.stack);
+      }
 
       event.preventDefault();
     }

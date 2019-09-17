@@ -33,7 +33,7 @@ class AjaxProjectController extends Controller implements Ajax
     {
         $getting_data = json_decode($this->request->getContent(),true);
         $result = $model->fill($getting_data)->save();
-        echo json_encode(['is_deleted'=>$result]);
+        echo json_encode(['redirectTo'=>route('projects')]);
     }
     protected $request;
 }

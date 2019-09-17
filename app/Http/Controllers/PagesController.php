@@ -20,13 +20,16 @@ class PagesController extends Controller
 
     function projects(ProjectController $controller)
     {
-        return view('projects.all')->withProjects($controller->all());
+        //dd($controller->all()[0]);
+        $projects = $controller->filterCollection($controller->all(),['is_deleted'=>'']);
+        //dd($projects);
+        return view('projects.all')->withProjects($projects);
     }
 
     function tasks(TasksController $controller)
     {
-        $actualTasks = $controller->allWithFilters([['is_completed'=>false],['is_deleted'=>'']]);
-        return view('tasks.task')->withTasks($actualTasks);
+        $tasks = $controller->filterCollection($controller->all(),['is_completed'=>false,'is_deleted'=>'']);
+        return view('tasks.task')->withTasks($tasks);
     }
 
     function contacts()

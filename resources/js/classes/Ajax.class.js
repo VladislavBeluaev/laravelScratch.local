@@ -11,8 +11,9 @@ export class Ajax {
                 success:function (response) {
                     resolve(response);
                 },
-                error:function (jqXHR, textStatus, errorThrown) {
-                    reject(errorThrown);
+                error:function (jqXHR) {
+                    let errorMessage = jqXHR.responseJSON.message+` Status code ${jqXHR.status}`;
+                    reject(errorMessage);
                 }
             };
             $.ajax(Object.assign(this.req_settings,callbackEvents));

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Ajax\AjaxTaskController;
+use App\Http\Traits\Filters;
 use App\Task;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
 
 class TasksController extends Controller
 {
+    use Filters;
     function __construct(Task $task, AjaxTaskController $ajax_controller)
     {
         $this->task = $task;
@@ -20,7 +22,7 @@ class TasksController extends Controller
         return $this->task->get();
     }
 
-    function allWithFilters(array $filters=[])
+    /*function allWithFilters(array $filters=[])
     {
         $filters_count = count($filters);
         if($filters_count===0) return $this->all();
@@ -32,7 +34,7 @@ class TasksController extends Controller
             }
             return $filters_data->values();
         }
-    }
+    }*/
 
     function get(Integer $id)
     {

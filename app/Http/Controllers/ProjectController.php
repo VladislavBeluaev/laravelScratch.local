@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Ajax\AjaxProjectController;
+use App\Http\Traits\Filters;
 use App\Project;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
 
 class ProjectController extends Controller
 {
+    use Filters;
     function __construct(Project $project,AjaxProjectController $ajax_controller)
     {
         $this->project = $project;
@@ -52,4 +54,5 @@ class ProjectController extends Controller
 
     protected $project;
     protected $ajax_controller;
+    static $filtersData;
 }
