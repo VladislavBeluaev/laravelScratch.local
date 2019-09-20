@@ -15,8 +15,8 @@
     <!-- Default form register -->
     <form class="text-center border border-light p-5 project-manager" action="{{route('create_projects')}}" method="POST">
         {{csrf_field()}}
-        <input type="text" name="title"  class="form-control mb-4" placeholder="Project title">
-        <textarea name="description" class="form-control mb-4" placeholder="Project description"></textarea>
+        <input type="text" name="title"  class="form-control mb-4" placeholder="Project title" required>
+        <textarea name="description" class="form-control mb-4" placeholder="Project description" required></textarea>
         <button class="btn btn-info my-4 btn-block" type="submit">Create project</button>
     </form>
     {{-- <div class="form-row mb-4">

@@ -26,9 +26,9 @@ class PagesController extends Controller
         return view('projects.all')->withProjects($projects);
     }
 
-    function tasks(TasksController $controller)
+    function tasks(TaskController $controller)
     {
-        $tasks = $controller->filterCollection($controller->all(),['is_completed'=>false,'is_deleted'=>'']);
+        $tasks = $controller->filterCollection($controller->all(),['is_completed'=>0,'is_deleted'=>'']);
         return view('tasks.task')->withTasks($tasks);
     }
 

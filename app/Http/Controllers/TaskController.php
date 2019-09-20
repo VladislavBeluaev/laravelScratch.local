@@ -8,7 +8,7 @@ use App\Task;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
 
-class TasksController extends Controller
+class TaskController extends Controller
 {
     use Filters;
     function __construct(Task $task, AjaxTaskController $ajax_controller)
@@ -48,7 +48,7 @@ class TasksController extends Controller
 
     function store()
     {
-        $this->task->insert(request()->except('_token'));
+        $this->task->insert(request()->except('_token','id'));
         return redirect(route('tasks'));
     }
 

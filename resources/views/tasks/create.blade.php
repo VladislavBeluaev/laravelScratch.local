@@ -15,7 +15,7 @@
     <!-- Default form register -->
     <form class="text-center border border-light p-5" action="{{route('create_tasks')}}" method="POST">
         {{csrf_field()}}
-        <textarea name="description" class="form-control mb-4" placeholder="Task description" ></textarea>
+        <textarea name="description" class="form-control mb-4" placeholder="Task description" required ></textarea>
         <button class="btn btn-info my-4 btn-block" type="submit">Create task</button>
     </form>
         {{--<div class="form-row mb-4">

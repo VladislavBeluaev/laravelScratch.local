@@ -1561,8 +1561,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! c:\osp\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! c:\osp\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

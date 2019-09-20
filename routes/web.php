@@ -22,12 +22,12 @@ Route::group(['prefix'=>'/projects'],function(){
 });
 Route::group(['prefix'=>'/tasks'],function(){
     Route::get('','PagesController@tasks')->name('tasks');
-    Route::get('/create','TasksController@create')->name('create_tasks');
-    Route::post('/create','TasksController@store');
-    Route::patch('/{task}/complete','TasksController@complete')->name('complete_task');
-    Route::get('/{task}/edit','TasksController@edit')->name('edit_task');
-    Route::patch('/{task}/update','TasksController@update')->name('update_task');/*->middleware(['ajax_response_headers']);*/
-    Route::delete('/{task}/delete','TasksController@destroy')->name('destroy_task');
+    Route::get('/create','TaskController@create')->name('create_tasks');
+    Route::post('/create','TaskController@store');
+    Route::patch('/{task}/complete','TaskController@complete')->name('complete_task');
+    Route::get('/{task}/edit','TaskController@edit')->name('edit_task');
+    Route::patch('/{task}/update','TaskController@update')->name('update_task');/*->middleware(['ajax_response_headers']);*/
+    Route::delete('/{task}/delete','TaskController@destroy')->name('destroy_task');
 });
 
 Route::get('/about','PagesController@about')->name('about');
