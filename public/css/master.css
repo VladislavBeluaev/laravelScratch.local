@@ -13,6 +13,9 @@
 .no-display {
   display: none;
 }
+.no-visible {
+  visibility: hidden;
+}
 .disable-btn {
   color: grey;
 }
@@ -335,4 +338,17 @@ textarea:focus {
 }
 article {
   font-size: 24px;
+}
+.preloader {
+  font-size: 16px;
+}
+.preloader img {
+  width: 48px;
+  height: auto;
+}
+.error-input-data {
+  border-color: red;
+}
+.ajax-error {
+  font-size: 16px;
 }

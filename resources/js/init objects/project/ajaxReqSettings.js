@@ -11,4 +11,5 @@ let ajaxReqSettings = {
         'async':true,
         'Accept': 'application/json'
     },
+    preloader:"preloader"
 };

@@ -19,8 +19,18 @@
         @csrf
         {{--{{method_field("PATCH")}}
         {{csrf_field()}}--}}
-        <input type="text" name="title" class="form-control mb-4" placeholder="Project title" value="{{$project->title}}">
-        <textarea name="description" class="form-control mb-4" placeholder="Project description">{{$project->description}}</textarea>
+        <input type="text" name="title"
+               class="form-control mb-4 {{$errors->has('title')?'error-input-data':''}}"
+               placeholder="Project title" value="{{$project->title}}">
+        @error('title')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
+        <textarea name="description"
+                  class="form-control mb-4 {{$errors->has('description')?'error-input-data':''}}"
+                  placeholder="Project description">{{$project->description}}</textarea>
+        @error('description')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
         <button class="btn btn-info my-4 btn-block" type="submit">Update project</button>
     </form>
     {{-- <div class="form-row mb-4">

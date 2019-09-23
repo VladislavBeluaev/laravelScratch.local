@@ -13,12 +13,25 @@
 
 @section('content')
     <!-- Default form register -->
-    <form class="text-center border border-light p-5 project-manager" action="{{route('create_projects')}}" method="POST">
+    <form class="text-center border border-light p-5 project-manager" action="{{route('create_projects')}}"
+          method="POST">
         {{csrf_field()}}
-        <input type="text" name="title"  class="form-control mb-4" placeholder="Project title" required>
-        <textarea name="description" class="form-control mb-4" placeholder="Project description" required></textarea>
+        <input type="text" name="title"
+               class="form-control mb-4 {{$errors->has('title')?'error-input-data':''}}"
+               placeholder="Project title" required value="{{old('title')}}">
+        @error('title')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
+        <textarea name="description"
+                  class="form-control mb-4 {{$errors->has('description')?'error-input-data':''}}"
+                  placeholder="Project description" required>{{old('description')}}</textarea>
+        @error('description')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
+        <div class="error-description"></div>
         <button class="btn btn-info my-4 btn-block" type="submit">Create project</button>
     </form>
+
     {{-- <div class="form-row mb-4">
        <div class="col">
            <!-- First name -->
@@ -76,6 +89,12 @@
          <a href="" target="_blank">terms of service</a>--}}
 
     <!-- Default form register -->
+    <ul>
+        @foreach($errors->all() as $error)
+            <li>{{$error}}</li>
+        @endforeach
+    </ul>
+
 @endsection
 
 

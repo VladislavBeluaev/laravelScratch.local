@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Ajax\AjaxProjectController;
+use App\Http\Requests\ProjectRequest;
 use App\Http\Traits\Filters;
 use App\Project;
 use Illuminate\Http\Request;
@@ -18,10 +19,11 @@ class ProjectController extends Controller
 {
     use Filters;
 
-    function __construct(Project $project, AjaxProjectController $ajax_controller)
+    function __construct(Project $project,/*ProjectRequest $validator,*/ AjaxProjectController $ajax_controller)
     {
         $this->project = $project;
         $this->ajax_controller = $ajax_controller;
+        /*$this->validator = $validator;*/
     }
 
     function all()
@@ -44,8 +46,7 @@ class ProjectController extends Controller
     function update(Project $project)
     {
         //$result = $project->fill(request()->except(['_token','_method']))->save();
-        $result = $project->update(\request()->except(['_token', '_method', 'id']));
-        if (!$result) return redirect()->back();
+        $project->update($this->validatedData());
         return redirect('projects');
     }
 
@@ -61,11 +62,21 @@ class ProjectController extends Controller
 
     function store()
     {
-        $this->project->insert(request()->except('_token','id'));
+        $this->project->insert(
+            $this->validatedData()
+            /*$this->validator->validated()*/
+        );
         return redirect(route('projects'));
     }
-
+    protected function validatedData() {
+        return request()->validate(ProjectController::RULES);
+    }
     protected $project;
     protected $ajax_controller;
+    protected $validator;
+    const  RULES = [
+        'title'=>'required|min:5|',
+        'description'=>'required|min:5',
+    ];
     static $filtersData;
 }

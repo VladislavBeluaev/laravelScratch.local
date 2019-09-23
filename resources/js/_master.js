@@ -1,3 +1,5 @@
+import {ErrorBag} from "./classes/ErrorBag.class";
+import {errorsInitObj} from "./init objects/errors/errorsInitObj";
 import {Ajax} from "./classes/Ajax.class";
 import {Task} from "./classes/Task.class";
 import {TestPromises} from "./classes/TestPromise.class";
@@ -13,8 +15,9 @@ import UrlPattern from "url-pattern";
     $(function () {
         let url = location.pathname.substr(1);
         let patternProject = new UrlPattern(routing.project);
-
         let routingList = Object.keys(routing);
+        let errorBag = new ErrorBag(errorsInitObj);
+        errorBag.hideAlertsIForms();
         try {
             switch (url) {
                 case "":
@@ -33,7 +36,7 @@ import UrlPattern from "url-pattern";
 
         } catch (e) {
             if ((patternProject.match(url) !== null)){
-                (new Project(projectInitObj, new Ajax(projectAjaxReqSettings))).run();
+                (new Project(projectInitObj, new Ajax(projectAjaxReqSettings),errorBag)).run();
             } else {
                 console.log(e.stack);
             }

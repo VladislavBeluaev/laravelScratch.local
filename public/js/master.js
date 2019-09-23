@@ -559,17 +559,21 @@ module.exports = __webpack_amd_options__;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/Ajax.class */ "./resources/js/classes/Ajax.class.js");
-/* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
-/* harmony import */ var _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./classes/TestPromise.class */ "./resources/js/classes/TestPromise.class.js");
-/* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
-/* harmony import */ var _init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./init objects/task/ajaxReqSettings */ "./resources/js/init objects/task/ajaxReqSettings.js");
-/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
-/* harmony import */ var _classes_Project_class__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./classes/Project.class */ "./resources/js/classes/Project.class.js");
-/* harmony import */ var _init_objects_project_projectInitObj__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./init objects/project/projectInitObj */ "./resources/js/init objects/project/projectInitObj.js");
-/* harmony import */ var _init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./init objects/project/ajaxReqSettings */ "./resources/js/init objects/project/ajaxReqSettings.js");
-/* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! url-pattern */ "./node_modules/url-pattern/lib/url-pattern.js");
-/* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(url_pattern__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _classes_ErrorBag_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./classes/ErrorBag.class */ "./resources/js/classes/ErrorBag.class.js");
+/* harmony import */ var _init_objects_errors_errorsInitObj__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./init objects/errors/errorsInitObj */ "./resources/js/init objects/errors/errorsInitObj.js");
+/* harmony import */ var _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./classes/Ajax.class */ "./resources/js/classes/Ajax.class.js");
+/* harmony import */ var _classes_Task_class__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./classes/Task.class */ "./resources/js/classes/Task.class.js");
+/* harmony import */ var _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./classes/TestPromise.class */ "./resources/js/classes/TestPromise.class.js");
+/* harmony import */ var _init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./init objects/task/taskInitObj */ "./resources/js/init objects/task/taskInitObj.js");
+/* harmony import */ var _init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./init objects/task/ajaxReqSettings */ "./resources/js/init objects/task/ajaxReqSettings.js");
+/* harmony import */ var _init_objects_routing__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./init objects/routing */ "./resources/js/init objects/routing.js");
+/* harmony import */ var _classes_Project_class__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./classes/Project.class */ "./resources/js/classes/Project.class.js");
+/* harmony import */ var _init_objects_project_projectInitObj__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./init objects/project/projectInitObj */ "./resources/js/init objects/project/projectInitObj.js");
+/* harmony import */ var _init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./init objects/project/ajaxReqSettings */ "./resources/js/init objects/project/ajaxReqSettings.js");
+/* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-pattern */ "./node_modules/url-pattern/lib/url-pattern.js");
+/* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(url_pattern__WEBPACK_IMPORTED_MODULE_11__);
+
+
 
 
 
@@ -584,8 +588,10 @@ __webpack_require__.r(__webpack_exports__);
 (function ($, undefined) {
   $(function () {
     var url = location.pathname.substr(1);
-    var patternProject = new url_pattern__WEBPACK_IMPORTED_MODULE_9___default.a(_init_objects_routing__WEBPACK_IMPORTED_MODULE_5__["routing"].project);
-    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_5__["routing"]);
+    var patternProject = new url_pattern__WEBPACK_IMPORTED_MODULE_11___default.a(_init_objects_routing__WEBPACK_IMPORTED_MODULE_7__["routing"].project);
+    var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_7__["routing"]);
+    var errorBag = new _classes_ErrorBag_class__WEBPACK_IMPORTED_MODULE_0__["ErrorBag"](_init_objects_errors_errorsInitObj__WEBPACK_IMPORTED_MODULE_1__["errorsInitObj"]);
+    errorBag.hideAlertsIForms();
 
     try {
       switch (url) {
@@ -594,8 +600,8 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_1__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_3__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_4__["ajaxReqSettings"])).run();
-          new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_2__["TestPromises"](5).run();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_3__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_5__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_6__["ajaxReqSettings"])).run();
+          new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_4__["TestPromises"](5).run();
           break;
 
         /*case "projects":
@@ -607,7 +613,7 @@ __webpack_require__.r(__webpack_exports__);
       }
     } catch (e) {
       if (patternProject.match(url) !== null) {
-        new _classes_Project_class__WEBPACK_IMPORTED_MODULE_6__["Project"](_init_objects_project_projectInitObj__WEBPACK_IMPORTED_MODULE_7__["projectInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_0__["Ajax"](_init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_8__["ajaxReqSettings"])).run();
+        new _classes_Project_class__WEBPACK_IMPORTED_MODULE_8__["Project"](_init_objects_project_projectInitObj__WEBPACK_IMPORTED_MODULE_9__["projectInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_10__["ajaxReqSettings"]), errorBag).run();
       } else {
         console.log(e.stack);
       }
@@ -699,14 +705,20 @@ function () {
     value: function call() {
       var _this = this;
 
+      var preloader$ = $(".".concat(this.req_settings.preloader));
       return new Promise(function (resolve, reject) {
         var callbackEvents = {
+          beforeSend: function beforeSend() {
+            preloader$.removeClass('d-none');
+          },
           success: function success(response) {
             resolve(response);
           },
           error: function error(jqXHR) {
-            var errorMessage = jqXHR.responseJSON.message + " Status code ".concat(jqXHR.status);
-            reject(errorMessage);
+            reject(jqXHR);
+          },
+          complete: function complete() {
+            preloader$.addClass('d-none');
           }
         };
         $.ajax(Object.assign(_this.req_settings, callbackEvents));
@@ -740,6 +752,66 @@ function () {
   }]);
 
   return Ajax;
+}();
+
+/***/ }),
+
+/***/ "./resources/js/classes/ErrorBag.class.js":
+/*!************************************************!*\
+  !*** ./resources/js/classes/ErrorBag.class.js ***!
+  \************************************************/
+/*! exports provided: ErrorBag */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ErrorBag", function() { return ErrorBag; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var ErrorBag =
+/*#__PURE__*/
+function () {
+  function ErrorBag(settings) {
+    _classCallCheck(this, ErrorBag);
+
+    this._initObj = settings;
+  }
+
+  _createClass(ErrorBag, [{
+    key: "hideAlertsIForms",
+    value: function hideAlertsIForms() {
+      $(".".concat(this._initObj.borderHighlightingClass)).on('focus.hideErrMsg', $.proxy(this._hideErrBorderHandler, this));
+    }
+  }, {
+    key: "_hideErrBorderHandler",
+    value: function _hideErrBorderHandler(event) {
+      $(event.target).removeClass(this._initObj.borderHighlightingClass).off('focus.hideErrMsg');
+    }
+  }, {
+    key: "showDestroyErr",
+    value: function showDestroyErr() {
+      var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+      var alert$ = $(".".concat(this._initObj.ajaxErrorBox));
+      if (!alert$.length) throw new Error('Errors have occurred when trying to show error message.');
+      alert$.queue(function (next) {
+        $(this).removeClass('d-none');
+        next();
+      }).queue(function (next) {
+        $(this).fadeOut(0);
+        if (message.length !== 0) $(this).text(message);
+        next();
+      }).queue(function (next) {
+        $(this).fadeIn('normal');
+        next();
+      });
+    }
+  }]);
+
+  return ErrorBag;
 }();
 
 /***/ }),
@@ -783,11 +855,14 @@ var Project =
 function (_Model) {
   _inherits(Project, _Model);
 
-  function Project(initObj, ajax) {
+  function Project(initObj, ajax, errorBag) {
+    var _this;
+
     _classCallCheck(this, Project);
 
-    return _possibleConstructorReturn(this, _getPrototypeOf(Project).call(this, initObj, ajax));
-    /*console.log(this._ajax,this._initObj);*/
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(Project).call(this, initObj, ajax));
+    _this._errorBag = errorBag;
+    return _this;
   }
 
   _createClass(Project, [{
@@ -803,6 +878,8 @@ function (_Model) {
   }, {
     key: "_removeProjectHandler",
     value: function _removeProjectHandler(event) {
+      var _this2 = this;
+
       var target = event.target;
       var targetWrapper$ = $(this._initObj.removeProject);
       if (targetWrapper$[0] !== target.closest('a')) return;
@@ -818,11 +895,38 @@ function (_Model) {
 
       try {
         this._ajax.call().then(function (response) {
-          var redirectUrl = JSON.parse(response).redirectTo;
-          if (!redirectUrl) throw new Error("Not found redirectUrl. Check ajax return redirectUrl json");
+          var redirectUrl = response.redirectTo;
+
+          if (!redirectUrl) {
+            throw new URIError("Not found redirectUrl. Check ajax return redirectUrl json");
+          }
+
           window.location.replace(redirectUrl);
-        })["catch"](function (errorMes) {
-          console.log(errorMes);
+        })["catch"](function (error) {
+          if (error instanceof URIError) {
+            _this2._errorBag.showDestroyErr();
+
+            console.log(error.message);
+            return false;
+          }
+
+          if ($.type(error) === 'error') {
+            _this2._errorBag.showDestroyErr();
+
+            console.log("".concat(error.message, ". Check variable redirectUrl in then method"));
+            return false;
+          }
+
+          var _error$responseJSON = error.responseJSON,
+              userInfo = _error$responseJSON.userInfo,
+              consoleErrorArr = _error$responseJSON.error;
+
+          _this2._errorBag.showDestroyErr(userInfo); //console.log(userInfo);
+
+
+          consoleErrorArr.forEach(function (item) {
+            console.log(item);
+          });
         });
       } catch (error) {
         console.log(error.stack);
@@ -1428,6 +1532,23 @@ function () {
 
 /***/ }),
 
+/***/ "./resources/js/init objects/errors/errorsInitObj.js":
+/*!***********************************************************!*\
+  !*** ./resources/js/init objects/errors/errorsInitObj.js ***!
+  \***********************************************************/
+/*! exports provided: errorsInitObj */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorsInitObj", function() { return errorsInitObj; });
+var errorsInitObj = {
+  borderHighlightingClass: "error-input-data",
+  ajaxErrorBox: "ajax-error"
+};
+
+/***/ }),
+
 /***/ "./resources/js/init objects/project/ajaxReqSettings.js":
 /*!**************************************************************!*\
   !*** ./resources/js/init objects/project/ajaxReqSettings.js ***!
@@ -1450,7 +1571,8 @@ var ajaxReqSettings = {
     'charset': 'utf-8',
     'async': true,
     'Accept': 'application/json'
-  }
+  },
+  preloader: "preloader"
 };
 
 /***/ }),
@@ -1561,8 +1683,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! c:\osp\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! c:\osp\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

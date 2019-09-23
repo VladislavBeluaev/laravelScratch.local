@@ -6,15 +6,21 @@ export class Ajax {
         $.ajax(Object.assign(this.req_settings,callbackEvents));
     }
     call(){
+       let preloader$ = $(`.${this.req_settings.preloader}`);
         return new Promise((resolve,reject)=>{
             let callbackEvents = {
+                beforeSend:function(){
+                    preloader$.removeClass('d-none');
+                },
                 success:function (response) {
                     resolve(response);
                 },
                 error:function (jqXHR) {
-                    let errorMessage = jqXHR.responseJSON.message+` Status code ${jqXHR.status}`;
-                    reject(errorMessage);
-                }
+                    reject(jqXHR);
+                },
+                complete:function(){
+                    preloader$.addClass('d-none');
+                },
             };
             $.ajax(Object.assign(this.req_settings,callbackEvents));
         });

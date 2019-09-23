@@ -20,6 +20,12 @@
                         class="fa fa-times"></i></a></p>
         </div>
     </div>
+    <div class="preloader d-none">
+        <p><img src="{{asset('images/preloader_1.gif')}}" alt="preloader_gif"></p>
+    </div>
+    <p class="alert alert-danger ajax-error d-none">
+        Errors have occurred in the application. Contact administrator.
+    </p>
 @endsection
 
 @section('content')
