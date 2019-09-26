@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Ajax\AjaxProjectController;
+use App\Http\Controllers\Ajax\AjaxProjectHandler;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Traits\Filters;
 use App\Project;
@@ -19,10 +19,10 @@ class ProjectController extends Controller
 {
     use Filters;
 
-    function __construct(Project $project,/*ProjectRequest $validator,*/ AjaxProjectController $ajax_controller)
+    function __construct(Project $project,/*ProjectRequest $validator,*/ AjaxProjectHandler $ajax_handler)
     {
         $this->project = $project;
-        $this->ajax_controller = $ajax_controller;
+        $this->ajax_handler = $ajax_handler;
         /*$this->validator = $validator;*/
     }
 
@@ -52,7 +52,7 @@ class ProjectController extends Controller
 
     function destroy(Project $project)
     {
-        return $this->ajax_controller->destroy($project);
+        return $this->ajax_handler->destroy($project);
     }
 
     function create()
@@ -72,7 +72,7 @@ class ProjectController extends Controller
         return request()->validate(ProjectController::RULES);
     }
     protected $project;
-    protected $ajax_controller;
+    protected $ajax_handler;
     protected $validator;
     const  RULES = [
         'title'=>'required|min:5|',

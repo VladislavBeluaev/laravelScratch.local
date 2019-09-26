@@ -10,7 +10,11 @@ export class Ajax {
         return new Promise((resolve,reject)=>{
             let callbackEvents = {
                 beforeSend:function(){
+                    let wrapper = document.createElement('div');
+                    wrapper.className = 'ajax-wrapper';
+                    $(document.body).prepend(wrapper);
                     preloader$.removeClass('d-none');
+
                 },
                 success:function (response) {
                     resolve(response);
@@ -20,6 +24,7 @@ export class Ajax {
                 },
                 complete:function(){
                     preloader$.addClass('d-none');
+                    $('.ajax-wrapper').remove();
                 },
             };
             $.ajax(Object.assign(this.req_settings,callbackEvents));

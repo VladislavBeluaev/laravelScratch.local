@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers\Ajax;
 
+use App\Http\Traits\ValidateModelsData;
 use App\Interfaces\Ajax;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class AjaxTaskController extends Controller implements Ajax
 {
+    use ValidateModelsData;
+
     //
     public function __construct(Request $request)
     {
@@ -27,27 +33,47 @@ class AjaxTaskController extends Controller implements Ajax
 
     function update(Model $model)
     {
-        $modified_task_description = json_decode($this->request->getContent(), true);
-        $result = ['update'=>$model->fill($modified_task_description)->save()];
-        echo json_encode($result);
-        /*echo json_encode(response()->json($result,204,[
-            'Content-Type'=>'application/json',
-            'Content-Length'=>15,
-            'charset'=>'utf-8',
-        ]));
-        */
+        $modified_task = json_decode($this->request->getContent(), true);
+        return $this->makeValidation(
+            $model, $modified_task, [
+                [
+                    'description' => 'required|min:5'
+                ],
+            ]
+        );
+
     }
-    function complete(Model $model){
+
+    function complete(Model $model)
+    {
         $complete_task = json_decode($this->request->getContent(), true);
-        $result = ['is_completed'=>$model->fill($complete_task)->save()];
-        echo json_encode($result);
+        return $this->makeValidation(
+            $model, $complete_task, [
+                [
+                    'is_completed' => 'required|boolean'
+                ],
+                [
+                    'boolean' => 'Trying to send incorrect value to is_completed column',
+                ]
+            ]
+        );
+
     }
 
     function destroy(Model $model)
     {
-        $complete_task = json_decode($this->request->getContent(), true);
-        $result = ['is_deleted'=>$model->fill($complete_task)->save()];
-        echo json_encode($result);
+        $removingTask = json_decode($this->request->getContent(), true);
+        return $this->makeValidation(
+            $model, $removingTask, [
+                [
+                    'is_deleted' => 'required|ends_with:recycle'
+                ],
+                [
+                    'ends_with' => 'Trying to send incorrect value to is_deleted column'
+                ]
+            ]
+        );
     }
+
     protected $request;
 }

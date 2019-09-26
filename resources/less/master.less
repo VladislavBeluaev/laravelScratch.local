@@ -41,6 +41,7 @@ input, textarea {
     .no-border;
     .no-padding;
     .no-margin;
+    width: 96%;
     .placeholder({
         text-align: left;
         font-weight: bold;
@@ -113,12 +114,12 @@ input, textarea {
 
             a {
                 &[title="save task"] {
-                    .task_control_buttons(460px, 0, @disable_btn_color);
+                    .task_control_buttons(92%, 0, @disable_btn_color);
                     display: inline !important;
                 }
 
                 &[title="cancel edit task"] {
-                    .task_control_buttons(490px, 0, @task_delete_color);
+                    .task_control_buttons(96%, 0, @task_delete_color);
                     display: inline !important;
                 }
             }
@@ -150,15 +151,15 @@ input, textarea {
             }
 
             &[title="complete task"] {
-                .task_control_buttons(430px, -10px, @task_completed_color);
+                .task_control_buttons(90%, -10px, @task_completed_color);
             }
 
             &[title="edit task"] {
-                .task_control_buttons(460px, -10px, @edit_task_color);
+                .task_control_buttons(94%, -10px, @edit_task_color);
             }
 
             &[title="delete task"] {
-                .task_control_buttons(490px, -10px, @task_delete_color);
+                .task_control_buttons(98%, -10px, @task_delete_color);
             }
         }
     }
@@ -247,6 +248,15 @@ input, textarea {
 
 article {
     font-size: @defaultFontSize*1.5;
+}
+.ajax-wrapper{
+    position: absolute;
+    width: 100vw;
+    height: 100vw;
+    background-color:rgba(255,255,255, .5);
+
+    z-index: @defaultZIndex;
+
 }
 .preloader{
     font-size: @defaultFontSize;

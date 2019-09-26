@@ -1,7 +1,8 @@
 export class Task {
-    constructor(initObj, ajax) {
+    constructor(initObj, ajax, errorBag) {
         this._initObj = initObj;
         this._ajax = ajax;
+        this._errorBag = errorBag;
     }
 
     run() {
@@ -31,7 +32,6 @@ export class Task {
         }
 
     }
-
     _saveEditTaskHandler(event) {
         let target = event.target;
         if ($(target).hasClass('save-edit-task') === false) return false;
@@ -46,20 +46,28 @@ export class Task {
                 description: Task.getReadWriteInputVal(currentEditTaskContainer$)
             }),
         });
-        this._ajax.send({
-            success: function (response) {
-                try {
-                    if (JSON.parse(response).update === true)
-                        Task.save.call(self, currentEditTaskContainer$);
-                } catch (e) {
-                    console.log(e.stack);
-                }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
+        this._ajax.call().then(response => {
+            let updatedDescription = response.description;
+            if (updatedDescription !== true)
+                throw new TypeError("Unknown result returns from server.Check json.");
+            Task.save.call(self, currentEditTaskContainer$);
+        }).catch(error => {
+            if (error instanceof TypeError) {
+                this._errorBag.showDestroyErr();
+                console.log(error.message);
+                return false;
+            }
+            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+            if (userInfo === undefined) {
+                console.log(error.responseJSON.message);
+                this._errorBag.showDestroyErr();
+                return false;
+            }
+            this._errorBag.showDestroyErr(userInfo);
+            consoleErrorArr.forEach(item => {
+                console.log(item);
+            });
 
-            },
         });
         event.preventDefault();
         event.stopPropagation();
@@ -167,25 +175,32 @@ export class Task {
                 is_completed: true
             }),
         });
-        this._ajax.send({
-            success: function (response) {
-                try {
-                    if (JSON.parse(response).is_completed === true) {
-                        Task.successAjaxHandler(completeTaskContainer$, {
-                            first: function () {
-                                $(this).addClass('complete-task');
-                            }
-                        });
-                    }
-                } catch (e) {
-                    console.log(e.stack);
+        this._ajax.call().then(response => {
+            let isCompleted = response.is_completed;
+            if (isCompleted !== true)
+                throw new TypeError("Unknown result returns from server.Check json.");
+            Task.successAjaxHandler(completeTaskContainer$, {
+                first: function () {
+                    $(this).addClass('complete-task');
                 }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
+            });
+        }).catch(error => {
+            if (error instanceof TypeError) {
+                this._errorBag.showDestroyErr();
+                console.log(error.message);
+                return false;
+            }
+            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+            if (userInfo === undefined) {
+                console.log(error.responseJSON.message);
+                this._errorBag.showDestroyErr();
+                return false;
+            }
+            this._errorBag.showDestroyErr(userInfo);
+            consoleErrorArr.forEach(item => {
+                console.log(item);
+            });
 
-            },
         });
         event.preventDefault();
     }
@@ -205,7 +220,31 @@ export class Task {
                 is_deleted: 'recycle'
             }),
         });
-        this._ajax.send({
+        this._ajax.call().then(response => {
+            let isDeleted = response.is_deleted;
+            if (isDeleted !== true) {
+                throw new TypeError("Unknown result returns from server.Check json.");
+            }
+            Task.successAjaxHandler(removeTaskContainer$);
+        }).catch(error => {
+            if (error instanceof TypeError) {
+                this._errorBag.showDestroyErr();
+                console.log(error.message);
+                return false;
+            }
+            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+            if (userInfo === undefined) {
+                console.log(error.responseJSON.message);
+                this._errorBag.showDestroyErr();
+                return false;
+            }
+            this._errorBag.showDestroyErr(userInfo);
+            consoleErrorArr.forEach(item => {
+                console.log(item);
+            });
+
+        });
+        /*this._ajax.send({
             success: function (response) {
                 try {
                     console.log(JSON.parse(response).is_deleted);
@@ -221,7 +260,7 @@ export class Task {
                 console.log(errorThrown);
 
             },
-        });
+        });*/
         event.preventDefault();
 
     }
@@ -235,53 +274,52 @@ export class Task {
     static successAjaxHandler($taskContainer$, ...fxQueue) {
         let taskQueueContainer = $taskContainer$.queue();
 
-            taskQueueContainer.push(function () {
-                $(this).fadeOut(400);
-                this.dequeue();
+        taskQueueContainer.push(function () {
+            $(this).fadeOut(400);
+            this.dequeue();
+        });
+        taskQueueContainer.push(function () {
+            let siblingsCollection = $(this).siblings('li');
+            $(this).remove();
+            let listNumberElem = 'span:first-child';
+            siblingsCollection.sort((x, y) => {
+                return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
+            }).each((i, item) => {
+                $(item).find(listNumberElem).text(i + 1);
             });
-            taskQueueContainer.push(function () {
-                let siblingsCollection = $(this).siblings('li');
-                $(this).remove();
-                let listNumberElem = 'span:first-child';
-                siblingsCollection.sort((x, y) => {
-                    return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
-                }).each((i, item) => {
-                    $(item).find(listNumberElem).text(i + 1);
-                });
-                this.dequeue();
-            });
-            if(fxQueue.length){
-                fxQueue.forEach(item => {
+            this.dequeue();
+        });
+        if (fxQueue.length) {
+            fxQueue.forEach(item => {
 
-                    let objectKey = Object.keys(item)[0];
-                    switch (objectKey) {
-                        case "first":
-                            console.log(item.first);
-                            taskQueueContainer.unshift(item.first);
-                            break;
-                        case "last":
-                            taskQueueContainer.push(item.last);
-                            break;
-                        default:
-                            throw new Error('Wrong format sending queue handlers');
-                    }
-                });
-            }
+                let objectKey = Object.keys(item)[0];
+                switch (objectKey) {
+                    case "first":
+                        taskQueueContainer.unshift(item.first);
+                        break;
+                    case "last":
+                        taskQueueContainer.push(item.last);
+                        break;
+                    default:
+                        throw new Error('Wrong format sending queue handlers');
+                }
+            });
+        }
         taskQueueContainer.shift().call($taskContainer$);
-            while(taskQueueContainer.length){
-                setTimeout(taskQueueContainer.shift().bind($taskContainer$),200);
-            }
-            /*new Promise(resolve => {
-                taskQueueContainer.shift().call($taskContainer$);
-                setTimeout(resolve,0,taskQueueContainer);
-            }).then((taskQueueContainer)=>{
-                taskQueueContainer.shift().call($taskContainer$);
-                return new Promise(resolve => {
-                    setTimeout(resolve,1000,taskQueueContainer);
-                });
-            }).then((taskQueueContainer)=>{
-                taskQueueContainer.shift().call($taskContainer$);
-            });*/
+        while (taskQueueContainer.length) {
+            setTimeout(taskQueueContainer.shift().bind($taskContainer$), 200);
+        }
+        /*new Promise(resolve => {
+            taskQueueContainer.shift().call($taskContainer$);
+            setTimeout(resolve,0,taskQueueContainer);
+        }).then((taskQueueContainer)=>{
+            taskQueueContainer.shift().call($taskContainer$);
+            return new Promise(resolve => {
+                setTimeout(resolve,1000,taskQueueContainer);
+            });
+        }).then((taskQueueContainer)=>{
+            taskQueueContainer.shift().call($taskContainer$);
+        });*/
     }
 
     _changeControlButtonsIconColor(isChange = true, context$) {

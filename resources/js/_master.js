@@ -24,8 +24,8 @@ import UrlPattern from "url-pattern";
                     console.log(`index page`);
                     break;
                 case "tasks":
-                    (new Task(taskInitObj, new Ajax(taskAjaxReqSettings))).run();
-                    (new TestPromises(5)).run();
+                    (new Task(taskInitObj, new Ajax(taskAjaxReqSettings),errorBag)).run();
+                    //(new TestPromises(5)).run();
                     break;
                 /*case "projects":
                     (new Project(projectInitObj,new Ajax(projectAjaxReqSettings))).run();

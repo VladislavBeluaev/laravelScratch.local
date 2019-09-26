@@ -8,9 +8,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 
-class AjaxProjectController extends Controller implements Ajax
+class AjaxProjectHandler extends Controller implements Ajax
 {
     public function __construct(Request $request)
     {
@@ -36,13 +35,13 @@ class AjaxProjectController extends Controller implements Ajax
     {
         $getting_data = json_decode($this->request->getContent(), true);
         $validator = Validator::make($getting_data, [
-            'is_deleted' => 'ends_with:recycle'
+            'is_deleted' => 'required|ends_with:recycle'
         ],[
             'ends_with'=>'Trying to send incorrect value to column is_deleted when trying to remove project.'
         ]);
         if ($validator->fails()) {
             return Response::json(
-                ['error'=>$validator->errors()->all(),
+                ['errors'=>$validator->errors()->all(),
                     'userInfo'=>'Errors have occurred in the application. Contact administrator.'
                 ],422)->withHeaders(
                 [
@@ -56,7 +55,7 @@ class AjaxProjectController extends Controller implements Ajax
         if($result===true)
             return Response::json(['redirectTo' => route('projects')],200)->withHeaders([
                 'Content-Type' => 'application/json',
-                'Content-Length'=>strlen(route('projects')),
+                'Content-Length'=>strlen(implode(['redirectTo' => route('projects')],'')),
                 'charset'=>'utf-8'
             ]);
         $serverError = 'Internal server Error.Errors occurred while updating the database data. Contact administrator';

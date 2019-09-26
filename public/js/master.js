@@ -600,8 +600,8 @@ __webpack_require__.r(__webpack_exports__);
           break;
 
         case "tasks":
-          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_3__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_5__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_6__["ajaxReqSettings"])).run();
-          new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_4__["TestPromises"](5).run();
+          new _classes_Task_class__WEBPACK_IMPORTED_MODULE_3__["Task"](_init_objects_task_taskInitObj__WEBPACK_IMPORTED_MODULE_5__["taskInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_task_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_6__["ajaxReqSettings"]), errorBag).run(); //(new TestPromises(5)).run();
+
           break;
 
         /*case "projects":
@@ -709,6 +709,9 @@ function () {
       return new Promise(function (resolve, reject) {
         var callbackEvents = {
           beforeSend: function beforeSend() {
+            var wrapper = document.createElement('div');
+            wrapper.className = 'ajax-wrapper';
+            $(document.body).prepend(wrapper);
             preloader$.removeClass('d-none');
           },
           success: function success(response) {
@@ -719,6 +722,7 @@ function () {
           },
           complete: function complete() {
             preloader$.addClass('d-none');
+            $('.ajax-wrapper').remove();
           }
         };
         $.ajax(Object.assign(_this.req_settings, callbackEvents));
@@ -919,7 +923,15 @@ function (_Model) {
 
           var _error$responseJSON = error.responseJSON,
               userInfo = _error$responseJSON.userInfo,
-              consoleErrorArr = _error$responseJSON.error;
+              consoleErrorArr = _error$responseJSON.errors;
+
+          if (userInfo === undefined) {
+            console.log(error.responseJSON.message);
+
+            _this2._errorBag.showDestroyErr();
+
+            return false;
+          }
 
           _this2._errorBag.showDestroyErr(userInfo); //console.log(userInfo);
 
@@ -960,11 +972,12 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Task =
 /*#__PURE__*/
 function () {
-  function Task(initObj, ajax) {
+  function Task(initObj, ajax, errorBag) {
     _classCallCheck(this, Task);
 
     this._initObj = initObj;
     this._ajax = ajax;
+    this._errorBag = errorBag;
   }
 
   _createClass(Task, [{
@@ -1011,6 +1024,8 @@ function () {
   }, {
     key: "_saveEditTaskHandler",
     value: function _saveEditTaskHandler(event) {
+      var _this = this;
+
       var target = event.target;
       if ($(target).hasClass('save-edit-task') === false) return false;
       var saveIconWrapper = target.closest('a');
@@ -1026,18 +1041,35 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            if (JSON.parse(response).update === true) Task.save.call(self, currentEditTaskContainer$);
-          } catch (e) {
-            console.log(e.stack);
-          }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
+      this._ajax.call().then(function (response) {
+        var updatedDescription = response.description;
+        if (updatedDescription !== true) throw new TypeError("Unknown result returns from server.Check json.");
+        Task.save.call(self, currentEditTaskContainer$);
+      })["catch"](function (error) {
+        if (error instanceof TypeError) {
+          _this._errorBag.showDestroyErr();
+
+          console.log(error.message);
+          return false;
         }
+
+        var _error$responseJSON = error.responseJSON,
+            userInfo = _error$responseJSON.userInfo,
+            consoleErrorArr = _error$responseJSON.errors;
+
+        if (userInfo === undefined) {
+          console.log(error.responseJSON.message);
+
+          _this._errorBag.showDestroyErr();
+
+          return false;
+        }
+
+        _this._errorBag.showDestroyErr(userInfo);
+
+        consoleErrorArr.forEach(function (item) {
+          console.log(item);
+        });
       });
 
       event.preventDefault();
@@ -1081,6 +1113,8 @@ function () {
   }, {
     key: "_completeTasksHandler",
     value: function _completeTasksHandler(event) {
+      var _this2 = this;
+
       var target = event.target;
       var completeIconWrapper = target.closest('a');
       if (completeIconWrapper.title !== 'complete task') return false;
@@ -1099,24 +1133,39 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            if (JSON.parse(response).is_completed === true) {
-              Task.successAjaxHandler(completeTaskContainer$, {
-                first: function first() {
-                  $(this).addClass('complete-task');
-                }
-              });
-            }
-          } catch (e) {
-            console.log(e.stack);
+      this._ajax.call().then(function (response) {
+        var isCompleted = response.is_completed;
+        if (isCompleted !== true) throw new TypeError("Unknown result returns from server.Check json.");
+        Task.successAjaxHandler(completeTaskContainer$, {
+          first: function first() {
+            $(this).addClass('complete-task');
           }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
+        });
+      })["catch"](function (error) {
+        if (error instanceof TypeError) {
+          _this2._errorBag.showDestroyErr();
+
+          console.log(error.message);
+          return false;
         }
+
+        var _error$responseJSON2 = error.responseJSON,
+            userInfo = _error$responseJSON2.userInfo,
+            consoleErrorArr = _error$responseJSON2.errors;
+
+        if (userInfo === undefined) {
+          console.log(error.responseJSON.message);
+
+          _this2._errorBag.showDestroyErr();
+
+          return false;
+        }
+
+        _this2._errorBag.showDestroyErr(userInfo);
+
+        consoleErrorArr.forEach(function (item) {
+          console.log(item);
+        });
       });
 
       event.preventDefault();
@@ -1124,6 +1173,8 @@ function () {
   }, {
     key: "_removeTasksHandler",
     value: function _removeTasksHandler(event) {
+      var _this3 = this;
+
       var target = event.target;
       var removeIconWrapper = target.closest('a');
       if (removeIconWrapper.title !== 'delete task') return false;
@@ -1142,23 +1193,57 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            console.log(JSON.parse(response).is_deleted);
+      this._ajax.call().then(function (response) {
+        var isDeleted = response.is_deleted;
 
-            if (JSON.parse(response).is_deleted === true) {
-              Task.successAjaxHandler(removeTaskContainer$);
-            }
-          } catch (e) {
-            console.log(e.stack);
-          }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
+        if (isDeleted !== true) {
+          throw new TypeError("Unknown result returns from server.Check json.");
         }
+
+        Task.successAjaxHandler(removeTaskContainer$);
+      })["catch"](function (error) {
+        if (error instanceof TypeError) {
+          _this3._errorBag.showDestroyErr();
+
+          console.log(error.message);
+          return false;
+        }
+
+        var _error$responseJSON3 = error.responseJSON,
+            userInfo = _error$responseJSON3.userInfo,
+            consoleErrorArr = _error$responseJSON3.errors;
+
+        if (userInfo === undefined) {
+          console.log(error.responseJSON.message);
+
+          _this3._errorBag.showDestroyErr();
+
+          return false;
+        }
+
+        _this3._errorBag.showDestroyErr(userInfo);
+
+        consoleErrorArr.forEach(function (item) {
+          console.log(item);
+        });
       });
+      /*this._ajax.send({
+          success: function (response) {
+              try {
+                  console.log(JSON.parse(response).is_deleted);
+                  if (JSON.parse(response).is_deleted === true) {
+                      Task.successAjaxHandler(removeTaskContainer$);
+                  }
+              } catch (e) {
+                  console.log(e.stack);
+              }
+          },
+          error: function (data, textStatus, errorThrown) {
+              console.log(data.getAllResponseHeaders());
+              console.log(errorThrown);
+           },
+      });*/
+
 
       event.preventDefault();
     }
@@ -1271,7 +1356,6 @@ function () {
 
           switch (objectKey) {
             case "first":
-              console.log(item.first);
               taskQueueContainer.unshift(item.first);
               break;
 
@@ -1638,7 +1722,8 @@ var ajaxReqSettings = {
     'charset': 'utf-8',
     'async': true,
     'Accept': 'application/json'
-  }
+  },
+  preloader: "preloader"
 };
 
 /***/ }),

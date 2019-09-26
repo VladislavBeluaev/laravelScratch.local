@@ -8,14 +8,15 @@ class PagesController extends Controller
 {
     function home()
     {
-        return view('welcome')->withTasks([
+        return view('welcome')->with(['request' => request('title')]);
+        /*return view('welcome')->withTasks([
             'go to store',
             'go to market',
             'go to job',
         ])->with([
             'request' => request('title'),
             'foo' => 'foobar'
-        ]);
+        ]);*/
     }
 
     function projects(ProjectController $controller)
