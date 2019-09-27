@@ -30,6 +30,10 @@ export class Ajax {
             $.ajax(Object.assign(this.req_settings,callbackEvents));
         });
     }
+    getResponse(callable){
+        callable.call(this);
+        return false;
+    }
     _makeAjaxURLFromTemplate(templateURL,params=[]) {
         if(templateURL.includes('{') && templateURL.includes('}')){
             let urlFragments = templateURL.split('}');

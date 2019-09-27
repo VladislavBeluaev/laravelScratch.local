@@ -17,7 +17,6 @@ export class Task {
     }
 
     _initEditTaskHandler(event) {
-        event.preventDefault();
         let target = event.target;
         let isEditIcon = Array.from(target.classList).filter(item => item.includes('edit'));
         if (!isEditIcon.length) return false;
@@ -30,8 +29,9 @@ export class Task {
         } catch (e) {
             console.log(e.stack);
         }
-
+        event.preventDefault();
     }
+
     _saveEditTaskHandler(event) {
         let target = event.target;
         if ($(target).hasClass('save-edit-task') === false) return false;
@@ -46,31 +46,23 @@ export class Task {
                 description: Task.getReadWriteInputVal(currentEditTaskContainer$)
             }),
         });
-        this._ajax.call().then(response => {
-            let updatedDescription = response.description;
-            if (updatedDescription !== true)
-                throw new TypeError("Unknown result returns from server.Check json.");
-            Task.save.call(self, currentEditTaskContainer$);
-        }).catch(error => {
-            if (error instanceof TypeError) {
-                this._errorBag.showDestroyErr();
-                console.log(error.message);
-                return false;
-            }
-            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
-            if (userInfo === undefined) {
-                console.log(error.responseJSON.message);
-                this._errorBag.showDestroyErr();
-                return false;
-            }
-            this._errorBag.showDestroyErr(userInfo);
-            consoleErrorArr.forEach(item => {
-                console.log(item);
-            });
-
-        });
-        event.preventDefault();
-        event.stopPropagation();
+        /*Ajax request and response */
+        try{
+            this._promiseResponseHandler.apply(this._ajax.call(),
+                ['description',
+                    Task.save.bind(self, currentEditTaskContainer$, {
+                        first: function () {
+                            $(this).addClass('complete-task');
+                        }
+                    }),
+                    this._errorBag]
+            );
+        }
+        catch (e) {
+            console.log(e.message);
+        }
+        /*End Ajax request and response */
+        return false;
     }
 
     static save(taskItemContainer$) {
@@ -175,33 +167,22 @@ export class Task {
                 is_completed: true
             }),
         });
-        this._ajax.call().then(response => {
-            let isCompleted = response.is_completed;
-            if (isCompleted !== true)
-                throw new TypeError("Unknown result returns from server.Check json.");
-            Task.successAjaxHandler(completeTaskContainer$, {
-                first: function () {
-                    $(this).addClass('complete-task');
-                }
-            });
-        }).catch(error => {
-            if (error instanceof TypeError) {
-                this._errorBag.showDestroyErr();
-                console.log(error.message);
-                return false;
-            }
-            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
-            if (userInfo === undefined) {
-                console.log(error.responseJSON.message);
-                this._errorBag.showDestroyErr();
-                return false;
-            }
-            this._errorBag.showDestroyErr(userInfo);
-            consoleErrorArr.forEach(item => {
-                console.log(item);
-            });
-
-        });
+        /*Ajax request and response */
+        try{
+            this._promiseResponseHandler.apply(this._ajax.call(),
+                ['is_completed',
+                    Task.successAjaxHandler.bind(null, completeTaskContainer$, {
+                        first: function () {
+                            $(this).addClass('complete-task');
+                        }
+                    }),
+                    this._errorBag]
+            );
+        }
+        catch (e) {
+            console.log(e.message);
+        }
+        /*End Ajax request and response */
         event.preventDefault();
     }
 
@@ -220,47 +201,17 @@ export class Task {
                 is_deleted: 'recycle'
             }),
         });
-        this._ajax.call().then(response => {
-            let isDeleted = response.is_deleted;
-            if (isDeleted !== true) {
-                throw new TypeError("Unknown result returns from server.Check json.");
-            }
-            Task.successAjaxHandler(removeTaskContainer$);
-        }).catch(error => {
-            if (error instanceof TypeError) {
-                this._errorBag.showDestroyErr();
-                console.log(error.message);
-                return false;
-            }
-            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
-            if (userInfo === undefined) {
-                console.log(error.responseJSON.message);
-                this._errorBag.showDestroyErr();
-                return false;
-            }
-            this._errorBag.showDestroyErr(userInfo);
-            consoleErrorArr.forEach(item => {
-                console.log(item);
-            });
-
-        });
-        /*this._ajax.send({
-            success: function (response) {
-                try {
-                    console.log(JSON.parse(response).is_deleted);
-                    if (JSON.parse(response).is_deleted === true) {
-                        Task.successAjaxHandler(removeTaskContainer$);
-                    }
-                } catch (e) {
-                    console.log(e.stack);
-                }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
-
-            },
-        });*/
+        /*Ajax request and response */
+        try {
+            this._promiseResponseHandler.apply(this._ajax.call(),
+                ['is_deleted',
+                    Task.successAjaxHandler.bind(null, removeTaskContainer$),
+                    this._errorBag]
+            );
+        } catch (e) {
+            console.log(e.message);
+        }
+        /*end Ajax request and response */
         event.preventDefault();
 
     }
@@ -269,6 +220,47 @@ export class Task {
         this._ajax.req_settings.type = settings.type;
         this._ajax.req_settings.url = settings.url;
         this._ajax.req_settings.data = settings.data
+    }
+
+    _promiseResponseHandler(...args) {
+        args.forEach((item, index) => {
+            if (index === 0 && $.type(item) !== 'string') {
+                throw new TypeError(`Invalid type passed. Expected to receive a string, passed ${$.type(item)}.`);
+            }
+            if (index === 1 && $.type(item) !== 'function') {
+                throw new TypeError(`Invalid type passed. Expected to receive a function, passed ${$.type(item)}.`);
+            }
+            if (index === 2 && $.type(item) !== 'object') {
+                throw new TypeError(`Invalid type passed. Expected to receive an object, passed ${$.type(item)}.`);
+            }
+        });
+        let [returnedColumn, callback, errorBag] = args;
+
+        this.then(response => {
+            let ajaxResult = response[returnedColumn];
+            if (ajaxResult !== true) {
+                throw new TypeError("Unknown result returns from server.Check json.");
+            }
+            callback();
+
+        }).catch(error => {
+            if (error instanceof TypeError) {
+                errorBag.showDestroyErr();
+                console.log(error.message);
+                return false;
+            }
+            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+            if (userInfo === undefined) {
+                console.log(error.responseJSON.message);
+                errorBag.showDestroyErr();
+                return false;
+            }
+            errorBag.showDestroyErr(userInfo);
+            consoleErrorArr.forEach(item => {
+                console.log(item);
+            });
+
+        });
     }
 
     static successAjaxHandler($taskContainer$, ...fxQueue) {
@@ -309,17 +301,6 @@ export class Task {
         while (taskQueueContainer.length) {
             setTimeout(taskQueueContainer.shift().bind($taskContainer$), 200);
         }
-        /*new Promise(resolve => {
-            taskQueueContainer.shift().call($taskContainer$);
-            setTimeout(resolve,0,taskQueueContainer);
-        }).then((taskQueueContainer)=>{
-            taskQueueContainer.shift().call($taskContainer$);
-            return new Promise(resolve => {
-                setTimeout(resolve,1000,taskQueueContainer);
-            });
-        }).then((taskQueueContainer)=>{
-            taskQueueContainer.shift().call($taskContainer$);
-        });*/
     }
 
     _changeControlButtonsIconColor(isChange = true, context$) {
