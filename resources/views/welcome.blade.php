@@ -21,6 +21,7 @@
 @section('main_menu_links')
     <a href="{{route('projects')}}">Projects</a>
     <a href="{{route('tasks')}}">Tasks</a>
+    <a href="{{route('news')}}">News</a>
     <a href="{{route('contacts')}}">Contacts</a>
     <a href="{{route('about')}}">About</a>
 @endsection

@@ -1,8 +1,7 @@
 export class Task {
-    constructor(initObj, ajax, errorBag) {
+    constructor(initObj, ajax) {
         this._initObj = initObj;
         this._ajax = ajax;
-        this._errorBag = errorBag;
     }
 
     run() {
@@ -17,6 +16,7 @@ export class Task {
     }
 
     _initEditTaskHandler(event) {
+        event.preventDefault();
         let target = event.target;
         let isEditIcon = Array.from(target.classList).filter(item => item.includes('edit'));
         if (!isEditIcon.length) return false;
@@ -29,7 +29,7 @@ export class Task {
         } catch (e) {
             console.log(e.stack);
         }
-        event.preventDefault();
+
     }
 
     _saveEditTaskHandler(event) {
@@ -46,23 +46,23 @@ export class Task {
                 description: Task.getReadWriteInputVal(currentEditTaskContainer$)
             }),
         });
-        /*Ajax request and response */
-        try{
-            this._promiseResponseHandler.apply(this._ajax.call(),
-                ['description',
-                    Task.save.bind(self, currentEditTaskContainer$, {
-                        first: function () {
-                            $(this).addClass('complete-task');
-                        }
-                    }),
-                    this._errorBag]
-            );
-        }
-        catch (e) {
-            console.log(e.message);
-        }
-        /*End Ajax request and response */
-        return false;
+        this._ajax.send({
+            success: function (response) {
+                try {
+                    if (JSON.parse(response).update === true)
+                        Task.save.call(self, currentEditTaskContainer$);
+                } catch (e) {
+                    console.log(e.stack);
+                }
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(data.getAllResponseHeaders());
+                console.log(errorThrown);
+
+            },
+        });
+        event.preventDefault();
+        event.stopPropagation();
     }
 
     static save(taskItemContainer$) {
@@ -167,22 +167,26 @@ export class Task {
                 is_completed: true
             }),
         });
-        /*Ajax request and response */
-        try{
-            this._promiseResponseHandler.apply(this._ajax.call(),
-                ['is_completed',
-                    Task.successAjaxHandler.bind(null, completeTaskContainer$, {
-                        first: function () {
-                            $(this).addClass('complete-task');
-                        }
-                    }),
-                    this._errorBag]
-            );
-        }
-        catch (e) {
-            console.log(e.message);
-        }
-        /*End Ajax request and response */
+        this._ajax.send({
+            success: function (response) {
+                try {
+                    if (JSON.parse(response).is_completed === true) {
+                        Task.successAjaxHandler(completeTaskContainer$, {
+                            first: function () {
+                                $(this).addClass('complete-task');
+                            }
+                        });
+                    }
+                } catch (e) {
+                    console.log(e.stack);
+                }
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(data.getAllResponseHeaders());
+                console.log(errorThrown);
+
+            },
+        });
         event.preventDefault();
     }
 
@@ -201,17 +205,23 @@ export class Task {
                 is_deleted: 'recycle'
             }),
         });
-        /*Ajax request and response */
-        try {
-            this._promiseResponseHandler.apply(this._ajax.call(),
-                ['is_deleted',
-                    Task.successAjaxHandler.bind(null, removeTaskContainer$),
-                    this._errorBag]
-            );
-        } catch (e) {
-            console.log(e.message);
-        }
-        /*end Ajax request and response */
+        this._ajax.send({
+            success: function (response) {
+                try {
+                    console.log(JSON.parse(response).is_deleted);
+                    if (JSON.parse(response).is_deleted === true) {
+                        Task.successAjaxHandler(removeTaskContainer$);
+                    }
+                } catch (e) {
+                    console.log(e.stack);
+                }
+            },
+            error: function (data, textStatus, errorThrown) {
+                console.log(data.getAllResponseHeaders());
+                console.log(errorThrown);
+
+            },
+        });
         event.preventDefault();
 
     }
@@ -222,85 +232,55 @@ export class Task {
         this._ajax.req_settings.data = settings.data
     }
 
-    _promiseResponseHandler(...args) {
-        args.forEach((item, index) => {
-            if (index === 0 && $.type(item) !== 'string') {
-                throw new TypeError(`Invalid type passed. Expected to receive a string, passed ${$.type(item)}.`);
-            }
-            if (index === 1 && $.type(item) !== 'function') {
-                throw new TypeError(`Invalid type passed. Expected to receive a function, passed ${$.type(item)}.`);
-            }
-            if (index === 2 && $.type(item) !== 'object') {
-                throw new TypeError(`Invalid type passed. Expected to receive an object, passed ${$.type(item)}.`);
-            }
-        });
-        let [returnedColumn, callback, errorBag] = args;
-
-        this.then(response => {
-            let ajaxResult = response[returnedColumn];
-            if (ajaxResult !== true) {
-                throw new TypeError("Unknown result returns from server.Check json.");
-            }
-            callback();
-
-        }).catch(error => {
-            if (error instanceof TypeError) {
-                errorBag.showDestroyErr();
-                console.log(error.message);
-                return false;
-            }
-            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
-            if (userInfo === undefined) {
-                console.log(error.responseJSON.message);
-                errorBag.showDestroyErr();
-                return false;
-            }
-            errorBag.showDestroyErr(userInfo);
-            consoleErrorArr.forEach(item => {
-                console.log(item);
-            });
-
-        });
-    }
-
     static successAjaxHandler($taskContainer$, ...fxQueue) {
         let taskQueueContainer = $taskContainer$.queue();
 
-        taskQueueContainer.push(function () {
-            $(this).fadeOut(400);
-            this.dequeue();
-        });
-        taskQueueContainer.push(function () {
-            let siblingsCollection = $(this).siblings('li');
-            $(this).remove();
-            let listNumberElem = 'span:first-child';
-            siblingsCollection.sort((x, y) => {
-                return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
-            }).each((i, item) => {
-                $(item).find(listNumberElem).text(i + 1);
+            taskQueueContainer.push(function () {
+                $(this).fadeOut(400);
+                this.dequeue();
             });
-            this.dequeue();
-        });
-        if (fxQueue.length) {
-            fxQueue.forEach(item => {
+            taskQueueContainer.push(function () {
+                let siblingsCollection = $(this).siblings('li');
+                $(this).remove();
+                let listNumberElem = 'span:first-child';
+                siblingsCollection.sort((x, y) => {
+                    return $(x).find(listNumberElem).text() - $(y).find(listNumberElem).text();
+                }).each((i, item) => {
+                    $(item).find(listNumberElem).text(i + 1);
+                });
+                this.dequeue();
+            });
+            if(fxQueue.length){
+                fxQueue.forEach(item => {
 
-                let objectKey = Object.keys(item)[0];
-                switch (objectKey) {
-                    case "first":
-                        taskQueueContainer.unshift(item.first);
-                        break;
-                    case "last":
-                        taskQueueContainer.push(item.last);
-                        break;
-                    default:
-                        throw new Error('Wrong format sending queue handlers');
-                }
-            });
-        }
+                    let objectKey = Object.keys(item)[0];
+                    switch (objectKey) {
+                        case "first":
+                            taskQueueContainer.unshift(item.first);
+                            break;
+                        case "last":
+                            taskQueueContainer.push(item.last);
+                            break;
+                        default:
+                            throw new Error('Wrong format sending queue handlers');
+                    }
+                });
+            }
         taskQueueContainer.shift().call($taskContainer$);
-        while (taskQueueContainer.length) {
-            setTimeout(taskQueueContainer.shift().bind($taskContainer$), 200);
-        }
+            while(taskQueueContainer.length){
+                setTimeout(taskQueueContainer.shift().bind($taskContainer$),200);
+            }
+            /*new Promise(resolve => {
+                taskQueueContainer.shift().call($taskContainer$);
+                setTimeout(resolve,0,taskQueueContainer);
+            }).then((taskQueueContainer)=>{
+                taskQueueContainer.shift().call($taskContainer$);
+                return new Promise(resolve => {
+                    setTimeout(resolve,1000,taskQueueContainer);
+                });
+            }).then((taskQueueContainer)=>{
+                taskQueueContainer.shift().call($taskContainer$);
+            });*/
     }
 
     _changeControlButtonsIconColor(isChange = true, context$) {

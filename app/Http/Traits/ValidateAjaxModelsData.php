@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-trait ValidateModelsData
+trait ValidateAjaxModelsData
 {
     function makeValidation(Model $model,array $getting_data,array $dataForValidatorFacade){
         $getting_data_key = key($getting_data);

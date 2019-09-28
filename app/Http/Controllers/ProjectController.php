@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Ajax\AjaxProjectHandler;
+use App\Http\Controllers\Ajax\AjaxProjectController;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Traits\Filters;
+use App\Http\Traits\SimpleModelDataValidator;
 use App\Project;
 use Illuminate\Http\Request;
 use phpDocumentor\Reflection\Types\Integer;
@@ -17,9 +18,9 @@ use phpDocumentor\Reflection\Types\Integer;
 
 class ProjectController extends Controller
 {
-    use Filters;
+    use Filters,SimpleModelDataValidator;
 
-    function __construct(Project $project,/*ProjectRequest $validator,*/ AjaxProjectHandler $ajax_handler)
+    function __construct(Project $project,/*ProjectRequest $validator,*/ AjaxProjectController $ajax_handler)
     {
         $this->project = $project;
         $this->ajax_handler = $ajax_handler;
@@ -46,7 +47,7 @@ class ProjectController extends Controller
     function update(Project $project)
     {
         //$result = $project->fill(request()->except(['_token','_method']))->save();
-        $project->update($this->validatedData());
+        $project->update($this->validatedData(ProjectController::RULES));
         return redirect('projects');
     }
 
@@ -63,13 +64,10 @@ class ProjectController extends Controller
     function store()
     {
         $this->project->insert(
-            $this->validatedData()
+            $this->validatedData(ProjectController::RULES)
             /*$this->validator->validated()*/
         );
         return redirect(route('projects'));
-    }
-    protected function validatedData() {
-        return request()->validate(ProjectController::RULES);
     }
     protected $project;
     protected $ajax_handler;

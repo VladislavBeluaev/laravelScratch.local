@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Http\Traits\ValidateModelsData;
+use App\Http\Traits\ValidateAjaxModelsData;
 use App\Interfaces\Ajax;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -13,7 +13,7 @@ use Illuminate\Validation\Rule;
 
 class AjaxTaskController extends Controller implements Ajax
 {
-    use ValidateModelsData;
+    use ValidateAjaxModelsData;
 
     //
     public function __construct(Request $request)

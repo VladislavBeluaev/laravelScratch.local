@@ -74,7 +74,7 @@
     </style>
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
+    <div class="flex-center position-ref mt-5">
         @yield('login')
         <div class="content">
             <div class="links">

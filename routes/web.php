@@ -10,6 +10,9 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+use Illuminate\Support\Facades\Route;
+
 Route::get('/','PagesController@home')->name('home');
 Route::group(['prefix'=>'/projects'],function(){
     Route::get('','PagesController@projects')->name('projects');
@@ -29,7 +32,23 @@ Route::group(['prefix'=>'/tasks'],function(){
     Route::patch('/{task}/update','TaskController@update')->name('update_task');/*->middleware(['ajax_response_headers']);*/
     Route::delete('/{task}/delete','TaskController@destroy')->name('destroy_task');
 });
-
+Route::get('/news/{newsCategory}','NewsCategoryController@showNewsByCategory');
+Route::group(['prefix'=>'/newsCategory'],function(){
+    Route::get('/all','NewsCategoryController@index')->name('all_categories');
+    Route::get('/create','NewsCategoryController@create')->name('create_news_category');
+    Route::post('/create','NewsCategoryController@store');
+    Route::get('/{newsCategory}/edit','NewsCategoryController@edit')->name('edit_news_category');
+    Route::patch('/{newsCategory}/update','NewsCategoryController@update')->name('update_news_category');
+    Route::delete('/{newsCategory}/delete','NewsCategoryController@destroy')->name('destroy_news_category');
+});
+Route::group(['prefix'=>'/news'],function(){
+    Route::get('','PagesController@news')->name('news');
+    Route::get('/create','NewsController@create')->name('create_news');
+    Route::post('/create','NewsController@store');
+    Route::get('/{news}/edit','NewsController@edit')->name('edit_news');
+    Route::patch('/{news}/update','NewsController@update')->name('update_news');
+    Route::delete('/{news}/delete','NewsController@destroy')->name('destroy_news');
+});
 Route::get('/about','PagesController@about')->name('about');
 Route::get('/contacts','PagesController@contacts')->name('contacts');
 /*Route::get('/', function () {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Ajax;
 
-use App\Http\Traits\ValidateModelsData;
+use App\Http\Traits\ValidateAjaxModelsData;
 use App\Interfaces\Ajax;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -10,9 +10,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class AjaxProjectHandler extends Controller implements Ajax
+class AjaxProjectController extends Controller implements Ajax
 {
-    use ValidateModelsData;
+    use ValidateAjaxModelsData;
     public function __construct(Request $request)
     {
         $this->request = $request;

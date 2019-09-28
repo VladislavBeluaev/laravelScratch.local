@@ -33,6 +33,12 @@ class PagesController extends Controller
         return view('tasks.task')->withTasks($tasks);
     }
 
+    function news(NewsController $controller)
+    {
+        $news = $controller->all();
+        return view('tasks.task')->withTasks($news);
+    }
+
     function contacts()
     {
         return view('contacts');

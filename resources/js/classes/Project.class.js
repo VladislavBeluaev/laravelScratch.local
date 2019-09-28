@@ -42,12 +42,7 @@ export class Project extends Model {
                     console.log(`${error.message}. Check variable redirectUrl in then method`);
                     return false;
                 }
-                let {userInfo, errors: consoleErrorArr} = error.responseJSON;
-                if(userInfo===undefined){
-                    console.log(error.responseJSON.message);
-                    this._errorBag.showDestroyErr();
-                    return false;
-                }
+                let {userInfo, error: consoleErrorArr} = error.responseJSON;
                 this._errorBag.showDestroyErr(userInfo);
                 //console.log(userInfo);
                 consoleErrorArr.forEach(item => {
