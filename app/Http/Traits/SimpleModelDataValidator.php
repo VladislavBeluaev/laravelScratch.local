@@ -9,4 +9,5 @@ trait SimpleModelDataValidator
     function validatedData($rules){
         return request()->validate($rules);
     }
+
 }

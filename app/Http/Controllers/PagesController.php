@@ -36,7 +36,7 @@ class PagesController extends Controller
     function news(NewsController $controller)
     {
         $news = $controller->all();
-        return view('tasks.task')->withTasks($news);
+        return view('news.all')->withTasks($news);
     }
 
     function contacts()

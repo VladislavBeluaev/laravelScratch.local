@@ -16,9 +16,9 @@
     <!-- Default form register -->
     <form class="text-center border border-light p-5" action="{{route('create_news_category')}}" method="POST">
         {{csrf_field()}}
-        <textarea name="title"
+        <input name="title"
                   class="form-control mb-4 {{$errors->has('title')?'error-input-data':''}}"
-                  placeholder="News category title" required >{{old('title')}}</textarea>
+                  placeholder="News category title" required value="{{old('title')}}">
         @error('title')
         <div class="alert alert-danger">{{$message}}</div>
         @enderror

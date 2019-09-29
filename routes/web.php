@@ -32,11 +32,12 @@ Route::group(['prefix'=>'/tasks'],function(){
     Route::patch('/{task}/update','TaskController@update')->name('update_task');/*->middleware(['ajax_response_headers']);*/
     Route::delete('/{task}/delete','TaskController@destroy')->name('destroy_task');
 });
-Route::get('/news/{newsCategory}','NewsCategoryController@showNewsByCategory');
+//Route::get('/news/{newsCategory}','NewsCategoryController@showNewsByCategory');
 Route::group(['prefix'=>'/newsCategory'],function(){
-    Route::get('/all','NewsCategoryController@index')->name('all_categories');
+    Route::get('','NewsCategoryController@index')->name('all_categories');
     Route::get('/create','NewsCategoryController@create')->name('create_news_category');
-    Route::post('/create','NewsCategoryController@store');
+    Route::post('/create','NewsCategoryController@store')->name('create_news_category');
+    Route::post('/import','NewsCategoryController@import')->name('import_news');
     Route::get('/{newsCategory}/edit','NewsCategoryController@edit')->name('edit_news_category');
     Route::patch('/{newsCategory}/update','NewsCategoryController@update')->name('update_news_category');
     Route::delete('/{newsCategory}/delete','NewsCategoryController@destroy')->name('destroy_news_category');
