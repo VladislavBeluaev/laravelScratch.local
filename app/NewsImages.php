@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewsImages extends Model
 {
+    protected $guarded = [];
     function getNewsByImage(){
-        return $this->belongsTo(News::class);
+        return $this->belongsTo(News::class,'fk_news');
     }
 }

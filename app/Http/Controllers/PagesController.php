@@ -35,8 +35,8 @@ class PagesController extends Controller
 
     function news(NewsController $controller)
     {
-        $news = $controller->all();
-        return view('news.all')->withTasks($news);
+        $lazyNews = $controller->all();
+        return view('news.all')->withLazyLoad($lazyNews);
     }
 
     function contacts()

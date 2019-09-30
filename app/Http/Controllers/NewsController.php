@@ -33,7 +33,9 @@ class NewsController extends Controller
    }
 
    function all(){
-       return $this->news->all();
+       return $this->category->with('news.images')->where(function($query){
+           $query->has('news');
+       })->get();
    }
     function show(News $news)
     {
@@ -69,10 +71,12 @@ class NewsController extends Controller
        if(!$upload_image_instance instanceof UploadedFile){
           throw new Exception("Getting object does not instance of UploadedFile");
        }
-       //dd($uploadImageInstance)
-        $path= $upload_image_instance->store('uploads/news_img');
-        $name = last(explode('/',$path));
-       dd($data);
+        $img_src= $upload_image_instance->store('uploads/news_img');
+        $img_name = last(explode('/',$img_src));
+
+        $news = $this->category->where('id',request()->get('fk_category'))->first()->news()->create($data);
+        $news->images()->create(['src'=>$img_src,'name'=>$img_name]);
+       //dd($createImgResult);
         return redirect(route('news'));
     }
     function import(){

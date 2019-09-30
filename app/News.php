@@ -9,6 +9,6 @@ class News extends Model
     protected $guarded = [];
 
     function images(){
-        return $this->hasMany(NewsImages::class);
+        return $this->hasMany(NewsImages::class,'fk_news');
     }
 }
