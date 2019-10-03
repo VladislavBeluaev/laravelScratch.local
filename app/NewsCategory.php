@@ -18,6 +18,9 @@ class NewsCategory extends Model
     function news(){
         return $this->hasMany(News::class,'fk_category');
     }
+    /*function getLimitNews(){
+        return $this->news()->limit(2);
+    }*/
 
     function  getActualCategory(){
         return $this->filterCollection($this->all(),[

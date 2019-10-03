@@ -36,7 +36,6 @@ class PagesController extends Controller
 
     function news(NewsController $controller)
     {
-        //dd(storage_path('app/public'));
         //dd(Storage::url('0i2x2SZRGdg38OfhOBwK28ZWjVaDQTBF0m6iAyxf.jpeg'));
         //echo asset('storage/0i2x2SZRGdg38OfhOBwK28ZWjVaDQTBF0m6iAyxf.jpeg');
         //die();

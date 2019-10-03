@@ -11,22 +11,36 @@
 @endsection
 
 @section('h1')
-    <div class="main-header-wrapper">
-        <p class="main-header-content">Main News</p>
-        <div class="news-content">
-            @foreach($lazyLoad as $news_category)
-                <div class="news-content__posts">
-                    <h2 class="news-content__post__category">{{$news_category->title}}</h2>
-                    @foreach($news_category->news as $news)
-                        <div class="news-content__post__item">
-                                <p><img src="{{asset("storage/{$news->images->first()->src}")}}" alt="{{$news->images->first()->alt}}"></p>
-                            <p>{{$news->title}}</p>
+        <div class="main-header-wrapper">
+            <p class="main-header-content">Main News</p>
+            <div class="news-content">
+                @foreach($lazyLoad as $news_category)
+                    <div class="news-content__posts">
+                        <h2 class="news-content__post__category"><a href="">{{$news_category->title}}</a></h2>
+                        <div class="news-content__post__item-wrapper">
+
+                            @foreach($news_category->news as $news)
+                                <div class="news-content__post__item">
+                                    <a href="{{
+                                    route('show_news',
+                                    [$news->getRouteKeyName=>$news->url_title,
+                                    'year'=>$news->createdY(),
+                                    'month'=>$news->createdM(),
+                                    'day'=>$news->createdD(),
+                                    ])}}">
+                                        <span></span>
+                                        <span>{{$news->title}}</span>
+                                        <span><img src="{{asset("storage/{$news->images->first()->src}")}}"
+                                                   alt="{{$news->images->first()->alt}}"></span>
+                                    </a>
+
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                </div>
-            @endforeach
+                    </div>
+                @endforeach
+            </div>
         </div>
-    </div>
 @endsection
 
 

@@ -44,6 +44,13 @@ Route::group(['prefix'=>'/newsCategory'],function(){
 });
 Route::group(['prefix'=>'/news'],function(){
     Route::get('','PagesController@news')->name('news');
+    Route::get('{year}/{month}/{day}/{news}',function($year, $month, $day, $news){
+        $news = app(\App\News::class)->whereYear('created_at',$year)
+            ->whereMonth('created_at',$month)
+        ->whereDay('created_at',$day)->whereUrl_title($news)->firstOrFail();
+         return app('App\Http\Controllers\NewsController')->show($news);
+    })->name('show_news');
+
     Route::get('/create','NewsController@create')->name('create_news');
     Route::post('/create','NewsController@store');
     Route::get('/{news}/edit','NewsController@edit')->name('edit_news');
