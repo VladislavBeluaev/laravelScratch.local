@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Ajax\AjaxNewsController;
+use App\Http\Repositories\NewsRepository;
 use App\Http\Traits\Filters;
 use App\Http\Traits\SimpleModelDataValidator;
 use App\News;
@@ -14,13 +15,14 @@ use Mockery\Exception;
 
 class NewsController extends Controller
 {
-    use SimpleModelDataValidator,Filters;
-   function __construct(News $news,NewsCategory $category, AjaxNewsController $ajax_handler)
+    use SimpleModelDataValidator;
+   function __construct(NewsRepository $repository, AjaxNewsController $ajax_handler)
    {
-       $this->news = $news;
-       $this->category = $category;
+       /*$this->news = $news;
+       $this->category = $category;*/
+       $this->repository = $repository;
        $this->ajax_handler = $ajax_handler;
-       $this->rules = [
+       /*$this->rules = [
            'title'=>'required|min:4',
            'description'=>'required|min:5',
            'fk_category'=>[
@@ -29,13 +31,11 @@ class NewsController extends Controller
                Rule::in(array_column($this->getActualNewsCategories(),'id'))
            ],
            'news_image'=>'required|file|image|max:20480'
-       ];
+       ];*/
    }
 
    function all(){
-       return $this->category->with('news.images')->where(function($query){
-           $query->has('news');
-       })->get();
+       return $this->repository->all();
    }
     function show(News $news)
     {
@@ -61,7 +61,8 @@ class NewsController extends Controller
 
     function create()
     {
-        return view('news.create')->withCategories($this->getActualNewsCategories());
+        return $this->repository->create();
+        //return view('news.create')->withCategories($this->getActualNewsCategories());
     }
 
     function store()
@@ -71,7 +72,7 @@ class NewsController extends Controller
        if(!$upload_image_instance instanceof UploadedFile){
           throw new Exception("Getting object does not instance of UploadedFile");
        }
-        $img_src= $upload_image_instance->store('uploads/news_img');
+        $img_src= $upload_image_instance->store(NewsController::UPLOAD_FOLDER);
         $img_name = last(explode('/',$img_src));
 
         $news = $this->category->where('id',request()->get('fk_category'))->first()->news()->create($data);
@@ -87,8 +88,9 @@ class NewsController extends Controller
         'is_deleted'=>''
     ]);
 }
-   protected $news;
+   protected $repository;
    protected $category;
    protected $ajax_handler;
    protected $rules;
+   const UPLOAD_FOLDER = 'public/uploads/news_img';
 }

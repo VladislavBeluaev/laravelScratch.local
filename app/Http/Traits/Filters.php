@@ -58,7 +58,9 @@ trait Filters
 
         foreach ($collection->toArray() as $item) {
             if (count(array_intersect_assoc($item, $filters)) === count($filters)) {
-                $shortClassName = 'App\\'.stristr(class_basename($this),'Controller',true);
+                $modelName = stristr(class_basename($this),'Controller',true);
+                $namespace_prefix = 'App\\';
+                $shortClassName = ($modelName===false?$namespace_prefix.class_basename($this):$namespace_prefix.$modelName);
                 $filteredData[] = new $shortClassName($item);
             }
         }

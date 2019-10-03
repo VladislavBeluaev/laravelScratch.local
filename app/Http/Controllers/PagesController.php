@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PagesController extends Controller
 {
@@ -35,6 +36,11 @@ class PagesController extends Controller
 
     function news(NewsController $controller)
     {
+        //dd(storage_path('app/public'));
+        //dd(Storage::url('0i2x2SZRGdg38OfhOBwK28ZWjVaDQTBF0m6iAyxf.jpeg'));
+        //echo asset('storage/0i2x2SZRGdg38OfhOBwK28ZWjVaDQTBF0m6iAyxf.jpeg');
+        //die();
+        //dd(Storage::disk('local')->get('0i2x2SZRGdg38OfhOBwK28ZWjVaDQTBF0m6iAyxf.jpeg'));
         $lazyNews = $controller->all();
         return view('news.all')->withLazyLoad($lazyNews);
     }
