@@ -3,8 +3,6 @@
 
 namespace App\Http\Repositories;
 
-
-use App\Http\Controllers\NewsController;
 use App\Http\Traits\SimpleModelDataValidator;
 use App\Interfaces\IRepository;
 use App\NewsCategory;
@@ -59,13 +57,17 @@ class NewsRepository implements IRepository
         if (!$upload_image_instance instanceof UploadedFile) {
             throw new Exception("Getting object does not instance of UploadedFile");
         }
-        $img_src = substr($upload_image_instance->store(NewsController::UPLOAD_FOLDER), 7);
+        $img_src = substr($upload_image_instance->store(NewsRepository::UPLOAD_FOLDER), 7);
         $img_name = last(explode('/', $img_src));
 
         $news = $this->category->where('id', request()->get('fk_category'))->first()->news()->create($data);
         $news->images()->create(['src' => $img_src, 'name' => $img_name]);
         //dd($createImgResult);
         return redirect(route('news'));
+    }
+
+    function import(){
+        
     }
 
     function update(Model $model)
@@ -80,5 +82,6 @@ class NewsRepository implements IRepository
 
     protected $category;
     protected $rules;
+    const UPLOAD_FOLDER = 'public/uploads/news_img';
 
 }

@@ -9,21 +9,22 @@
 namespace App\Http\Controllers\Ajax;
 
 
+use App\Http\Repositories\NewsRepository;
 use App\Interfaces\Ajax;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 
 class AjaxNewsController implements Ajax
 {
-    public function __construct(Request $request)
+    public function __construct(Request $request,NewsRepository $repository=null)
     {
         $this->request = $request;
+        $this->repository = $repository;
     }
 
     function create()
     {
-        dd($this->request->getContent());
-        $importing_news = $this->request->getContent();
+        return $this->repository->import();
     }
 
     function read()
@@ -41,4 +42,5 @@ class AjaxNewsController implements Ajax
         // TODO: Implement destroy() method.
     }
     protected $request;
+    protected $repository;
 }

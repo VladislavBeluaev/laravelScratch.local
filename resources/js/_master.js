@@ -10,6 +10,7 @@ import {Project} from "./classes/Project.class";
 import {projectInitObj} from "./init objects/project/projectInitObj";
 import {ajaxReqSettings as projectAjaxReqSettings} from "./init objects/project/ajaxReqSettings";
 import UrlPattern from "url-pattern";
+import {NewsResource} from "./classes/NewsResource.class";
 
 (function ($, undefined) {
     $(function () {

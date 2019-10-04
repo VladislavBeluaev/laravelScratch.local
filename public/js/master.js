@@ -572,6 +572,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./init objects/project/ajaxReqSettings */ "./resources/js/init objects/project/ajaxReqSettings.js");
 /* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-pattern */ "./node_modules/url-pattern/lib/url-pattern.js");
 /* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(url_pattern__WEBPACK_IMPORTED_MODULE_11__);
+/* harmony import */ var _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./classes/NewsResource.class */ "./resources/js/classes/NewsResource.class.js");
+
 
 
 
@@ -814,6 +816,24 @@ function () {
 
   return ErrorBag;
 }();
+
+/***/ }),
+
+/***/ "./resources/js/classes/NewsResource.class.js":
+/*!****************************************************!*\
+  !*** ./resources/js/classes/NewsResource.class.js ***!
+  \****************************************************/
+/*! exports provided: NewsResource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NewsResource", function() { return NewsResource; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var NewsResource = function NewsResource() {
+  _classCallCheck(this, NewsResource);
+};
 
 /***/ }),
 
@@ -1683,8 +1703,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

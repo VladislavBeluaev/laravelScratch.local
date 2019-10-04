@@ -51,11 +51,10 @@ class NewsController extends Controller
         return $this->repository->store();
     }
     function import(){
-
+        return $this->ajax_handler->create();
     }
    protected $repository;
    protected $category;
    protected $ajax_handler;
    protected $rules;
-   const UPLOAD_FOLDER = 'public/uploads/news_img';
 }
