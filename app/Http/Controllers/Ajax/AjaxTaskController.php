@@ -34,13 +34,22 @@ class AjaxTaskController extends Controller implements Ajax
     function update(Model $model)
     {
         $modified_task = json_decode($this->request->getContent(), true);
-        return $this->makeValidation(
+        $resultJson =  $this->makeValidation(
             $model, $modified_task, [
                 [
                     'description' => 'required|min:5'
                 ],
             ]
         );
+        try{
+            if($resultJson->getData()->description===true){
+                $resultJson->setData(['update'=>true]);
+            }
+            return $resultJson;
+        }
+        catch (\ErrorException $error){
+            return $resultJson;
+        }
 
     }
 

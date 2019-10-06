@@ -26,6 +26,7 @@ export class Project extends Model {
         });
         try {
             this._ajax.call().then(response => {
+                this._errorBag.hideAjaxErrBox();
                 let redirectUrl = response.redirectTo;
                 if (!redirectUrl) {
                     throw new URIError(`Not found redirectUrl. Check ajax return redirectUrl json`);
@@ -33,17 +34,17 @@ export class Project extends Model {
                 window.location.replace(redirectUrl);
             }).catch(error => {
                 if (error instanceof URIError) {
-                    this._errorBag.showDestroyErr();
+                    this._errorBag.showAjaxErrBox();
                     console.log(error.message);
                     return false;
                 }
                 if ($.type(error) === 'error') {
-                    this._errorBag.showDestroyErr();
+                    this._errorBag.showAjaxErrBox();
                     console.log(`${error.message}. Check variable redirectUrl in then method`);
                     return false;
                 }
-                let {userInfo, error: consoleErrorArr} = error.responseJSON;
-                this._errorBag.showDestroyErr(userInfo);
+                let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+                this._errorBag.showAjaxErrBox(userInfo);
                 //console.log(userInfo);
                 consoleErrorArr.forEach(item => {
                     console.log(item);

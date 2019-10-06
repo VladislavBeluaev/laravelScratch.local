@@ -14,84 +14,53 @@
 
 @section('content')
     <!-- Default form register -->
-    <form class="text-center border border-light p-5" action="{{route('create_news_resource')}}" method="POST">
+    {{--<ul>
+    @foreach($errors->all() as $key=>$er)
+        <li>{{$er}}</li>
+        @endforeach
+    </ul>--}}
+    <form class="text-center border border-light p-5" action="{{route('create_news_resource')}}" method="POST"
+          id="create_resource">
         {{csrf_field()}}
-        <input name="name"
-               class="form-control mb-3 {{$errors->has('name')?'error-input-data':''}}"
-               placeholder="Enter resource name" required value="{{old('name')}}">
-        @error('name')
+        <input name="res_name"
+               class="form-control mb-3 {{$errors->has('res_name')?'error-input-data':''}}"
+               placeholder="Enter resource name" required value="{{old('res_name')}}">
+        <p class="alert alert-danger error-create d-none">
+            The field cannot be empty
+        </p>
+        @error('res_name')
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
         <h3 class="text-left mb-2">Категории для загрузки</h3>
-        @foreach($categories as $category)
+        <p class="alert alert-danger general-error d-none"></p>
+        @foreach($categories as $index=>$category)
             <div class="custom-control custom-checkbox text-left mb-2">
-                <input type="checkbox" class="custom-control-input" name="category_resource[]" id="fk_category_{{$category->id}}"
-                       value="{{$category->id}}">
+                <input type="checkbox" class="custom-control-input" name="category_resource[]"
+                       id="fk_category_{{$category->id}}"
+                       value="{{$category->id}}" {{$errors->has("category_resource.$index") ||$errors->has("source_url_$index") ? ' checked' : '' }}>
                 <label class="custom-control-label" for="fk_category_{{$category->id}}">{{$category->title}}</label>
+                @error("category_resource.$index")
+                <div class="alert alert-danger error-validation">{{$message}}</div>
+                @enderror
             </div>
+            <input name="source_url_{{$index}}" type="url"
+                   class="form-control mb-3 {{($errors->has("source_url_$index"))?'error-input-data':''}} d-none"
+                   placeholder="Enter source url" value="{{old("source_url_$index")}}">
+            @error("source_url_$index")
+            <div class="alert alert-danger error-validation">{{$message}}</div>
+            @enderror
+            <p class="alert alert-danger error-create d-none">
+                Errors have occurred in the application. Contact administrator.
+            </p>
+           {{-- @error('source_url')
+            <div class="alert alert-danger">{{$message}}</div>
+            @enderror--}}
         @endforeach
-        @error('category_resource')
+        {{--@error('category_resource')
         <div class="alert alert-danger">{{$message}}</div>
-        @enderror
-        <button class="btn btn-info  btn-block" type="submit">Create resource</button>
+        @enderror--}}
+        <button class="btn btn-info btn-block" type="submit">Create resource</button>
     </form>
-    {{--<div class="form-row mb-4">
-        <div class="col">
-            <!-- First name -->
-            <input type="text" id="defaultRegisterFormFirstName" class="form-control" placeholder="First name">
-        </div>
-        <div class="col">
-            <!-- Last name -->
-            <input type="text" id="defaultRegisterFormLastName" class="form-control" placeholder="Last name">
-        </div>
-    </div>--}}
-
-    <!-- E-mail -->
-    {{--<input type="text" id="defaultRegisterFormEmail" class="form-control mb-4" placeholder="Task description">--}}
-
-    <!-- Password -->
-    {{--<input type="password" id="defaultRegisterFormPassword" class="form-control" placeholder="Password" aria-describedby="defaultRegisterFormPasswordHelpBlock">
-    <small id="defaultRegisterFormPasswordHelpBlock" class="form-text text-muted mb-4">
-        At least 8 characters and 1 digit
-    </small>
-
-    <!-- Phone number -->
-    <input type="text" id="defaultRegisterPhonePassword" class="form-control" placeholder="Phone number" aria-describedby="defaultRegisterFormPhoneHelpBlock">
-    <small id="defaultRegisterFormPhoneHelpBlock" class="form-text text-muted mb-4">
-        Optional - for two step authentication
-    </small>
-
-    <!-- Newsletter -->
-    <div class="custom-control custom-checkbox">
-        <input type="checkbox" class="custom-control-input" id="defaultRegisterFormNewsletter">
-        <label class="custom-control-label" for="defaultRegisterFormNewsletter">Subscribe to our newsletter</label>
-    </div>--}}
-
-    <!-- Sign up button -->
-
-    {{-- <!-- Social register -->
-     <p>or sign up with:</p>
-
-     <a type="button" class="light-blue-text mx-2">
-         <i class="fab fa-facebook-f"></i>
-     </a>
-     <a type="button" class="light-blue-text mx-2">
-         <i class="fab fa-twitter"></i>
-     </a>
-     <a type="button" class="light-blue-text mx-2">
-         <i class="fab fa-linkedin-in"></i>
-     </a>
-     <a type="button" class="light-blue-text mx-2">
-         <i class="fab fa-github"></i>
-     </a>
-
-     <hr>
-
-     <!-- Terms of service -->
-     <p>By clicking
-         <em>Sign up</em> you agree to our
-         <a href="" target="_blank">terms of service</a>--}}
-    <!-- Default form register -->
 @endsection
 
 

@@ -18,6 +18,12 @@ class NewsCategory extends Model
     function news(){
         return $this->hasMany(News::class,'fk_category');
     }
+    function resources(){
+        return $this->belongsToMany('categories_resources','fk_category','fk_resource')->withTimestamps();
+    }
+    function sources(){
+        return $this->belongsToMany(NewsLink::class,'categories_links','fk_category','fk_link');
+    }
     /*function getLimitNews(){
         return $this->news()->limit(2);
     }*/

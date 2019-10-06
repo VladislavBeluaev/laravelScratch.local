@@ -25,4 +25,15 @@
     <p class="alert alert-danger ajax-error d-none">
         Errors have occurred in the application. Contact administrator.
     </p>
+    <ul>
+    @foreach($resources as $resource)
+        <li><a href="{{route('edit_news_resource',[$resource->getRouteKeyName=>$resource->id])}}">{{$resource->res_name}}</a>
+            <ul>
+                @foreach($resource->categories as $category)
+                    <li>{{$category->title}}</li>
+                    @endforeach
+            </ul>
+        </li>
+    @endforeach
+    </ul>
 @endsection

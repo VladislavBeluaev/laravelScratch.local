@@ -43,10 +43,17 @@ class AjaxProjectController extends Controller implements Ajax
                 ['ends_with'=>'Trying to send incorrect value to column is_deleted when trying to remove project.']
             ]
         );
-        if($resultJson->getData()->is_deleted===true){
-            $resultJson->setData(['redirectTo'=>route('projects')]);
+        //dd($resultJson->getData()->is_deleted);
+        //return $resultJson;
+        try{
+            if($resultJson->getData()->is_deleted===true){
+                $resultJson->setData(['redirectTo'=>route('projects')]);
+            }
+            return $resultJson;
         }
-        return $resultJson;
+        catch (\ErrorException $error){
+            return $resultJson;
+        }
     }
 
     protected $request;

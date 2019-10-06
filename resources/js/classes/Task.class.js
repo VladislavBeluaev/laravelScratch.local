@@ -1,7 +1,9 @@
 export class Task {
-    constructor(initObj, ajax) {
+    constructor(initObj, ajax,errorBag) {
         this._initObj = initObj;
         this._ajax = ajax;
+        this._ajaxResult = false;
+        this._errorBag = errorBag;
     }
 
     run() {
@@ -46,23 +48,8 @@ export class Task {
                 description: Task.getReadWriteInputVal(currentEditTaskContainer$)
             }),
         });
-        this._ajax.send({
-            success: function (response) {
-                try {
-                    if (JSON.parse(response).update === true)
-                        Task.save.call(self, currentEditTaskContainer$);
-                } catch (e) {
-                    console.log(e.stack);
-                }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
-
-            },
-        });
-        event.preventDefault();
-        event.stopPropagation();
+        this._resolveAjaxPromise.call(this._ajax.call(),'update',Task.save.bind(self,currentEditTaskContainer$),this);
+       return false;
     }
 
     static save(taskItemContainer$) {
@@ -101,7 +88,15 @@ export class Task {
                 Task.userCancelEditTask.call(this, previousEditTask$);
 
             Task.userSaveTask.call(this, previousEditTask$);
-
+            let self = this;
+            setTimeout(function () {
+                if(self._ajaxResult===false){
+                    let newEditTask$ = $(`.${self._initObj.activeEditTask}`).filter((_,item)=>{
+                        return item!==previousEditTask$[0];
+                    });
+                    Task.userCancelEditTask.call(self, newEditTask$);
+                }
+            },500);
         }
         if (Task._isEmptyField(inputTaskValue$) === false) {
             alert("Поле задача не может быть пустым!");
@@ -159,6 +154,7 @@ export class Task {
         this._previousEditTask();
         let answer = confirm('Вы действительно хотите завершить задачу?');
         if (answer === false) return false;
+
         let completeTaskContainer$ = $(target.closest('li'));
         this._setRequestSettings({
             type: "PATCH",
@@ -167,26 +163,13 @@ export class Task {
                 is_completed: true
             }),
         });
-        this._ajax.send({
-            success: function (response) {
-                try {
-                    if (JSON.parse(response).is_completed === true) {
-                        Task.successAjaxHandler(completeTaskContainer$, {
-                            first: function () {
-                                $(this).addClass('complete-task');
-                            }
-                        });
-                    }
-                } catch (e) {
-                    console.log(e.stack);
+        this._resolveAjaxPromise.call(
+            this._ajax.call(),'is_completed',
+            Task.successAjaxHandler.bind(null,completeTaskContainer$,{
+                first: function () {
+                    $(this).addClass('complete-task');
                 }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
-
-            },
-        });
+            }),this);
         event.preventDefault();
     }
 
@@ -205,23 +188,7 @@ export class Task {
                 is_deleted: 'recycle'
             }),
         });
-        this._ajax.send({
-            success: function (response) {
-                try {
-                    console.log(JSON.parse(response).is_deleted);
-                    if (JSON.parse(response).is_deleted === true) {
-                        Task.successAjaxHandler(removeTaskContainer$);
-                    }
-                } catch (e) {
-                    console.log(e.stack);
-                }
-            },
-            error: function (data, textStatus, errorThrown) {
-                console.log(data.getAllResponseHeaders());
-                console.log(errorThrown);
-
-            },
-        });
+        this._resolveAjaxPromise.call(this._ajax.call(),'is_deleted',Task.successAjaxHandler.bind(null,removeTaskContainer$),this);
         event.preventDefault();
 
     }
@@ -230,6 +197,36 @@ export class Task {
         this._ajax.req_settings.type = settings.type;
         this._ajax.req_settings.url = settings.url;
         this._ajax.req_settings.data = settings.data
+    }
+
+    _resolveAjaxPromise(checkedJsonColumn,callback,...callBackArgs){
+        let taskInstance = callBackArgs.pop();
+        taskInstance._errorBag.hideAjaxErrBox();
+        this.then(response=>{
+            taskInstance._ajaxResult = true;
+            console.log(taskInstance);
+            let result = response[checkedJsonColumn];
+            if (!result) {
+                throw new TypeError(`The received data received is different than expected. Expected to receive boolean true,but received ${result}`);
+            }
+            callback();
+        }).catch(error=>{
+            if (error instanceof TypeError) {
+                taskInstance._errorBag.showAjaxErrBox();
+                console.log(error.message);
+                return false;
+            }
+            if ($.type(error) === 'error') {
+                taskInstance._errorBag.showAjaxErrBox();
+                console.log(`${error.message}. Check variable result in then method`);
+                return false;
+            }
+            let {userInfo, errors: consoleErrorArr} = error.responseJSON;
+            taskInstance._errorBag.showAjaxErrBox(userInfo);
+            consoleErrorArr.forEach(item => {
+                console.log(item);
+            });
+        });
     }
 
     static successAjaxHandler($taskContainer$, ...fxQueue) {

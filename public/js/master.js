@@ -572,7 +572,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./init objects/project/ajaxReqSettings */ "./resources/js/init objects/project/ajaxReqSettings.js");
 /* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! url-pattern */ "./node_modules/url-pattern/lib/url-pattern.js");
 /* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(url_pattern__WEBPACK_IMPORTED_MODULE_11__);
-/* harmony import */ var _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./classes/NewsResource.class */ "./resources/js/classes/NewsResource.class.js");
+/* harmony import */ var _init_objects_resources_news_newsResourceInitObj__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./init objects/resources_news/newsResourceInitObj */ "./resources/js/init objects/resources_news/newsResourceInitObj.js");
+/* harmony import */ var _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./classes/NewsResource.class */ "./resources/js/classes/NewsResource.class.js");
+
 
 
 
@@ -606,9 +608,9 @@ __webpack_require__.r(__webpack_exports__);
           new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_4__["TestPromises"](5).run();
           break;
 
-        /*case "projects":
-            (new Project(projectInitObj,new Ajax(projectAjaxReqSettings))).run();
-            break;*/
+        case "news_resource/create":
+          new _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_13__["NewsResource"](_init_objects_resources_news_newsResourceInitObj__WEBPACK_IMPORTED_MODULE_12__["newsResourceInitObj"], errorBag).run();
+          break;
 
         default:
           throw new Error("404 Page not found!!");
@@ -711,7 +713,6 @@ function () {
       return new Promise(function (resolve, reject) {
         var callbackEvents = {
           beforeSend: function beforeSend() {
-            console.log('call');
             preloader$.removeClass('d-none');
           },
           success: function success(response) {
@@ -782,6 +783,10 @@ function () {
     _classCallCheck(this, ErrorBag);
 
     this._initObj = settings;
+    this._generalErrorBox$ = $(".".concat(this._initObj.generalErrorBox));
+    this._alertAjaxBox$ = $(".".concat(this._initObj.ajaxErrorBox));
+    this._newsResourceErrorBox = $(".".concat(this._initObj.newsResourceErrorBox));
+    this._serverErrorBox = $(".".concat(this._initObj.serverErrorBox));
   }
 
   _createClass(ErrorBag, [{
@@ -795,12 +800,86 @@ function () {
       $(event.target).removeClass(this._initObj.borderHighlightingClass).off('focus.hideErrMsg');
     }
   }, {
-    key: "showDestroyErr",
-    value: function showDestroyErr() {
+    key: "showAjaxErrBox",
+    value: function showAjaxErrBox() {
       var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-      var alert$ = $(".".concat(this._initObj.ajaxErrorBox));
-      if (!alert$.length) throw new Error('Errors have occurred when trying to show error message.');
-      alert$.queue(function (next) {
+      if (!this._alertAjaxBox$.length) throw new Error('Errors have occurred when trying to show Ajax error message.');
+
+      this._showProcess.call(this._alertAjaxBox$, message);
+    }
+  }, {
+    key: "hideAjaxErrBox",
+    value: function hideAjaxErrBox() {
+      this._hideProcess.call(this._alertAjaxBox$);
+    }
+  }, {
+    key: "showNewsResourceErrorBox",
+    value: function showNewsResourceErrorBox(siblingElem) {
+      var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+      var alertBox$ = this._newsResourceErrorBox.filter(function (_, item) {
+        return siblingElem === item;
+      });
+
+      if (!alertBox$.length) return false; //throw new Error('Errors have occurred when trying to show NewsResourceErrorBox message.');
+
+      this._showProcess.call(alertBox$, message);
+    }
+  }, {
+    key: "hideNewsResourceErrorBox",
+    value: function hideNewsResourceErrorBox(siblingElem) {
+      var alertBox$ = this._newsResourceErrorBox.filter(function (_, item) {
+        return siblingElem === item;
+      });
+
+      if (!alertBox$.length) return false; //throw new Error('Errors have occurred when trying to hide NewsResourceErrorBox message.');
+
+      this._hideProcess.call(alertBox$);
+    }
+  }, {
+    key: "isNewsResourceErrorBox",
+    value: function isNewsResourceErrorBox() {
+      return this._newsResourceErrorBox.filter(function (_, item) {
+        return $(item).hasClass('d-none') === false;
+      }).length;
+    }
+  }, {
+    key: "hideServerErrorsBox",
+    value: function hideServerErrorsBox(siblingElem) {
+      var alertBox$ = this._serverErrorBox.filter(function (_, item) {
+        return siblingElem === item;
+      });
+
+      if (!alertBox$.length) return false; //throw new Error('Errors have occurred when trying to hide NewsResourceErrorBox message.');
+
+      this._hideProcess.call(alertBox$);
+
+      console.log(alertBox$.prev());
+      alertBox$.prev().removeClass(this._initObj.borderHighlightingClass);
+    }
+  }, {
+    key: "showGeneralErrorBox",
+    value: function showGeneralErrorBox(message) {
+      if (!this._generalErrorBox$.length) throw new Error('Errors have occurred when trying to show General error message.');
+
+      this._showProcess.call(this._generalErrorBox$, message);
+    }
+  }, {
+    key: "hideGeneralErrorBox",
+    value: function hideGeneralErrorBox() {
+      if (!this._generalErrorBox$.length) return false; // throw new Error('Errors have occurred when trying to hide General error message.');
+
+      this._hideProcess.call(this._generalErrorBox$);
+    }
+  }, {
+    key: "changeMessageOnVisibleError",
+    value: function changeMessageOnVisibleError(errorBox$, text) {
+      errorBox$.text(text);
+    }
+  }, {
+    key: "_showProcess",
+    value: function _showProcess(message) {
+      this.queue(function (next) {
         $(this).removeClass('d-none');
         next();
       }).queue(function (next) {
@@ -809,6 +888,19 @@ function () {
         next();
       }).queue(function (next) {
         $(this).fadeIn('normal');
+        next();
+      });
+    }
+  }, {
+    key: "_hideProcess",
+    value: function _hideProcess() {
+      var _this = this;
+
+      this.queue(function (next) {
+        $(this).fadeOut('normal');
+        next();
+      }).queue(function (next) {
+        $(_this).addClass('d-none');
         next();
       });
     }
@@ -831,9 +923,182 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "NewsResource", function() { return NewsResource; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var NewsResource = function NewsResource() {
-  _classCallCheck(this, NewsResource);
-};
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var NewsResource =
+/*#__PURE__*/
+function () {
+  function NewsResource(settings, errorBag) {
+    _classCallCheck(this, NewsResource);
+
+    this._settings = settings;
+    this._errorBag = errorBag;
+  }
+
+  _createClass(NewsResource, [{
+    key: "run",
+    value: function run() {
+      var container$ = $(this._settings.container);
+      var self = this;
+      $(this._settings.resourceName).on({
+        'change.addNewsResource': $.proxy(this._inputResourceNameHandler, this),
+        'focus.removeErrorBox': function focusRemoveErrorBox(e) {
+          self._errorBag.hideNewsResourceErrorBox(e.target.nextElementSibling);
+        }
+      });
+      $(this._settings.checkBoxInput).on('change.addResourceSource', $.proxy(this._toggleSourceInputHandler, this));
+      container$.on('click.CreateNewsResource', container$.find('button[type="button"]'), $.proxy(this._createResourceHandler, this));
+      $(window).on('load', $.proxy(this._showSourcesField, this));
+    }
+  }, {
+    key: "_inputResourceNameHandler",
+    value: function _inputResourceNameHandler() {
+      var target = event.target;
+      if (target.tagName !== 'INPUT') return false;
+      if (!target.value) this._errorBag.showNewsResourceErrorBox(target.nextElementSibling);else this._errorBag.hideNewsResourceErrorBox(target.nextElementSibling);
+    }
+  }, {
+    key: "_toggleSourceInputHandler",
+    value: function _toggleSourceInputHandler(event) {
+      var target = event.target;
+      if (target.tagName !== 'INPUT') return false;
+
+      this._errorBag.hideGeneralErrorBox();
+
+      var parent$ = $(target.closest('div'));
+      if (parent$.hasClass(this._settings.inputWrapper) === false) return false;
+      var sourceURLElem$ = parent$.next();
+      if (sourceURLElem$.attr('name').includes(this._settings.sourceUrlElem) === false) return false;
+      if ($(target).is(':checked')) this._showSourceElem(sourceURLElem$);else {
+        console.log(sourceURLElem$);
+
+        this._hideSourceElem(sourceURLElem$, event);
+      }
+    }
+  }, {
+    key: "_showSourceElem",
+    value: function _showSourceElem(elem$) {
+      var _this = this;
+
+      elem$.queue(function (next) {
+        elem$.removeClass('d-none');
+        next();
+      }).queue(function (next) {
+        elem$.fadeOut(0);
+        next();
+      }).queue(function (next) {
+        elem$.fadeIn('normal');
+        elem$.on('change.NewsResourceValidURL', $.proxy(_this._validURL, _this));
+        next();
+      });
+    }
+  }, {
+    key: "_hideSourceElem",
+    value: function _hideSourceElem(elem$, e) {
+      var _this2 = this;
+
+      elem$.queue(function (next) {
+        elem$.fadeOut('normal');
+        next();
+      }).queue(function (next) {
+        elem$.addClass('d-none');
+
+        if (e.originalEvent) {
+          elem$.val('');
+        }
+
+        next();
+      }).queue(function (next) {
+        _this2._errorBag.hideNewsResourceErrorBox(elem$.next()[0]);
+
+        if (e.originalEvent) {
+          _this2._errorBag.hideServerErrorsBox(elem$.next()[0]);
+
+          _this2._errorBag.hideServerErrorsBox(elem$.prev().find(':last-child')[0]);
+        }
+
+        next();
+      });
+    }
+  }, {
+    key: "_validURL",
+    value: function _validURL(event) {
+      var target = event.target;
+      if (target.tagName !== 'INPUT' || $(target).attr('name').includes(this._settings.sourceUrlElem) === false) return false;
+      var pattern = new RegExp('^(https?:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', 'i');
+      var checkRes = !!pattern.test(target.value);
+      if (!checkRes) this._errorBag.showNewsResourceErrorBox(target.nextElementSibling, 'Not valid URL');else this._errorBag.hideNewsResourceErrorBox(target.nextElementSibling);
+      $(target).data('validate-before', true);
+      event.stopImmediatePropagation();
+    }
+  }, {
+    key: "_createResourceHandler",
+    value: function _createResourceHandler(event) {
+      var _this3 = this;
+
+      var resourceName$ = $(this._settings.resourceName);
+      if (!resourceName$) throw new Error('Field resource name does not exist. Check form');
+
+      if (event.target.tagName === 'BUTTON') {
+        if (!resourceName$.val()) {
+          this._errorBag.showNewsResourceErrorBox(resourceName$.next()[0]);
+
+          console.log('resourceName$.val()');
+          event.preventDefault();
+        }
+
+        var checkedSources = $(this._settings.checkBoxInput).filter(':checked');
+        console.log(checkedSources);
+
+        if (!checkedSources.length) {
+          this._errorBag.showGeneralErrorBox('At least one category must be selected');
+
+          console.log('checkedSources.length');
+          event.preventDefault();
+        }
+
+        checkedSources.each(function (_, item) {
+          var sourceInput$ = $(item.closest('div').nextElementSibling);
+
+          if (sourceInput$.val() === '') {
+            _this3._errorBag.changeMessageOnVisibleError(sourceInput$.next(), 'Trying to send empty value');
+
+            event.preventDefault();
+          }
+
+          if (sourceInput$.data('validate-before') === undefined) {
+            console.log(sourceInput$[0]);
+            sourceInput$.trigger('change.NewsResourceValidURL');
+          }
+
+          sourceInput$.removeData('validate-before');
+
+          if (_this3._errorBag.isNewsResourceErrorBox() !== 0) {
+            console.log('checkedSources.length');
+            event.preventDefault();
+          }
+        }); //event.preventDefault();
+        //if(this._errorBag.isGeneralErrorShow())  event.preventDefault();
+      }
+    }
+  }, {
+    key: "_showSourcesField",
+    value: function _showSourcesField() {
+      $(this._settings.checkBoxInput).filter(':checked').each(function (_, item) {
+        $(item).trigger('change.addResourceSource');
+      });
+    }
+  }]);
+
+  return NewsResource;
+}();
 
 /***/ }),
 
@@ -916,6 +1181,8 @@ function (_Model) {
 
       try {
         this._ajax.call().then(function (response) {
+          _this2._errorBag.hideAjaxErrBox();
+
           var redirectUrl = response.redirectTo;
 
           if (!redirectUrl) {
@@ -925,14 +1192,14 @@ function (_Model) {
           window.location.replace(redirectUrl);
         })["catch"](function (error) {
           if (error instanceof URIError) {
-            _this2._errorBag.showDestroyErr();
+            _this2._errorBag.showAjaxErrBox();
 
             console.log(error.message);
             return false;
           }
 
           if ($.type(error) === 'error') {
-            _this2._errorBag.showDestroyErr();
+            _this2._errorBag.showAjaxErrBox();
 
             console.log("".concat(error.message, ". Check variable redirectUrl in then method"));
             return false;
@@ -940,9 +1207,9 @@ function (_Model) {
 
           var _error$responseJSON = error.responseJSON,
               userInfo = _error$responseJSON.userInfo,
-              consoleErrorArr = _error$responseJSON.error;
+              consoleErrorArr = _error$responseJSON.errors;
 
-          _this2._errorBag.showDestroyErr(userInfo); //console.log(userInfo);
+          _this2._errorBag.showAjaxErrBox(userInfo); //console.log(userInfo);
 
 
           consoleErrorArr.forEach(function (item) {
@@ -981,11 +1248,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 var Task =
 /*#__PURE__*/
 function () {
-  function Task(initObj, ajax) {
+  function Task(initObj, ajax, errorBag) {
     _classCallCheck(this, Task);
 
     this._initObj = initObj;
     this._ajax = ajax;
+    this._ajaxResult = false;
+    this._errorBag = errorBag;
   }
 
   _createClass(Task, [{
@@ -1047,22 +1316,9 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            if (JSON.parse(response).update === true) Task.save.call(self, currentEditTaskContainer$);
-          } catch (e) {
-            console.log(e.stack);
-          }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
-        }
-      });
+      this._resolveAjaxPromise.call(this._ajax.call(), 'update', Task.save.bind(self, currentEditTaskContainer$), this);
 
-      event.preventDefault();
-      event.stopPropagation();
+      return false;
     }
   }, {
     key: "_previousEditTask",
@@ -1077,6 +1333,15 @@ function () {
         console.log(needToSave);
         if (needToSave === false) Task.userCancelEditTask.call(this, previousEditTask$);
         Task.userSaveTask.call(this, previousEditTask$);
+        var self = this;
+        setTimeout(function () {
+          if (self._ajaxResult === false) {
+            var newEditTask$ = $(".".concat(self._initObj.activeEditTask)).filter(function (_, item) {
+              return item !== previousEditTask$[0];
+            });
+            Task.userCancelEditTask.call(self, newEditTask$);
+          }
+        }, 500);
       }
 
       if (Task._isEmptyField(inputTaskValue$) === false) {
@@ -1120,25 +1385,11 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            if (JSON.parse(response).is_completed === true) {
-              Task.successAjaxHandler(completeTaskContainer$, {
-                first: function first() {
-                  $(this).addClass('complete-task');
-                }
-              });
-            }
-          } catch (e) {
-            console.log(e.stack);
-          }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
+      this._resolveAjaxPromise.call(this._ajax.call(), 'is_completed', Task.successAjaxHandler.bind(null, completeTaskContainer$, {
+        first: function first() {
+          $(this).addClass('complete-task');
         }
-      });
+      }), this);
 
       event.preventDefault();
     }
@@ -1163,23 +1414,7 @@ function () {
         })
       });
 
-      this._ajax.send({
-        success: function success(response) {
-          try {
-            console.log(JSON.parse(response).is_deleted);
-
-            if (JSON.parse(response).is_deleted === true) {
-              Task.successAjaxHandler(removeTaskContainer$);
-            }
-          } catch (e) {
-            console.log(e.stack);
-          }
-        },
-        error: function error(data, textStatus, errorThrown) {
-          console.log(data.getAllResponseHeaders());
-          console.log(errorThrown);
-        }
-      });
+      this._resolveAjaxPromise.call(this._ajax.call(), 'is_deleted', Task.successAjaxHandler.bind(null, removeTaskContainer$), this);
 
       event.preventDefault();
     }
@@ -1189,6 +1424,53 @@ function () {
       this._ajax.req_settings.type = settings.type;
       this._ajax.req_settings.url = settings.url;
       this._ajax.req_settings.data = settings.data;
+    }
+  }, {
+    key: "_resolveAjaxPromise",
+    value: function _resolveAjaxPromise(checkedJsonColumn, callback) {
+      for (var _len = arguments.length, callBackArgs = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+        callBackArgs[_key - 2] = arguments[_key];
+      }
+
+      var taskInstance = callBackArgs.pop();
+
+      taskInstance._errorBag.hideAjaxErrBox();
+
+      this.then(function (response) {
+        taskInstance._ajaxResult = true;
+        console.log(taskInstance);
+        var result = response[checkedJsonColumn];
+
+        if (!result) {
+          throw new TypeError("The received data received is different than expected. Expected to receive boolean true,but received ".concat(result));
+        }
+
+        callback();
+      })["catch"](function (error) {
+        if (error instanceof TypeError) {
+          taskInstance._errorBag.showAjaxErrBox();
+
+          console.log(error.message);
+          return false;
+        }
+
+        if ($.type(error) === 'error') {
+          taskInstance._errorBag.showAjaxErrBox();
+
+          console.log("".concat(error.message, ". Check variable result in then method"));
+          return false;
+        }
+
+        var _error$responseJSON = error.responseJSON,
+            userInfo = _error$responseJSON.userInfo,
+            consoleErrorArr = _error$responseJSON.errors;
+
+        taskInstance._errorBag.showAjaxErrBox(userInfo);
+
+        consoleErrorArr.forEach(function (item) {
+          console.log(item);
+        });
+      });
     }
   }, {
     key: "_changeControlButtonsIconColor",
@@ -1282,8 +1564,8 @@ function () {
         this.dequeue();
       });
 
-      for (var _len = arguments.length, fxQueue = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-        fxQueue[_key - 1] = arguments[_key];
+      for (var _len2 = arguments.length, fxQueue = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        fxQueue[_key2 - 1] = arguments[_key2];
       }
 
       if (fxQueue.length) {
@@ -1326,8 +1608,8 @@ function () {
   }, {
     key: "changeIconColor",
     value: function changeIconColor() {
-      for (var _len2 = arguments.length, icons = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-        icons[_key2] = arguments[_key2];
+      for (var _len3 = arguments.length, icons = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+        icons[_key3] = arguments[_key3];
       }
 
       var saveIcon$ = icons[0],
@@ -1338,8 +1620,8 @@ function () {
   }, {
     key: "setDisableIconColor",
     value: function setDisableIconColor() {
-      for (var _len3 = arguments.length, icons = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
-        icons[_key3] = arguments[_key3];
+      for (var _len4 = arguments.length, icons = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
+        icons[_key4] = arguments[_key4];
       }
 
       var saveIcon$ = icons[0],
@@ -1564,7 +1846,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorsInitObj", function() { return errorsInitObj; });
 var errorsInitObj = {
   borderHighlightingClass: "error-input-data",
-  ajaxErrorBox: "ajax-error"
+  generalErrorBox: 'general-error',
+  ajaxErrorBox: "ajax-error",
+  newsResourceErrorBox: 'error-create',
+  serverErrorBox: "error-validation"
 };
 
 /***/ }),
@@ -1614,6 +1899,26 @@ var projectInitObj = {
 
 /***/ }),
 
+/***/ "./resources/js/init objects/resources_news/newsResourceInitObj.js":
+/*!*************************************************************************!*\
+  !*** ./resources/js/init objects/resources_news/newsResourceInitObj.js ***!
+  \*************************************************************************/
+/*! exports provided: newsResourceInitObj */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "newsResourceInitObj", function() { return newsResourceInitObj; });
+var newsResourceInitObj = {
+  container: 'form#create_resource',
+  resourceName: 'input[name="res_name"]',
+  checkBoxInput: '.custom-control-input',
+  inputWrapper: 'custom-control',
+  sourceUrlElem: 'source_url'
+};
+
+/***/ }),
+
 /***/ "./resources/js/init objects/routing.js":
 /*!**********************************************!*\
   !*** ./resources/js/init objects/routing.js ***!
@@ -1658,7 +1963,8 @@ var ajaxReqSettings = {
     'charset': 'utf-8',
     'async': true,
     'Accept': 'application/json'
-  }
+  },
+  preloader: "preloader"
 };
 
 /***/ }),
@@ -1703,8 +2009,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

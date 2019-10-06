@@ -10,7 +10,6 @@ export class Ajax {
         return new Promise((resolve,reject)=>{
             let callbackEvents = {
                 beforeSend:function(){
-                    console.log('call');
                     preloader$.removeClass('d-none');
                 },
                 success:function (response) {

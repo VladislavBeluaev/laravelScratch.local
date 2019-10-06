@@ -10,6 +10,7 @@ import {Project} from "./classes/Project.class";
 import {projectInitObj} from "./init objects/project/projectInitObj";
 import {ajaxReqSettings as projectAjaxReqSettings} from "./init objects/project/ajaxReqSettings";
 import UrlPattern from "url-pattern";
+import {newsResourceInitObj} from "./init objects/resources_news/newsResourceInitObj";
 import {NewsResource} from "./classes/NewsResource.class";
 
 (function ($, undefined) {
@@ -28,9 +29,9 @@ import {NewsResource} from "./classes/NewsResource.class";
                     (new Task(taskInitObj, new Ajax(taskAjaxReqSettings),errorBag)).run();
                     (new TestPromises(5)).run();
                     break;
-                /*case "projects":
-                    (new Project(projectInitObj,new Ajax(projectAjaxReqSettings))).run();
-                    break;*/
+                case "news_resource/create":
+                    (new NewsResource(newsResourceInitObj,errorBag)).run();
+                    break;
                 default:
                     throw new Error("404 Page not found!!");
             }
