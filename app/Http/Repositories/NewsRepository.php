@@ -26,6 +26,7 @@ class NewsRepository implements IRepository
                 'numeric',
                 Rule::in(array_column($this->category->getActualCategory(), 'id'))
             ],
+            'url_title'=>'required|min:3|string',
             'news_image' => 'required|file|image|max:20480'
         ];
     }

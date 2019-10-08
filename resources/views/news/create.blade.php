@@ -22,7 +22,7 @@
 
 @section('content')
     <!-- Default form register -->
-    <form class="text-center border border-light p-5" action="{{route('import_news')}}" method="POST" id="import_news">
+    {{--<form class="text-center border border-light p-5" action="{{route('import_news')}}" method="POST" id="import_news">
         {{csrf_field()}}
         <select size="" name="news_source" class="form-control mb-4 {{$errors->has('news_source')?'error-input-data':''}}">
             <option selected="selected" value="0">Choose news source</option>
@@ -39,7 +39,7 @@
         @error('description')
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
-        <select size="{{count($categories)}}" name="fk_category" class="form-control mb-4 {{$errors->has('news_category')?'error-input-data':''}}">
+        <select size="" name="fk_category" class="form-control mb-4 {{$errors->has('news_category')?'error-input-data':''}}">
             <option selected="selected" value="0">Choose news category</option>
             @foreach ($categories as $category)
                 <option value="{{$category->id}}">{{$category->title}}</option>
@@ -55,7 +55,7 @@
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
         <button class="btn btn-info my-4 btn-block" type="submit">Create</button>
-    </form>
+    </form>--}}
 
     <form class="text-center border border-light p-5" action="{{route('create_news')}}" method="POST"
           enctype="multipart/form-data">
@@ -79,6 +79,12 @@
                 @endforeach
         </select>
         @error('fk_category')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
+        <input name="url_title"
+               class="form-control mb-4 {{$errors->has('url_title')?'error-input-data':''}}"
+               placeholder="User show url title" value="{{old('url_title')}}" required>
+        @error('url_title')
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
         <input type="file" name="news_image"

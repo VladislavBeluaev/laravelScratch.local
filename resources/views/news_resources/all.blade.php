@@ -27,7 +27,7 @@
     </p>
     <ul>
     @foreach($resources as $resource)
-        <li><a href="{{route('edit_news_resource',[$resource->getRouteKeyName=>$resource->id])}}">{{$resource->res_name}}</a>
+        <li><a href="{{route('edit_news_resource',[$resource->getRouteKeyName=>$resource->res_name])}}">{{$resource->res_name}}</a>
             <ul>
                 @foreach($resource->categories as $category)
                     <li>{{$category->title}}</li>

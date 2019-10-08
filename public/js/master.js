@@ -786,6 +786,7 @@ function () {
     this._generalErrorBox$ = $(".".concat(this._initObj.generalErrorBox));
     this._alertAjaxBox$ = $(".".concat(this._initObj.ajaxErrorBox));
     this._newsResourceErrorBox = $(".".concat(this._initObj.newsResourceErrorBox));
+    this._updateErrorBox$ = $(".".concat(this._initObj.updateErrorBox));
     this._serverErrorBox = $(".".concat(this._initObj.serverErrorBox));
   }
 
@@ -875,6 +876,26 @@ function () {
     key: "changeMessageOnVisibleError",
     value: function changeMessageOnVisibleError(errorBox$, text) {
       errorBox$.text(text);
+    }
+  }, {
+    key: "showUpdateErrorBox",
+    value: function showUpdateErrorBox(errorBox) {
+      var message = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+
+      var alertBox$ = this._updateErrorBox$.filter(function (_, item) {
+        return errorBox === item;
+      });
+
+      this._showProcess.call(alertBox$, message);
+    }
+  }, {
+    key: "hideUpdateErrorBox",
+    value: function hideUpdateErrorBox(errorBox) {
+      var alertBox$ = this._updateErrorBox$.filter(function (_, item) {
+        return errorBox === item;
+      });
+
+      this._hideProcess.call(alertBox$);
     }
   }, {
     key: "_showProcess",
@@ -1846,10 +1867,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "errorsInitObj", function() { return errorsInitObj; });
 var errorsInitObj = {
   borderHighlightingClass: "error-input-data",
-  generalErrorBox: 'general-error',
   ajaxErrorBox: "ajax-error",
   newsResourceErrorBox: 'error-create',
-  serverErrorBox: "error-validation"
+  updateErrorBox: 'error-update',
+  serverErrorBox: "error-validation",
+  generalErrorBox: 'general-error'
 };
 
 /***/ }),
@@ -2009,8 +2031,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

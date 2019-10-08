@@ -4,6 +4,7 @@ export class ErrorBag{
         this._generalErrorBox$ = $(`.${this._initObj.generalErrorBox}`);
         this._alertAjaxBox$ = $(`.${this._initObj.ajaxErrorBox}`);
         this._newsResourceErrorBox = $(`.${this._initObj.newsResourceErrorBox}`);
+        this._updateErrorBox$ = $(`.${this._initObj.updateErrorBox}`);
         this._serverErrorBox = $(`.${this._initObj.serverErrorBox}`);
     }
     hideAlertsIForms(){
@@ -59,6 +60,19 @@ export class ErrorBag{
     changeMessageOnVisibleError(errorBox$,text){
         errorBox$.text(text);
     }
+    showUpdateErrorBox(errorBox,message=''){
+        let alertBox$ =this._updateErrorBox$.filter((_,item)=>{
+            return errorBox===item;
+        });
+        this._showProcess.call(alertBox$,message);
+    }
+    hideUpdateErrorBox(errorBox){
+        let alertBox$ =this._updateErrorBox$.filter((_,item)=>{
+            return errorBox===item;
+        });
+        this._hideProcess.call(alertBox$);
+    }
+
     _showProcess(message){
         this.queue(function(next){
             $(this).removeClass('d-none');
@@ -73,7 +87,6 @@ export class ErrorBag{
             next();
         });
     }
-
     _hideProcess(){
         this.queue(function(next){
             $(this).fadeOut('normal');

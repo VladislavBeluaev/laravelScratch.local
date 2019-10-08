@@ -11,4 +11,9 @@ class NewsResource extends Model
     function categories(){
        return $this->belongsToMany(NewsCategory::class,'categories_resources','fk_resource','fk_category')->withTimestamps();
     }
+
+    function getRouteKey()
+    {
+        return 'res_name';
+    }
 }

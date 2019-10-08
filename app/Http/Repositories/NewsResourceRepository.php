@@ -13,10 +13,11 @@ use Illuminate\Support\MessageBag;
 
 class NewsResourceRepository implements IRepository
 {
-    function __construct(NewsResource $resource, NewsLink $source)
+    function __construct(NewsResource $resource, NewsLink $source,NewsCategory $category)
     {
         $this->resource = $resource;
         $this->source = $source;
+        $this->category = $category;
     }
 
     function all()
@@ -91,6 +92,20 @@ class NewsResourceRepository implements IRepository
         //dd($save_data);
     }
 
+    function edit(Model $model){
+        $all_categories = array_column($this->category->getActualCategory(),'id');
+        $established_categories = array_column($model->with('categories')->first()->categories->toArray(),'id');
+        $available_categories_id = array_diff($all_categories,$established_categories);
+        /*$available_categories =  collect($this->category->getActualCategory())->filter(function ($model) use($available_categories_id){
+            return in_array($model->id,$available_categories_id);
+        });*/
+        $available_categories =$this->category->whereIn('id',$available_categories_id)->get();
+        //dd($available_categories);
+        $resource = $model->with('categories.sources')->first();
+        //dd(compact("resource","available_categories"));
+        return compact("resource","available_categories");
+    }
+
     function update(Model $model)
     {
         // TODO: Implement update() method.
@@ -103,5 +118,6 @@ class NewsResourceRepository implements IRepository
 
     protected $resource;
     protected $source;
+    protected $category;
 
 }
