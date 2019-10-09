@@ -574,6 +574,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var url_pattern__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(url_pattern__WEBPACK_IMPORTED_MODULE_11__);
 /* harmony import */ var _init_objects_resources_news_newsResourceInitObj__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./init objects/resources_news/newsResourceInitObj */ "./resources/js/init objects/resources_news/newsResourceInitObj.js");
 /* harmony import */ var _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./classes/NewsResource.class */ "./resources/js/classes/NewsResource.class.js");
+/* harmony import */ var _init_objects_resources_news_updateNewsResourceInitObj__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./init objects/resources_news/updateNewsResourceInitObj */ "./resources/js/init objects/resources_news/updateNewsResourceInitObj.js");
+/* harmony import */ var _init_objects_resources_news_updateNewsResReqSettings__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./init objects/resources_news/updateNewsResReqSettings */ "./resources/js/init objects/resources_news/updateNewsResReqSettings.js");
+/* harmony import */ var _classes_EditNewsResource_class__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./classes/EditNewsResource.class */ "./resources/js/classes/EditNewsResource.class.js");
+
+
+
 
 
 
@@ -593,6 +599,8 @@ __webpack_require__.r(__webpack_exports__);
   $(function () {
     var url = location.pathname.substr(1);
     var patternProject = new url_pattern__WEBPACK_IMPORTED_MODULE_11___default.a(_init_objects_routing__WEBPACK_IMPORTED_MODULE_7__["routing"].project);
+    var patternEditNewsResource = new url_pattern__WEBPACK_IMPORTED_MODULE_11___default.a(_init_objects_routing__WEBPACK_IMPORTED_MODULE_7__["routing"].edit_newsResource); //console.log(url);
+
     var routingList = Object.keys(_init_objects_routing__WEBPACK_IMPORTED_MODULE_7__["routing"]);
     var errorBag = new _classes_ErrorBag_class__WEBPACK_IMPORTED_MODULE_0__["ErrorBag"](_init_objects_errors_errorsInitObj__WEBPACK_IMPORTED_MODULE_1__["errorsInitObj"]);
     errorBag.hideAlertsIForms();
@@ -618,6 +626,8 @@ __webpack_require__.r(__webpack_exports__);
     } catch (e) {
       if (patternProject.match(url) !== null) {
         new _classes_Project_class__WEBPACK_IMPORTED_MODULE_8__["Project"](_init_objects_project_projectInitObj__WEBPACK_IMPORTED_MODULE_9__["projectInitObj"], new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_project_ajaxReqSettings__WEBPACK_IMPORTED_MODULE_10__["ajaxReqSettings"]), errorBag).run();
+      } else if (patternEditNewsResource.match(url) !== null) {
+        new _classes_EditNewsResource_class__WEBPACK_IMPORTED_MODULE_16__["EditNewsResource"](_init_objects_resources_news_updateNewsResourceInitObj__WEBPACK_IMPORTED_MODULE_14__["updateNewsResourceInitObj"], errorBag, new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_resources_news_updateNewsResReqSettings__WEBPACK_IMPORTED_MODULE_15__["updateNewsResReqSettings"])).run();
       } else {
         console.log(e.stack);
       }
@@ -757,6 +767,199 @@ function () {
 
   return Ajax;
 }();
+
+/***/ }),
+
+/***/ "./resources/js/classes/EditNewsResource.class.js":
+/*!********************************************************!*\
+  !*** ./resources/js/classes/EditNewsResource.class.js ***!
+  \********************************************************/
+/*! exports provided: EditNewsResource */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "EditNewsResource", function() { return EditNewsResource; });
+/* harmony import */ var _NewsResource_class__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./NewsResource.class */ "./resources/js/classes/NewsResource.class.js");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+
+var EditNewsResource =
+/*#__PURE__*/
+function (_NewsResource) {
+  _inherits(EditNewsResource, _NewsResource);
+
+  function EditNewsResource(settings, errorBag, ajax) {
+    var _this;
+
+    _classCallCheck(this, EditNewsResource);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(EditNewsResource).call(this, settings, errorBag));
+    _this._ajax = ajax;
+    return _this;
+  }
+
+  _createClass(EditNewsResource, [{
+    key: "run",
+    value: function run() {
+      $(this._settings.checkBoxInput, this._settings.secondContainer).on('change.AddNewSource', $.proxy(this._addNewSourceHandler, this));
+      $(this._settings.secondContainer).on('click.SendNewSource', this._settings.addSource, $.proxy(this._sendNewSourceHandler, this));
+    }
+  }, {
+    key: "_addNewSourceHandler",
+    value: function _addNewSourceHandler(e) {
+      var target = e.target;
+      if (target.tagName !== 'INPUT') return false;
+
+      var checkBoxAlertBox = this._getCheckBoxAlertBox(target, this._settings.secondContainer);
+
+      var relatedSourceName = $(target).data('source');
+
+      if (relatedSourceName === undefined) {
+        this._errorBag.showUpdateErrorBox(checkBoxAlertBox, 'Errors occurred while trying to find a source input field.');
+
+        return false;
+      }
+
+      var relatedSourceElem$ = this._getRelatedSourceElem(target);
+
+      if (!relatedSourceElem$.length) {
+        this._errorBag.showUpdateErrorBox(checkBoxAlertBox, 'Errors occurred while trying to open a source input field.');
+
+        return false;
+      }
+
+      if ($(target).is(':checked')) this._showSourceElem(relatedSourceElem$);else this._hideSourceElem(relatedSourceElem$, e);
+    }
+  }, {
+    key: "_validURLHandler",
+    value: function _validURLHandler(e) {
+      var target = e.target;
+      if (target.tagName !== 'INPUT' && target.getAttribute('name').includes(this._settings.sourceUrlElem) === false) return false;
+      var checkRes = !!this._settings.urlPattern.test(target.value);
+
+      var sourceInputAlertBox = this._getInputAlertBox(target, this._settings.secondContainer);
+
+      if (!checkRes) {
+        this._errorBag.showUpdateErrorBox(sourceInputAlertBox, 'Not valid URL');
+
+        return false;
+      } else this._errorBag.hideUpdateErrorBox(sourceInputAlertBox);
+
+      e.stopImmediatePropagation();
+    }
+  }, {
+    key: "_sendNewSourceHandler",
+    value: function _sendNewSourceHandler(e) {
+      var _this2 = this;
+
+      var target = e.target;
+      if (target.tagName !== 'BUTTON') return false;
+      var checkedCollection = $(this._settings.checkBoxInput, this._settings.secondContainer).filter(':checked');
+
+      if (!checkedCollection.length) {
+        this._errorBag.showGeneralErrorBox('At least one category must be selected');
+
+        e.preventDefault();
+      }
+
+      this._errorBag.hideGeneralErrorBox();
+
+      checkedCollection.each(function (_, item) {
+        var relatedSource$ = _this2._getRelatedSourceElem(item);
+
+        if (relatedSource$.val() === '') {
+          _this2._errorBag.showUpdateErrorBox(_this2._getInputAlertBox(relatedSource$.get(0), _this2._settings.secondContainer), 'URL cannot be empty');
+
+          e.preventDefault();
+        }
+      });
+      setTimeout(this._isVisibleErrors.bind(this, e), 500);
+    }
+  }, {
+    key: "_showSourceElem",
+    value: function _showSourceElem(sourceElem$) {
+      var _this3 = this;
+
+      sourceElem$.queue(function (next) {
+        sourceElem$.removeClass('d-none');
+        next();
+      }).queue(function (next) {
+        sourceElem$.fadeOut(0);
+        next();
+      }).queue(function (next) {
+        sourceElem$.fadeIn('normal');
+        sourceElem$.on('change.ValidURL', $.proxy(_this3._validURLHandler, _this3));
+        next();
+      });
+    }
+  }, {
+    key: "_hideSourceElem",
+    value: function _hideSourceElem(sourceElem$, e) {
+      var _this4 = this;
+
+      sourceElem$.queue(function (next) {
+        sourceElem$.fadeOut('normal');
+        next();
+      }).queue(function (next) {
+        sourceElem$.addClass('d-none');
+
+        if (e.originalEvent) {
+          sourceElem$.val('');
+        }
+
+        next();
+      }).queue(function (next) {
+        _this4._errorBag.hideUpdateErrorBox(_this4._getInputAlertBox(sourceElem$.get(0), _this4._settings.secondContainer));
+
+        next();
+      });
+    }
+  }, {
+    key: "_isVisibleErrors",
+    value: function _isVisibleErrors(e) {
+      var count = $(this._settings.alert, this._settings.secondContainer).filter(function (_, item) {
+        return $(item).hasClass('d-none') === false;
+      });
+      if (count) e.preventDefault();
+    }
+  }, {
+    key: "_getRelatedSourceElem",
+    value: function _getRelatedSourceElem(checkbox) {
+      var relatedSourceName = $(checkbox).data('source');
+      $("[name='".concat(relatedSourceName, "']"), this._settings.secondContainer);
+      return $("[name='".concat(relatedSourceName, "']"), this._settings.secondContainer);
+    }
+  }, {
+    key: "_getCheckBoxAlertBox",
+    value: function _getCheckBoxAlertBox(elem, context) {
+      return $("[data-error-update-for='".concat(elem.getAttribute('id'), "']"), context).get(0);
+    }
+  }, {
+    key: "_getInputAlertBox",
+    value: function _getInputAlertBox(elem, context) {
+      return $("[data-error-update-for='".concat(elem.getAttribute('name'), "']"), context).get(0);
+    }
+  }]);
+
+  return EditNewsResource;
+}(_NewsResource_class__WEBPACK_IMPORTED_MODULE_0__["NewsResource"]);
 
 /***/ }),
 
@@ -1941,6 +2144,63 @@ var newsResourceInitObj = {
 
 /***/ }),
 
+/***/ "./resources/js/init objects/resources_news/updateNewsResReqSettings.js":
+/*!******************************************************************************!*\
+  !*** ./resources/js/init objects/resources_news/updateNewsResReqSettings.js ***!
+  \******************************************************************************/
+/*! exports provided: updateNewsResReqSettings */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateNewsResReqSettings", function() { return updateNewsResReqSettings; });
+/* harmony import */ var _routing__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../routing */ "./resources/js/init objects/routing.js");
+
+var updateNewsResReqSettings = {
+  type: "PATCH",
+  url: _routing__WEBPACK_IMPORTED_MODULE_0__["routing"].update_newsResource,
+  data: null,
+  headers: {
+    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+    'Content-Type': 'application/json',
+    'charset': 'utf-8',
+    'async': true,
+    'Accept': 'application/json'
+  },
+  preloader: "preloader"
+};
+
+/***/ }),
+
+/***/ "./resources/js/init objects/resources_news/updateNewsResourceInitObj.js":
+/*!*******************************************************************************!*\
+  !*** ./resources/js/init objects/resources_news/updateNewsResourceInitObj.js ***!
+  \*******************************************************************************/
+/*! exports provided: updateNewsResourceInitObj */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "updateNewsResourceInitObj", function() { return updateNewsResourceInitObj; });
+var updateNewsResourceInitObj = {
+  firstContainer: 'form#edit_resource',
+  secondContainer: 'form#add_new_sources',
+  checkBoxInput: '.custom-control-input',
+  checkBoxWrapper: 'custom-control',
+  resourceName: 'input[name="res_name"]',
+  sourceUrlElem: 'source_url',
+  urlPattern: new RegExp('^(https?:\\/\\/)?' + // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+  '(\\#[-a-z\\d_]*)?$', 'i'),
+  addSource: '.btn.btn-success',
+  alert: '.alert.alert-danger'
+};
+
+/***/ }),
+
 /***/ "./resources/js/init objects/routing.js":
 /*!**********************************************!*\
   !*** ./resources/js/init objects/routing.js ***!
@@ -1958,7 +2218,9 @@ var routing = {
   delete_project: 'project(/:id)/delete',
   tasks: '/tasks',
   update_task: 'tasks/{task}/update',
-  contacts: '/contacts'
+  contacts: '/contacts',
+  edit_newsResource: 'news_resource(/:id)/edit',
+  update_newsResource: 'news_resource{news_resource}/update'
 };
 
 /***/ }),
@@ -2031,8 +2293,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

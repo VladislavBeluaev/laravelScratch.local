@@ -12,11 +12,17 @@ import {ajaxReqSettings as projectAjaxReqSettings} from "./init objects/project/
 import UrlPattern from "url-pattern";
 import {newsResourceInitObj} from "./init objects/resources_news/newsResourceInitObj";
 import {NewsResource} from "./classes/NewsResource.class";
+import {updateNewsResourceInitObj} from "./init objects/resources_news/updateNewsResourceInitObj";
+import {updateNewsResReqSettings} from "./init objects/resources_news/updateNewsResReqSettings";
+import {EditNewsResource} from "./classes/EditNewsResource.class";
 
 (function ($, undefined) {
     $(function () {
         let url = location.pathname.substr(1);
         let patternProject = new UrlPattern(routing.project);
+
+        let patternEditNewsResource = new UrlPattern(routing.edit_newsResource);
+        //console.log(url);
         let routingList = Object.keys(routing);
         let errorBag = new ErrorBag(errorsInitObj);
         errorBag.hideAlertsIForms();
@@ -39,9 +45,14 @@ import {NewsResource} from "./classes/NewsResource.class";
         } catch (e) {
             if ((patternProject.match(url) !== null)){
                 (new Project(projectInitObj, new Ajax(projectAjaxReqSettings),errorBag)).run();
-            } else {
+            }
+            else if(patternEditNewsResource.match(url)!==null){
+                (new EditNewsResource(updateNewsResourceInitObj,errorBag,new Ajax(updateNewsResReqSettings))).run();
+            }
+            else {
                 console.log(e.stack);
             }
+
 
         }
 
