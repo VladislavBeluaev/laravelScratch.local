@@ -12,7 +12,7 @@
 @section('h1',"Edit $resource->res_name resource")
 
 @section('content')
-    <form class="text-center border border-light p-5" action="{{route('create_news_resource')}}" method="PATCH"
+    <form class="text-center border border-light p-5" action="{{route('create_news_resource')}}" method="POST"
           id="edit_resource">
         @csrf
         @method('PATCH')
@@ -44,7 +44,7 @@
         @endforeach
     </form>
 
-    <form class="text-center border border-light p-5" action="{{route('create_news_resource')}}" method="PATCH"
+    <form class="text-center border border-light p-5" action="{{route('bind_link_resource',$resource)}}" method="POST"
           id="add_new_sources">
         @csrf
         @method('PATCH')

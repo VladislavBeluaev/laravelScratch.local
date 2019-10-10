@@ -616,6 +616,9 @@ __webpack_require__.r(__webpack_exports__);
           new _classes_TestPromise_class__WEBPACK_IMPORTED_MODULE_4__["TestPromises"](5).run();
           break;
 
+        case "news_resource":
+          break;
+
         case "news_resource/create":
           new _classes_NewsResource_class__WEBPACK_IMPORTED_MODULE_13__["NewsResource"](_init_objects_resources_news_newsResourceInitObj__WEBPACK_IMPORTED_MODULE_12__["newsResourceInitObj"], errorBag).run();
           break;
@@ -629,7 +632,7 @@ __webpack_require__.r(__webpack_exports__);
       } else if (patternEditNewsResource.match(url) !== null) {
         new _classes_EditNewsResource_class__WEBPACK_IMPORTED_MODULE_16__["EditNewsResource"](_init_objects_resources_news_updateNewsResourceInitObj__WEBPACK_IMPORTED_MODULE_14__["updateNewsResourceInitObj"], errorBag, new _classes_Ajax_class__WEBPACK_IMPORTED_MODULE_2__["Ajax"](_init_objects_resources_news_updateNewsResReqSettings__WEBPACK_IMPORTED_MODULE_15__["updateNewsResReqSettings"])).run();
       } else {
-        console.log(e.stack);
+        window.location.replace('/not_found_url'); //console.log(e.stack);
       }
     }
   });
@@ -860,7 +863,9 @@ function (_NewsResource) {
         this._errorBag.showUpdateErrorBox(sourceInputAlertBox, 'Not valid URL');
 
         return false;
-      } else this._errorBag.hideUpdateErrorBox(sourceInputAlertBox);
+      } else {
+        this._errorBag.hideUpdateErrorBox(sourceInputAlertBox);
+      }
 
       e.stopImmediatePropagation();
     }
@@ -876,7 +881,7 @@ function (_NewsResource) {
       if (!checkedCollection.length) {
         this._errorBag.showGeneralErrorBox('At least one category must be selected');
 
-        e.preventDefault();
+        return false;
       }
 
       this._errorBag.hideGeneralErrorBox();
@@ -885,12 +890,17 @@ function (_NewsResource) {
         var relatedSource$ = _this2._getRelatedSourceElem(item);
 
         if (relatedSource$.val() === '') {
+          console.log('calling');
+
           _this2._errorBag.showUpdateErrorBox(_this2._getInputAlertBox(relatedSource$.get(0), _this2._settings.secondContainer), 'URL cannot be empty');
 
           e.preventDefault();
+          return false;
+        } else {
+          var checkRes = !!_this2._settings.urlPattern.test(relatedSource$.val());
+          if (!checkRes) e.preventDefault();
         }
       });
-      setTimeout(this._isVisibleErrors.bind(this, e), 500);
     }
   }, {
     key: "_showSourceElem",
@@ -930,14 +940,6 @@ function (_NewsResource) {
 
         next();
       });
-    }
-  }, {
-    key: "_isVisibleErrors",
-    value: function _isVisibleErrors(e) {
-      var count = $(this._settings.alert, this._settings.secondContainer).filter(function (_, item) {
-        return $(item).hasClass('d-none') === false;
-      });
-      if (count) e.preventDefault();
     }
   }, {
     key: "_getRelatedSourceElem",
@@ -2293,8 +2295,8 @@ var taskInitObj = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
-module.exports = __webpack_require__(/*! d:\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
+__webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\js\_master.js */"./resources/js/_master.js");
+module.exports = __webpack_require__(/*! d:\temp\OSPanel_new\OSPanel\domains\laravelScratch.local\resources\less\master.less */"./resources/less/master.less");
 
 
 /***/ })

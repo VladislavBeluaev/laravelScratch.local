@@ -16,7 +16,7 @@ class NewsResource extends Model
         $with_dot = strstr($value,'.',true);
         return $with_dot===false?$value:$with_dot;
     }
-    function getRouteKey()
+    function getRouteKeyName()
     {
         return 'res_name';
     }

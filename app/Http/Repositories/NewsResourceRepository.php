@@ -92,6 +92,21 @@ class NewsResourceRepository implements IRepository
         //dd($save_data);
     }
 
+    function bind_source(){
+        dd(request()->all());
+        $rules = ['category_resource.*' => 'required|numeric'];
+        $output_category_resource_indexes = [];
+        foreach (request()->all() as $key=>$value){
+            if(strstr($key,'source_url')!==false && $value!==null)
+            {
+                $output_category_resource_indexes[] = "category_resource.".substr($key,-1,1);
+                $rules[$key] = 'required|URL';
+            }
+
+        }
+        dd($output_category_resource_indexes);
+    }
+
     function edit(Model $model){
         $all_categories = array_column($this->category->getActualCategory(),'id');
         $established_categories = array_column($model->with('categories')->first()->categories->toArray(),'id');

@@ -35,6 +35,8 @@ import {EditNewsResource} from "./classes/EditNewsResource.class";
                     (new Task(taskInitObj, new Ajax(taskAjaxReqSettings),errorBag)).run();
                     (new TestPromises(5)).run();
                     break;
+                case "news_resource":
+                    break;
                 case "news_resource/create":
                     (new NewsResource(newsResourceInitObj,errorBag)).run();
                     break;
@@ -50,7 +52,8 @@ import {EditNewsResource} from "./classes/EditNewsResource.class";
                 (new EditNewsResource(updateNewsResourceInitObj,errorBag,new Ajax(updateNewsResReqSettings))).run();
             }
             else {
-                console.log(e.stack);
+                window.location.replace('/not_found_url');
+                //console.log(e.stack);
             }
 
 

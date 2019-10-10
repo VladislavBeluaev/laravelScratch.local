@@ -41,8 +41,9 @@ export class EditNewsResource extends NewsResource {
             this._errorBag.showUpdateErrorBox(sourceInputAlertBox, 'Not valid URL');
             return false;
         }
-        else
+        else{
             this._errorBag.hideUpdateErrorBox(sourceInputAlertBox);
+        }
         e.stopImmediatePropagation();
     }
     _sendNewSourceHandler(e){
@@ -51,19 +52,24 @@ export class EditNewsResource extends NewsResource {
         let checkedCollection = $(this._settings.checkBoxInput,this._settings.secondContainer).filter(':checked');
         if(!checkedCollection.length){
             this._errorBag.showGeneralErrorBox('At least one category must be selected');
-            e.preventDefault();
+            return false;
         }
         this._errorBag.hideGeneralErrorBox();
         checkedCollection.each((_,item)=>{
             let relatedSource$ = this._getRelatedSourceElem(item);
             if(relatedSource$.val()==='')
             {
+                console.log('calling');
                 this._errorBag.showUpdateErrorBox(
                     this._getInputAlertBox(relatedSource$.get(0),this._settings.secondContainer),'URL cannot be empty');
                 e.preventDefault();
+                return false;
+            }
+            else{
+                let checkRes = !!this._settings.urlPattern.test(relatedSource$.val());
+                if(!checkRes) e.preventDefault();
             }
         });
-        setTimeout(this._isVisibleErrors.bind(this,e),500);
     }
     _showSourceElem(sourceElem$) {
         sourceElem$.queue(next => {
@@ -93,12 +99,6 @@ export class EditNewsResource extends NewsResource {
             this._errorBag.hideUpdateErrorBox(this._getInputAlertBox(sourceElem$.get(0), this._settings.secondContainer));
             next();
         });
-    }
-    _isVisibleErrors(e){
-        let count =  $(this._settings.alert,this._settings.secondContainer).filter((_,item)=>{
-            return $(item).hasClass('d-none')===false;
-        });
-        if(count) e.preventDefault();
     }
     _getRelatedSourceElem(checkbox){
         let relatedSourceName = $(checkbox).data('source');

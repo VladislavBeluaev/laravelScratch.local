@@ -65,18 +65,19 @@ Route::group(['prefix'=>'/news_resource'],function(){
     Route::post('/create','NewsResourceController@store');
     Route::get('/{news_resource}/edit','NewsResourceController@edit')->name('edit_news_resource');
     Route::patch('/{news_resource}/update','NewsResourceController@update')->name('update_news_resource');
+    Route::patch('/{news_resource}/import_link','NewsResourceController@bind_source')->name('bind_link_resource');
     Route::delete('/{news_resource}/delete','NewsResourceController@destroy')->name('destroy_news_resource');
 });
 Route::group(['prefix'=>'/import_link'],function(){
     Route::get('','NewsLinkController@all')->name('all_import_link');
     Route::get('/create','NewsLinkController@create')->name('create_import_link');
-    Route::post('/create','NewsLinkController@store');
+    //Route::patch('/create','NewsLinkController@store')->name('bind_link_resource');
     Route::get('/{news_link}/edit','NewsLinkController@edit')->name('edit_import_link');
-    Route::patch('/{news_link}/update','NewsLinkController@update')->name('update_import_link');
     Route::delete('/{news_link}/delete','NewsLinkController@destroy')->name('destroy_import_link');
 });
 Route::get('/about','PagesController@about')->name('about');
 Route::get('/contacts','PagesController@contacts')->name('contacts');
+Route::get('/404','PagesController@not_found')->name('404');
 /*Route::get('/', function () {
     return view('welcome')->withTasks([
         'go to store',
