@@ -93,18 +93,46 @@ class NewsResourceRepository implements IRepository
     }
 
     function bind_source(){
-        dd(request()->all());
+        //dd(request()->all());
         $rules = ['category_resource.*' => 'required|numeric'];
         $output_category_resource_indexes = [];
         foreach (request()->all() as $key=>$value){
             if(strstr($key,'source_url')!==false && $value!==null)
             {
                 $output_category_resource_indexes[] = "category_resource.".substr($key,-1,1);
-                $rules[$key] = 'required|URL';
+                $rules[$key] = 'required|URL|ends_with';
             }
 
         }
-        dd($output_category_resource_indexes);
+        $validator = Validator::make(request()->all(),$rules,[
+            'required' =>'The field is required',
+            'ends_with'=>'The source_url must end with one of the following: xxx. Given',
+            'numeric' => 'Field value must be valid number.'
+        ]);
+        if ($validator->fails()) {
+
+            $errors = $validator->errors()->getMessages();
+            $response_errors = [];
+            foreach ($errors as $key => $value) {
+                if (strstr($key, 'category_resource') !== false) {
+                    $response_errors[array_shift($output_category_resource_indexes)] =$value;
+                }
+                else
+                    $response_errors[$key] = $value;
+            }
+            return redirect()->route('edit_news_resource',NewsResource::find(1))->withInput(
+                request()->all())
+                ->withErrors(new MessageBag($response_errors));
+        }
+        $save_data = [];
+        foreach ($validator->validated() as $key=>$value){
+            if(strstr($key,'source_url')!==false){
+                $save_data['source_url'][] = $value;
+            }
+            else
+                $save_data[$key] = $value;
+        }
+        dd($save_data);
     }
 
     function edit(Model $model){

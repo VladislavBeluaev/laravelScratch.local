@@ -57,8 +57,12 @@
                        data-source="source_url_{{$index}}"
                        value="{{$category->id}}">
                 <label class="custom-control-label" for="fk_category_{{$category->id}}">{{$category->title}}</label>
+                @error("category_resource.$index")
+                <div class="alert alert-danger error-validation">{{$message}}</div>
+                @enderror
                 <div class="alert alert-danger error-update d-none" data-error-update-for="fk_category_{{$category->id}}"></div>
             </div>
+        
             @error("category_resource_$index")
             <div class="alert alert-danger error-validation">{{$message}}</div>
             @enderror
