@@ -32,6 +32,9 @@
         <div class="alert alert-danger">{{$message}}</div>
         @enderror
         <h3 class="text-left mb-2">Категории для загрузки</h3>
+        @error('duplicate_key')
+        <div class="alert alert-danger">{{$message}}</div>
+        @enderror
         <p class="alert alert-danger general-error d-none"></p>
         @foreach($categories as $index=>$category)
             <div class="custom-control custom-checkbox text-left mb-2">

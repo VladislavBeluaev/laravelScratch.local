@@ -16,7 +16,7 @@ class CreateNewsLinksTable extends Migration
     {
         Schema::create('news_links', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('url');
+            $table->string('url')->unique();
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
         });

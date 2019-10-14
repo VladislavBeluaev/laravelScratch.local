@@ -2,7 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1301a4cb-6bd3-4097-8178-c876a35c5a0f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php" beforeDir="false" afterPath="$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php" beforeDir="false" afterPath="$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/resources/views/news_resources/create.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/news_resources/create.blade.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/resources/views/news_resources/edit.blade.php" beforeDir="false" afterPath="$PROJECT_DIR$/resources/views/news_resources/edit.blade.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -34,19 +37,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/js/classes/EditNewsResource.class.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1960">
-              <caret line="70" column="13" selection-start-line="70" selection-start-column="13" selection-end-line="70" selection-end-column="13" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resources/views/news_resources/edit.blade.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
+            <state relative-caret-position="204">
+              <caret line="52" column="28" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="28" />
             </state>
           </provider>
         </entry>
@@ -54,8 +48,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/routes/web.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="65" column="95" lean-forward="true" selection-start-line="65" selection-start-column="77" selection-end-line="65" selection-end-column="95" />
+            <state relative-caret-position="1540">
+              <caret line="65" column="95" selection-start-line="65" selection-start-column="77" selection-end-line="65" selection-end-column="95" />
             </state>
           </provider>
         </entry>
@@ -72,20 +66,38 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/NewsResourceController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="980">
+            <state relative-caret-position="820">
               <caret line="36" column="45" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="708">
-              <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
+            <state relative-caret-position="2010">
+              <caret line="189" column="28" selection-start-line="189" selection-start-column="12" selection-end-line="189" selection-end-column="28" />
               <folding>
                 <element signature="e#42#73#0#PHP" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/resources/views/news_resources/create.blade.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="675">
+              <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="420">
+              <caret line="18" column="44" lean-forward="true" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
             </state>
           </provider>
         </entry>
@@ -187,7 +199,6 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/Ajax/AjaxNewsController.php" />
         <option value="$PROJECT_DIR$/app/Http/Repositories/NewsRepository.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_04_094531_create_news_sources_table.php" />
-        <option value="$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_04_110937_create_categories_resources_table.php" />
         <option value="$PROJECT_DIR$/database/migrations/2019_10_04_111335_create_categories_links_table.php" />
         <option value="$PROJECT_DIR$/resources/views/news/create.blade.php" />
@@ -203,7 +214,6 @@
         <option value="$PROJECT_DIR$/public/js/master.js" />
         <option value="$PROJECT_DIR$/resources/js/classes/Project.class.js" />
         <option value="$PROJECT_DIR$/resources/js/classes/Task.class.js" />
-        <option value="$PROJECT_DIR$/resources/views/news_resources/create.blade.php" />
         <option value="$PROJECT_DIR$/resources/js/init objects/resources_news/newsResourceInitObj.js" />
         <option value="$PROJECT_DIR$/resources/js/init objects/errors/errorsInitObj.js" />
         <option value="$PROJECT_DIR$/resources/js/classes/NewsResource.class.js" />
@@ -224,8 +234,10 @@
         <option value="$PROJECT_DIR$/app/Http/Controllers/NewsLinkController.php" />
         <option value="$PROJECT_DIR$/routes/web.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/NewsResourceController.php" />
-        <option value="$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php" />
         <option value="$PROJECT_DIR$/resources/views/news_resources/edit.blade.php" />
+        <option value="$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php" />
+        <option value="$PROJECT_DIR$/resources/views/news_resources/create.blade.php" />
+        <option value="$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php" />
       </list>
     </option>
   </component>
@@ -345,7 +357,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -358,10 +369,28 @@
               <item name="laravelScratch.local" type="462c0819:PsiDirectoryNode" />
               <item name="app" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="laravelScratch.local" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravelScratch.local" type="462c0819:PsiDirectoryNode" />
+              <item name="app" type="462c0819:PsiDirectoryNode" />
+              <item name="Http" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravelScratch.local" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravelScratch.local" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="laravelScratch.local" type="b2602c69:ProjectViewProjectNode" />
+              <item name="laravelScratch.local" type="462c0819:PsiDirectoryNode" />
+              <item name="database" type="462c0819:PsiDirectoryNode" />
+              <item name="migrations" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -469,17 +498,18 @@
       <workItem from="1570620364239" duration="2800000" />
       <workItem from="1570696190688" duration="4783000" />
       <workItem from="1570786549752" duration="1632000" />
+      <workItem from="1571043740544" duration="8939000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="146072000" />
+    <option name="totallyTimeSpent" value="155011000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1359275" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1369936" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -561,25 +591,10 @@
     <SUITE FILE_PATH="coverage/laravelScratch_local@phpunit_xml.xml" NAME="phpunit.xml Coverage Results" MODIFIED="1568635631464" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="PhpCoverage" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/resources/less/variables.less">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="5" column="10" selection-start-line="5" selection-end-line="5" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_03_213256_add_column_url_title_to_news_table.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="16" column="70" selection-start-line="16" selection-start-column="70" selection-end-line="16" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/News.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="420">
           <caret line="15" column="5" selection-start-line="15" selection-start-column="5" selection-end-line="15" selection-end-column="5" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -616,7 +631,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="504">
           <caret line="32" column="54" selection-start-line="32" selection-start-column="54" selection-end-line="32" selection-end-column="54" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -631,13 +645,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="364">
           <caret line="13" column="25" selection-start-line="13" selection-start-column="4" selection-end-line="13" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Ajax/AjaxProjectController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="364">
-          <caret line="49" column="56" lean-forward="true" selection-start-line="49" selection-start-column="56" selection-end-line="49" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -719,7 +726,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="10" column="22" selection-start-line="10" selection-start-column="22" selection-end-line="10" selection-end-column="22" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -727,15 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="644">
           <caret line="24" column="96" selection-start-line="24" selection-start-column="96" selection-end-line="24" selection-end-column="96" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Repositories/NewsRepository.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1596">
-          <caret line="63" column="23" selection-start-line="63" selection-start-column="8" selection-end-line="63" selection-end-column="23" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -778,13 +775,6 @@
         <state relative-caret-position="56">
           <caret line="2" column="28" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="28" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/news_resources/create.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="952">
-          <caret line="34" column="63" selection-start-line="34" selection-start-column="8" selection-end-line="34" selection-end-column="63" />
         </state>
       </provider>
     </entry>
@@ -837,17 +827,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/routes/web.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1540">
+          <caret line="65" column="95" selection-start-line="65" selection-start-column="77" selection-end-line="65" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/NewsLinkController.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="280">
           <caret line="10" column="7" selection-start-line="8" selection-start-column="4" selection-end-line="10" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/NewsResourceController.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="980">
-          <caret line="36" column="45" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="45" />
         </state>
       </provider>
     </entry>
@@ -875,27 +865,62 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/routes/web.php">
+    <entry file="file://$PROJECT_DIR$/resources/views/news_resources/edit.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="65" column="95" lean-forward="true" selection-start-line="65" selection-start-column="77" selection-end-line="65" selection-end-column="95" />
+        <state relative-caret-position="204">
+          <caret line="52" column="28" selection-start-line="52" selection-start-column="16" selection-end-line="52" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/NewsResourceController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="820">
+          <caret line="36" column="45" selection-start-line="36" selection-start-column="34" selection-end-line="36" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Repositories/NewsRepository.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Ajax/AjaxNewsController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="224">
+          <caret line="16" column="6" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Ajax/AjaxProjectController.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="12" column="6" selection-start-line="12" selection-start-column="6" selection-end-line="12" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/database/migrations/2019_10_04_110631_create_news_links_table.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="18" column="44" lean-forward="true" selection-start-line="18" selection-start-column="44" selection-end-line="18" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/resources/views/news_resources/create.blade.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="34" column="31" lean-forward="true" selection-start-line="34" selection-start-column="31" selection-end-line="34" selection-end-column="31" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Repositories/NewsResourceRepository.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="708">
-          <caret line="121" column="13" selection-start-line="121" selection-start-column="13" selection-end-line="121" selection-end-column="13" />
+        <state relative-caret-position="2010">
+          <caret line="189" column="28" selection-start-line="189" selection-start-column="12" selection-end-line="189" selection-end-column="28" />
           <folding>
             <element signature="e#42#73#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/news_resources/edit.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="64" column="8" selection-start-line="64" selection-start-column="8" selection-end-line="64" selection-end-column="8" />
         </state>
       </provider>
     </entry>

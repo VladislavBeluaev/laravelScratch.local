@@ -48,6 +48,11 @@
           id="add_new_sources">
         @csrf
         @method('PATCH')
+        <input type="hidden" name="resource" value="{{$resource->id}}">
+        <input type="hidden" name="form_action" value="add_">
+        @error("hidden_error")
+        <div class="alert alert-danger error-validation">{{$message}}</div>
+        @enderror
         <h3 class="text-left mb-2">Доступные разделы для ресурса</h3>
         <p class="alert alert-danger general-error d-none"></p>
         @foreach($available_categories as $index=>$category)
@@ -57,20 +62,20 @@
                        data-source="source_url_{{$index}}"
                        value="{{$category->id}}">
                 <label class="custom-control-label" for="fk_category_{{$category->id}}">{{$category->title}}</label>
-                @error("category_resource.$index")
+                @error("add_category_resource.$index")
                 <div class="alert alert-danger error-validation">{{$message}}</div>
                 @enderror
                 <div class="alert alert-danger error-update d-none" data-error-update-for="fk_category_{{$category->id}}"></div>
             </div>
         
-            @error("category_resource_$index")
+            @error("add_category_resource_$index")
             <div class="alert alert-danger error-validation">{{$message}}</div>
             @enderror
             <input name="source_url_{{$index}}" type="url"
                    class="form-control mb-3 {{($errors->has("source_url_$index"))?'error-input-data':''}} d-none"
                    placeholder="Enter source url">
             <div class="alert alert-danger error-update d-none" data-error-update-for="source_url_{{$index}}"></div>
-            @error("source_url_$index")
+            @error("add_source_url_$index")
             <div class="alert alert-danger error-validation">{{$message}}</div>
             @enderror
         @endforeach
